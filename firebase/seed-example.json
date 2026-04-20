@@ -1,0 +1,63 @@
+{
+  "vehicles": [
+    {
+      "id": "bmw_m340i_2020_gasolina_automatico_awd",
+      "brand": "BMW",
+      "model": "M340i",
+      "year": 2020,
+      "powertrain": "gasolina",
+      "transmission": "automatico",
+      "drivetrain": "awd",
+      "vehicleKey": "bmw|m340i|2020|gasolina|automatico|awd"
+    }
+  ],
+  "builds": [
+    {
+      "id": "bmw-m340i-street-balance",
+      "vehicleKey": "bmw|m340i|2020|gasolina|automatico|awd",
+      "exactMatchKey": "bmw|m340i|2020|gasolina|automatico|awd|diario|calle|equilibrio|medio",
+      "goalMatchKey": "bmw|m340i|2020|gasolina|automatico|awd|calle",
+      "name": "BMW M340i Street balance",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 93,
+      "summary": "Build equilibrada para uso diario, con foco en respuesta, frenada y una estetica OEM+.",
+      "estimatedBudget": 4300,
+      "expectedGain": "+42 cv aprox.",
+      "reliabilityIndex": 91,
+      "executionTime": "2 a 3 semanas",
+      "stages": [
+        {
+          "label": "Etapa 1",
+          "focus": "Base fiable",
+          "parts": ["Revision completa", "Admision sellada", "ECU stage 1 conservadora"],
+          "note": "Primero salud mecanica y respuesta limpia."
+        },
+        {
+          "label": "Etapa 2",
+          "focus": "Balanced setup",
+          "parts": ["Cat-back homologado", "Pastillas deportivas", "Neumatico UHP"],
+          "note": "La build gana consistencia en uso real."
+        },
+        {
+          "label": "Etapa 3",
+          "focus": "Refinado final",
+          "parts": ["Llantas ligeras", "Alineado especifico", "Detalle OEM+"],
+          "note": "Se remata la presencia sin romper el equilibrio."
+        }
+      ],
+      "reasons": [
+        "La plataforma aguanta bien una stage 1 moderada.",
+        "La traccion total permite aprovechar mejor la mejora sin hacer el coche nervioso.",
+        "El presupuesto medio encaja con una build defendible para venta en la app."
+      ],
+      "warnings": [
+        "Confirmar referencia exacta de motor antes de vender la build.",
+        "Revisar homologacion de escape y llanta."
+      ],
+      "isFeatured": true
+    }
+  ]
+}

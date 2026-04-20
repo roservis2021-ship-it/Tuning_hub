@@ -1,0 +1,361 @@
+{
+  "vehicles": [
+    {
+      "id": "volkswagen_golf_golf-iv_1-9-tdi_2002_diesel_manual_fwd",
+      "brand": "Volkswagen",
+      "model": "Golf",
+      "generation": "Golf IV",
+      "engine": "1.9 TDI",
+      "year": 2002,
+      "powertrain": "diesel",
+      "transmission": "manual",
+      "drivetrain": "fwd",
+      "vehicleKey": "volkswagen|golf|golf iv|1.9 tdi|2002|diesel|manual|fwd"
+    },
+    {
+      "id": "volkswagen_golf-gti_mk7-5_2-0-tsi_2019_gasolina_automatico_fwd",
+      "brand": "Volkswagen",
+      "model": "Golf GTI",
+      "generation": "Mk7.5",
+      "engine": "2.0 TSI",
+      "year": 2019,
+      "powertrain": "gasolina",
+      "transmission": "automatico",
+      "drivetrain": "fwd",
+      "vehicleKey": "volkswagen|golf gti|mk7.5|2.0 tsi|2019|gasolina|automatico|fwd"
+    },
+    {
+      "id": "volkswagen_golf-r_mk7-5_2-0-tsi-310_2019_gasolina_automatico_awd",
+      "brand": "Volkswagen",
+      "model": "Golf R",
+      "generation": "Mk7.5",
+      "engine": "2.0 TSI 310",
+      "year": 2019,
+      "powertrain": "gasolina",
+      "transmission": "automatico",
+      "drivetrain": "awd",
+      "vehicleKey": "volkswagen|golf r|mk7.5|2.0 tsi 310|2019|gasolina|automatico|awd"
+    },
+    {
+      "id": "volkswagen_polo_aw_gti_2021_gasolina_automatico_fwd",
+      "brand": "Volkswagen",
+      "model": "Polo",
+      "generation": "AW",
+      "engine": "GTI",
+      "year": 2021,
+      "powertrain": "gasolina",
+      "transmission": "automatico",
+      "drivetrain": "fwd",
+      "vehicleKey": "volkswagen|polo|aw|gti|2021|gasolina|automatico|fwd"
+    },
+    {
+      "id": "volkswagen_scirocco_mk3_2-0-tsi_2016_gasolina_manual_fwd",
+      "brand": "Volkswagen",
+      "model": "Scirocco",
+      "generation": "Mk3",
+      "engine": "2.0 TSI",
+      "year": 2016,
+      "powertrain": "gasolina",
+      "transmission": "manual",
+      "drivetrain": "fwd",
+      "vehicleKey": "volkswagen|scirocco|mk3|2.0 tsi|2016|gasolina|manual|fwd"
+    }
+  ],
+  "builds": [
+    {
+      "id": "volkswagen-golf-iv-1-9-tdi-daily-torque",
+      "vehicleKey": "volkswagen|golf|golf iv|1.9 tdi|2002|diesel|manual|fwd",
+      "exactMatchKey": "volkswagen|golf|golf iv|1.9 tdi|2002|diesel|manual|fwd|diario|calle|fiabilidad|medio",
+      "goalMatchKey": "volkswagen|golf|golf iv|1.9 tdi|2002|diesel|manual|fwd|calle",
+      "name": "Golf IV 1.9 TDI Daily Torque",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "fiabilidad",
+      "budget": "medio",
+      "fitScore": 93,
+      "summary": "Build para Golf IV 1.9 TDI enfocada en respuesta, par utilizable y fiabilidad real para coche de diario.",
+      "estimatedBudget": 2900,
+      "expectedGain": "+25 a +35 cv aprox. y mucho par",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Base TDI sana",
+          "parts": [
+            "Mantenimiento completo y revision de vacios, caudalimetro y manguitos",
+            "Reprogramacion ECU conservadora",
+            "Admision limpia y filtro de alto flujo"
+          ],
+          "note": "En el 1.9 TDI la clave es partir de una base sana antes de subir par."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Flujo y temperatura",
+          "parts": [
+            "Intercooler mejorado si se va a exigir mucho en verano",
+            "Downpipe de alto flujo",
+            "Escape menos restrictivo"
+          ],
+          "note": "La segunda fase busca mantener consistencia y no solo una cifra mejor en banco."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Soporte de diario",
+          "parts": [
+            "Embrague si el par final lo pide",
+            "Frenos y neumaticos acordes al nuevo ritmo",
+            "Suspension fast road suave"
+          ],
+          "note": "El cierre de la build se centra en aguantar el uso diario sin castigar demasiado confort."
+        }
+      ],
+      "reasons": [
+        "El Golf IV 1.9 TDI es una de las bases diesel mas conocidas y agradecidas para una preparacion de calle.",
+        "La prioridad en fiabilidad encaja mejor con una receta que cuide temperatura, embrague y mantenimiento.",
+        "Es una build muy coherente para usuario real de coche de diario."
+      ],
+      "warnings": [
+        "El par extra puede sacar a la luz desgaste previo en embrague o turbo.",
+        "Conviene revisar humos, homologacion e ITV si se cambia escape o downpipe."
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "volkswagen-golf-gti-mk7-5-balanced-stage",
+      "vehicleKey": "volkswagen|golf gti|mk7.5|2.0 tsi|2019|gasolina|automatico|fwd",
+      "exactMatchKey": "volkswagen|golf gti|mk7.5|2.0 tsi|2019|gasolina|automatico|fwd|finde|calle|equilibrio|medio",
+      "goalMatchKey": "volkswagen|golf gti|mk7.5|2.0 tsi|2019|gasolina|automatico|fwd|calle",
+      "name": "Golf GTI Mk7.5 Balanced Stage",
+      "usage": "finde",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 95,
+      "summary": "Build equilibrada para Golf GTI Mk7.5 centrada en mantener el caracter GTI con mas respuesta, mejor temperatura y mejor apoyo.",
+      "estimatedBudget": 4700,
+      "expectedGain": "+45 a +60 cv aprox.",
+      "reliabilityIndex": 88,
+      "executionTime": "2 a 3 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Respuesta GTI",
+          "parts": [
+            "Revision previa de bujias, bobinas y mantenimiento DSG",
+            "Reprogramacion ECU stage 1",
+            "Admision de alto flujo"
+          ],
+          "note": "La base EA888 Gen 3 responde muy bien a una fase 1 bien afinada."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Flujo y consistencia",
+          "parts": [
+            "Intercooler sobredimensionado",
+            "Downpipe de alto flujo",
+            "Cat-back deportivo"
+          ],
+          "note": "La segunda fase baja temperatura de admision y sostiene mejor el empuje en uso alegre."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Chasis GTI serio",
+          "parts": [
+            "Pastillas, liquido y latiguillos",
+            "Suspension fast road o muelle con buen amortiguador",
+            "Neumatico UHP y alineado final"
+          ],
+          "note": "Se busca que el coche frene y gire como acelera, sin perder su lado usable."
+        }
+      ],
+      "reasons": [
+        "El GTI Mk7.5 es una plataforma muy equilibrada para tuning de calle con soporte enorme de piezas.",
+        "Una receta balanceada suele dar mejor experiencia real que perseguir solo pico de potencia.",
+        "La DSG y el chasis MQB permiten una build muy redonda con presupuesto medio."
+      ],
+      "warnings": [
+        "Si se sube mucho de par, conviene vigilar gestion DSG y temperatura de admision.",
+        "La homologacion puede complicarse con downpipe y escape abierto."
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "volkswagen-golf-r-mk7-5-street-haldex",
+      "vehicleKey": "volkswagen|golf r|mk7.5|2.0 tsi 310|2019|gasolina|automatico|awd",
+      "exactMatchKey": "volkswagen|golf r|mk7.5|2.0 tsi 310|2019|gasolina|automatico|awd|finde|calle|potencia|alto",
+      "goalMatchKey": "volkswagen|golf r|mk7.5|2.0 tsi 310|2019|gasolina|automatico|awd|calle",
+      "name": "Golf R Mk7.5 Street Haldex",
+      "usage": "finde",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "summary": "Build para Golf R Mk7.5 orientada a una calle muy rapida, priorizando traccion, temperatura y entrega limpia sobre 4Motion.",
+      "estimatedBudget": 6900,
+      "expectedGain": "+70 a +100 cv aprox.",
+      "reliabilityIndex": 85,
+      "executionTime": "3 a 5 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Base R aprovechada",
+          "parts": [
+            "Revision completa de bujias, bobinas y mantenimiento Haldex/DSG",
+            "Reprogramacion ECU stage 1",
+            "Admision de alto caudal"
+          ],
+          "note": "El Golf R ya sale muy fuerte de serie y una primera fase bien hecha lo transforma rapido."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Mas aire, mas constancia",
+          "parts": [
+            "Intercooler grande para uso intenso",
+            "Downpipe de alto flujo",
+            "TCU tune para la DSG"
+          ],
+          "note": "Con este nivel la caja y la temperatura pasan a ser parte central de la build."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Traccion y soporte final",
+          "parts": [
+            "Escape completo",
+            "Neumatico serio y frenos mejorados",
+            "Suspension y alineado para 4Motion"
+          ],
+          "note": "La ultima fase busca que el coche ponga la potencia al suelo con coherencia."
+        }
+      ],
+      "reasons": [
+        "El Golf R es una de las plataformas MQB mas solidas para una build potente de calle.",
+        "La traccion total permite aprovechar mejor la potencia extra que en un FWD puro.",
+        "Con presupuesto alto merece la pena acompanar motor, DSG, Haldex y chasis."
+      ],
+      "warnings": [
+        "Sin mantenimiento correcto de Haldex y DSG, la build pierde sentido rapidamente.",
+        "A este nivel ya hay que cuidar mucho homologacion, temperaturas y calidad del combustible."
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "volkswagen-polo-aw-gti-urban-pocket-rocket",
+      "vehicleKey": "volkswagen|polo|aw|gti|2021|gasolina|automatico|fwd",
+      "exactMatchKey": "volkswagen|polo|aw|gti|2021|gasolina|automatico|fwd|diario|calle|equilibrio|medio",
+      "goalMatchKey": "volkswagen|polo|aw|gti|2021|gasolina|automatico|fwd|calle",
+      "name": "Polo AW GTI Urban Pocket Rocket",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 94,
+      "summary": "Build de calle para Polo GTI AW enfocada en sacar partido al 2.0 TSI sin romper la usabilidad diaria del coche.",
+      "estimatedBudget": 4300,
+      "expectedGain": "+35 a +50 cv aprox.",
+      "reliabilityIndex": 87,
+      "executionTime": "2 a 3 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Punch utilizable",
+          "parts": [
+            "Revision previa y mantenimiento DSG",
+            "Reprogramacion ECU stage 1",
+            "Admision de alto flujo"
+          ],
+          "note": "El 2.0 TSI del Polo GTI gana mucha respuesta sin necesidad de una build extrema."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Temperatura y sonido",
+          "parts": [
+            "Intercooler mejorado",
+            "Downpipe de alto flujo",
+            "Cat-back con tono deportivo"
+          ],
+          "note": "Una segunda fase bien medida mantiene la alegria del coche sin volverlo incomodo."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Apoyo y traccion",
+          "parts": [
+            "Suspension fast road",
+            "Neumaticos UHP",
+            "Frenada mejorada"
+          ],
+          "note": "En un GTI pequeno el chasis y el neumatico cambian tanto como los caballos."
+        }
+      ],
+      "reasons": [
+        "El Polo GTI AW es una base moderna, ligera y muy coherente para tuning usable.",
+        "La receta mantiene al coche divertido en ciudad y carretera sin pasarse de radical.",
+        "Para el perfil TikTok y calle es un modelo muy vendible y reconocible."
+      ],
+      "warnings": [
+        "Si se endurece demasiado suspension o soportes, pierde gracia como daily.",
+        "La DSG debe estar bien mantenida si se incrementa notablemente el par."
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "volkswagen-scirocco-mk3-fast-road-coupe",
+      "vehicleKey": "volkswagen|scirocco|mk3|2.0 tsi|2016|gasolina|manual|fwd",
+      "exactMatchKey": "volkswagen|scirocco|mk3|2.0 tsi|2016|gasolina|manual|fwd|finde|calle|potencia|medio",
+      "goalMatchKey": "volkswagen|scirocco|mk3|2.0 tsi|2016|gasolina|manual|fwd|calle",
+      "name": "Scirocco Mk3 Fast Road Coupe",
+      "usage": "finde",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "medio",
+      "fitScore": 94,
+      "summary": "Build fast road para Scirocco Mk3 2.0 TSI con foco en empuje, temperatura y tacto de coupe de calle rapido.",
+      "estimatedBudget": 4900,
+      "expectedGain": "+45 a +65 cv aprox.",
+      "reliabilityIndex": 86,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Base coupe rapida",
+          "parts": [
+            "Revision de bujias, bobinas y PCV",
+            "Reprogramacion ECU stage 1",
+            "Admision de alto flujo"
+          ],
+          "note": "La primera fase ya da al Scirocco una respuesta mucho mas seria sin perder calle."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Flujo real",
+          "parts": [
+            "Intercooler mejorado",
+            "Downpipe deportivo",
+            "Escape con buen flujo"
+          ],
+          "note": "En una plataforma turbo de este tipo, la consistencia termica importa tanto como la cifra final."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Remate dinamico",
+          "parts": [
+            "Suspension fast road",
+            "Frenos y liquido de mayor rendimiento",
+            "Neumatico UHP con alineado final"
+          ],
+          "note": "El objetivo final es que el coche corra y a la vez siga sintiendose fino y presentable."
+        }
+      ],
+      "reasons": [
+        "El Scirocco Mk3 sigue siendo una base muy atractiva para una build de calle con personalidad.",
+        "Su 2.0 TSI tiene una ruta de mejoras muy conocida en el ecosistema VW.",
+        "Es un modelo perfecto para una web de tuning enfocada en coches reconocibles y aspiracionales."
+      ],
+      "warnings": [
+        "Una build de potencia sin soporte de frenos y neumaticos se queda coja muy rapido.",
+        "Conviene revisar ITV y legalidad si se cambia downpipe o nivel sonoro."
+      ],
+      "isFeatured": true
+    }
+  ]
+}

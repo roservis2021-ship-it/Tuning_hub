@@ -1,0 +1,28 @@
+{
+  "name": "tuning-hub",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "server": "node server/app.mjs",
+    "build": "vite build",
+    "preview": "vite preview",
+    "seed:catalog": "node scripts/build-catalog-seed.mjs",
+    "seed:firestore": "node scripts/seed-firestore.mjs",
+    "build:sql-seed": "node scripts/import-sql-builds.mjs",
+    "build:xlsx-seed": "powershell -ExecutionPolicy Bypass -File scripts/import-xlsx-builds.ps1",
+    "build:csv-backed-seed": "node scripts/import-backed-recommendations-csv.mjs",
+    "build:vehicle-catalog": "node scripts/build-vehicle-catalog-from-catalog-seed.mjs"
+  },
+  "dependencies": {
+    "firebase": "^12.12.0",
+    "firebase-admin": "^13.8.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "vite": "^7.1.7"
+  }
+}

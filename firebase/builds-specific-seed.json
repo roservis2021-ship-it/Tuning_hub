@@ -1,0 +1,432 @@
+{
+  "vehicles": [
+    {
+      "id": "audi_s3_8p_2-0-tfsi_2008_gasolina_manual_awd",
+      "brand": "Audi",
+      "model": "S3",
+      "generation": "8P",
+      "engine": "2.0 TFSI",
+      "year": 2008,
+      "powertrain": "gasolina",
+      "transmission": "manual",
+      "drivetrain": "awd",
+      "vehicleKey": "audi|s3|8p|2.0 tfsi|2008|gasolina|manual|awd"
+    },
+    {
+      "id": "bmw_serie-3_e90-e91-e92-e93_320d_2010_diesel_manual_rwd",
+      "brand": "BMW",
+      "model": "Serie 3",
+      "generation": "E90/E91/E92/E93",
+      "engine": "320d",
+      "year": 2010,
+      "powertrain": "diesel",
+      "transmission": "manual",
+      "drivetrain": "rwd",
+      "vehicleKey": "bmw|serie 3|e90/e91/e92/e93|320d|2010|diesel|manual|rwd"
+    },
+    {
+      "id": "renault_megane-rs_megane-iii-rs_2-0-turbo_2012_gasolina_manual_fwd",
+      "brand": "Renault",
+      "model": "Megane RS",
+      "generation": "Megane III RS",
+      "engine": "2.0 Turbo",
+      "year": 2012,
+      "powertrain": "gasolina",
+      "transmission": "manual",
+      "drivetrain": "fwd",
+      "vehicleKey": "renault|megane rs|megane iii rs|2.0 turbo|2012|gasolina|manual|fwd"
+    },
+    {
+      "id": "peugeot_208_a9_gti_2016_gasolina_manual_fwd",
+      "brand": "Peugeot",
+      "model": "208",
+      "generation": "A9",
+      "engine": "GTi",
+      "year": 2016,
+      "powertrain": "gasolina",
+      "transmission": "manual",
+      "drivetrain": "fwd",
+      "vehicleKey": "peugeot|208|a9|gti|2016|gasolina|manual|fwd"
+    },
+    {
+      "id": "abarth_595_312_1-4-t-jet-165_2018_gasolina_manual_fwd",
+      "brand": "Abarth",
+      "model": "595",
+      "generation": "312",
+      "engine": "1.4 T-Jet 165",
+      "year": 2018,
+      "powertrain": "gasolina",
+      "transmission": "manual",
+      "drivetrain": "fwd",
+      "vehicleKey": "abarth|595|312|1.4 t-jet 165|2018|gasolina|manual|fwd"
+    },
+    {
+      "id": "mini_cooper-s_f56_cooper-s_2017_gasolina_manual_fwd",
+      "brand": "Mini",
+      "model": "Cooper S",
+      "generation": "F56",
+      "engine": "2.0 Turbo",
+      "year": 2017,
+      "powertrain": "gasolina",
+      "transmission": "manual",
+      "drivetrain": "fwd",
+      "vehicleKey": "mini|cooper s|f56|2.0 turbo|2017|gasolina|manual|fwd"
+    }
+  ],
+  "builds": [
+    {
+      "id": "audi-s3-8p-fast-road-balance",
+      "vehicleKey": "audi|s3|8p|2.0 tfsi|2008|gasolina|manual|awd",
+      "exactMatchKey": "audi|s3|8p|2.0 tfsi|2008|gasolina|manual|awd|finde|calle|equilibrio|medio",
+      "goalMatchKey": "audi|s3|8p|2.0 tfsi|2008|gasolina|manual|awd|calle",
+      "name": "S3 8P Fast Road Balance",
+      "usage": "finde",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 94,
+      "summary": "Build de fast road para S3 8P centrada en bajar temperaturas, mejorar respuesta y sujetar el coche para uso rapido sin perder demasiada calle.",
+      "estimatedBudget": 5200,
+      "expectedGain": "+45 a +60 cv aprox.",
+      "reliabilityIndex": 88,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "Etapa 1",
+          "focus": "Base motor",
+          "parts": [
+            "Revision completa de PCV, diverter valve y bobinas",
+            "ECU stage 1 conservadora",
+            "Admision sellada y mantenimiento fresco"
+          ],
+          "note": "La base del EA113 agradece empezar por salud mecanica antes de apretar."
+        },
+        {
+          "label": "Etapa 2",
+          "focus": "Temperatura y flujo",
+          "parts": [
+            "Intercooler sobredimensionado para remap",
+            "Downpipe y escape con buen flujo",
+            "Neumatico UHP y alineado para Haldex"
+          ],
+          "note": "Los especialistas destacan que el intercooler cobra sentido especialmente en coches reprogramados."
+        },
+        {
+          "label": "Etapa 3",
+          "focus": "Chasis y frenada",
+          "parts": [
+            "Pastillas, liquido y latiguillos",
+            "Suspension regulable o muelle/amortiguador fast road",
+            "Mantenimiento Haldex y ajuste fino"
+          ],
+          "note": "El objetivo es que el coche traduzca la potencia en confianza real."
+        }
+      ],
+      "reasons": [
+        "La plataforma 8P 2.0 TFSI responde muy bien a remap e intercooler.",
+        "La traccion total permite una build de calle rapida muy utilizable.",
+        "Con presupuesto medio ya se puede conseguir un conjunto muy redondo."
+      ],
+      "warnings": [
+        "Vigilar consumos de aceite, bomba segun historial y componentes tipicos del 2.0 TFSI.",
+        "Si se sube mucho de stage 1, la gestion termica deja de ser opcional."
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "bmw-e90-320d-torque-daily",
+      "vehicleKey": "bmw|serie 3|e90/e91/e92/e93|320d|2010|diesel|manual|rwd",
+      "exactMatchKey": "bmw|serie 3|e90/e91/e92/e93|320d|2010|diesel|manual|rwd|diario|calle|fiabilidad|medio",
+      "goalMatchKey": "bmw|serie 3|e90/e91/e92/e93|320d|2010|diesel|manual|rwd|calle",
+      "name": "320d E9x Torque Daily",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "fiabilidad",
+      "budget": "medio",
+      "fitScore": 91,
+      "summary": "Build diaria para 320d E9x enfocada en ganar par y respuesta sin forzar una plataforma muy usada como daily.",
+      "estimatedBudget": 3400,
+      "expectedGain": "+34 a +47 cv aprox. y mucho par",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 3 semanas",
+      "stages": [
+        {
+          "label": "Etapa 1",
+          "focus": "Mantenimiento cero",
+          "parts": [
+            "Revision de admision, termostatos y estado del turbo",
+            "ECU stage 1 suave",
+            "Check de embrague y volante motor"
+          ],
+          "note": "La mejora por reflash existe, pero en daily conviene revisar antes lo que mas sufre con el par."
+        },
+        {
+          "label": "Etapa 2",
+          "focus": "Respiracion",
+          "parts": [
+            "Intercooler o mejora termica si el uso es intenso",
+            "Escape y admision solo si el estado del coche lo justifica",
+            "Neumaticos y tacos de motor/transmision segun desgaste"
+          ],
+          "note": "El punto fuerte de esta build es el par utilizable, no montar piezas por montar."
+        },
+        {
+          "label": "Etapa 3",
+          "focus": "Chasis coherente",
+          "parts": [
+            "Suspension fast road",
+            "Frenada mejorada",
+            "Alineado y geometria final"
+          ],
+          "note": "Un 320d afinado gana mucho cuando acompanas el motor con chasis."
+        }
+      ],
+      "reasons": [
+        "Los especialistas de remap muestran ganancias claras de potencia y par en 320d E90.",
+        "En uso diario, una calibracion conservadora tiene mejor retorno que buscar pico maximo.",
+        "Es una base muy logica para una web de tuning de coches de calle."
+      ],
+      "warnings": [
+        "Revisar historial de distribucion segun motor exacto y kilometraje.",
+        "Con mucho par y uso duro, el embrague puede convertirse en el siguiente cuello de botella."
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "megane-3-rs-track-street",
+      "vehicleKey": "renault|megane rs|megane iii rs|2.0 turbo|2012|gasolina|manual|fwd",
+      "exactMatchKey": "renault|megane rs|megane iii rs|2.0 turbo|2012|gasolina|manual|fwd|finde|tandas|potencia|alto",
+      "goalMatchKey": "renault|megane rs|megane iii rs|2.0 turbo|2012|gasolina|manual|fwd|tandas",
+      "name": "Megane 3 RS Track Street",
+      "usage": "finde",
+      "goal": "tandas",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 95,
+      "summary": "Build para Megane 3 RS pensada para tandas y fast road, con claro foco en intercooler, control termico y frenada.",
+      "estimatedBudget": 6900,
+      "expectedGain": "+40 a +60 cv aprox.",
+      "reliabilityIndex": 84,
+      "executionTime": "3 a 5 semanas",
+      "stages": [
+        {
+          "label": "Etapa 1",
+          "focus": "Stage 1 utilizable",
+          "parts": [
+            "ECU stage 1 sobre base sana",
+            "Revision de bujias, bobinas y manguitos",
+            "Liquido de frenos y pastilla deportiva"
+          ],
+          "note": "Primero haces que el coche aguante una sesion fuerte sin perder consistencia."
+        },
+        {
+          "label": "Etapa 2",
+          "focus": "Temperatura",
+          "parts": [
+            "Intercooler stage 1 de mayor capacidad",
+            "Admisión y escape con flujo coherente",
+            "Neumatico semislick o UHP muy serio"
+          ],
+          "note": "Hay fabricantes que venden el intercooler como upgrade directa para Megane RS remapeado y hasta 300-450+ bhp."
+        },
+        {
+          "label": "Etapa 3",
+          "focus": "Puesta a punto de circuito",
+          "parts": [
+            "Suspension regulable",
+            "Alineado especifico para grip delantero",
+            "Discos/pastillas y refrigeracion de frenos"
+          ],
+          "note": "La ganancia real viene de enlazar potencia, termica y paso por curva."
+        }
+      ],
+      "reasons": [
+        "El Megane RS es una de las bases FWD mas coherentes para tandas.",
+        "Las mejoras de intercooler estan claramente orientadas a coches reprogramados o de uso intenso.",
+        "Con presupuesto alto ya compensa montar una hoja de ruta con frenos y chasis en serio."
+      ],
+      "warnings": [
+        "No sobredimensionar potencia sin acompañar frenada y neumatico.",
+        "En uso de tandas, temperatura de aceite y frenos manda mas que la cifra final."
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "peugeot-208-gti-hot-hatch-balance",
+      "vehicleKey": "peugeot|208|a9|gti|2016|gasolina|manual|fwd",
+      "exactMatchKey": "peugeot|208|a9|gti|2016|gasolina|manual|fwd|finde|calle|equilibrio|medio",
+      "goalMatchKey": "peugeot|208|a9|gti|2016|gasolina|manual|fwd|calle",
+      "name": "208 GTi Hot Hatch Balance",
+      "usage": "finde",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 92,
+      "summary": "Build equilibrada para 208 GTi con foco en intercooler, soporte de motor y tacto de hot hatch rapido.",
+      "estimatedBudget": 4100,
+      "expectedGain": "+25 a +40 cv aprox.",
+      "reliabilityIndex": 87,
+      "executionTime": "2 a 3 semanas",
+      "stages": [
+        {
+          "label": "Etapa 1",
+          "focus": "Base de remap",
+          "parts": [
+            "Mantenimiento e inspeccion previa",
+            "ECU stage 1 conservadora",
+            "Neumatico y frenos a la altura"
+          ],
+          "note": "La clave es no perder la agilidad ni el feeling original del 208 GTi."
+        },
+        {
+          "label": "Etapa 2",
+          "focus": "Temperatura y traccion",
+          "parts": [
+            "Intercooler mejorado para coche remapeado",
+            "Torque mount reforzado",
+            "Boost pipes si se busca una segunda fase"
+          ],
+          "note": "Hay fabricantes que destacan expresamente el intercooler y el torque mount para este chasis."
+        },
+        {
+          "label": "Etapa 3",
+          "focus": "Refinado fast road",
+          "parts": [
+            "Suspension fast road",
+            "Alineado con mas apoyo delantero",
+            "Escape discreto y mas respiracion"
+          ],
+          "note": "No hace falta convertirlo en track toy para que cambie mucho el coche."
+        }
+      ],
+      "reasons": [
+        "La plataforma 208 GTi mejora mucho al controlar temperaturas y wheel hop.",
+        "Los soportes y la gestion del movimiento del motor tienen impacto real en la respuesta.",
+        "Con presupuesto medio sale una build muy redonda y vendible."
+      ],
+      "warnings": [
+        "Un taco demasiado rigido puede meter NVH en un coche de calle.",
+        "Si la prioridad es uso diario total, conviene no pasarse con durezas."
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "abarth-595-fast-road-spool",
+      "vehicleKey": "abarth|595|312|1.4 t-jet 165|2018|gasolina|manual|fwd",
+      "exactMatchKey": "abarth|595|312|1.4 t-jet 165|2018|gasolina|manual|fwd|finde|calle|potencia|medio",
+      "goalMatchKey": "abarth|595|312|1.4 t-jet 165|2018|gasolina|manual|fwd|calle",
+      "name": "595 Fast Road Spool",
+      "usage": "finde",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "medio",
+      "fitScore": 93,
+      "summary": "Build de 595 pensada para mejorar spool, respuesta y sensacion de kart sin perder demasiado calle.",
+      "estimatedBudget": 4300,
+      "expectedGain": "+25 a +35 cv aprox.",
+      "reliabilityIndex": 85,
+      "executionTime": "2 a 3 semanas",
+      "stages": [
+        {
+          "label": "Etapa 1",
+          "focus": "Respuesta",
+          "parts": [
+            "ECU stage 1 sensata",
+            "Chequeo de turbo y actuadores",
+            "Mantenimiento base al dia"
+          ],
+          "note": "El coche cambia mucho ya con una buena calibracion y una base sana."
+        },
+        {
+          "label": "Etapa 2",
+          "focus": "Intercooler y flujo",
+          "parts": [
+            "Intercooler frontal de mayor flujo",
+            "Pipework de menor restriccion",
+            "Escape cat-back con buena respuesta"
+          ],
+          "note": "Los especialistas venden esta mejora como especialmente util en coches remapeados."
+        },
+        {
+          "label": "Etapa 3",
+          "focus": "Traccion",
+          "parts": [
+            "Neumatico serio",
+            "Suspension corta o coilover suave",
+            "Frenada acorde al nuevo ritmo"
+          ],
+          "note": "El reto en un 595 no es solo sacar potencia, sino ponerla al suelo con gracia."
+        }
+      ],
+      "reasons": [
+        "El 1.4 T-Jet responde muy bien a una build de calle con buen intercooler.",
+        "La mejora del spool y la sensacion de empuje se notan mucho en este chasis corto.",
+        "Encaja perfecto con el perfil de usuario de tuning de diario/fin de semana."
+      ],
+      "warnings": [
+        "Cuanto mas rigido el setup, menos agradable sera para trayectos largos.",
+        "Conviene vigilar temperaturas si se usa fuerte en verano o puerto."
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "mini-f56-cooper-s-balanced-stage",
+      "vehicleKey": "mini|cooper s|f56|2.0 turbo|2017|gasolina|manual|fwd",
+      "exactMatchKey": "mini|cooper s|f56|2.0 turbo|2017|gasolina|manual|fwd|finde|calle|equilibrio|medio",
+      "goalMatchKey": "mini|cooper s|f56|2.0 turbo|2017|gasolina|manual|fwd|calle",
+      "name": "F56 Cooper S Balanced Stage",
+      "usage": "finde",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 92,
+      "summary": "Build equilibrada para Mini Cooper S F56 basada en remap suave, intercooler y tacto rapido de chasis.",
+      "estimatedBudget": 4700,
+      "expectedGain": "+30 a +45 cv aprox.",
+      "reliabilityIndex": 87,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "Etapa 1",
+          "focus": "Base B48",
+          "parts": [
+            "Mantenimiento, bujias y revision de fugas",
+            "ECU stage 1 prudente",
+            "Neumatico y frenos UHP"
+          ],
+          "note": "La base moderna del F56 responde bien a una fase 1 bien planteada."
+        },
+        {
+          "label": "Etapa 2",
+          "focus": "Carga y temperatura",
+          "parts": [
+            "Intercooler mejorado",
+            "Boost pipes segun nivel final",
+            "Admision con buen control termico"
+          ],
+          "note": "Los especialistas muestran reducciones claras de temperatura con intercooler dedicado en F56."
+        },
+        {
+          "label": "Etapa 3",
+          "focus": "Fast road serio",
+          "parts": [
+            "Suspension fast road",
+            "Alineado para apoyo delantero",
+            "Escape y sonido sin arruinar el uso diario"
+          ],
+          "note": "Se busca mantener ese caracter agil, no convertirlo en un coche torpe."
+        }
+      ],
+      "reasons": [
+        "El F56 mejora mucho en consistencia cuando bajas temperaturas de admision.",
+        "Es una plataforma muy popular para tuning usable.",
+        "La build equilibrada cuadra mejor que una busqueda obsesiva de cifra."
+      ],
+      "warnings": [
+        "Si luego pasas a track day serio, puede merecer aceite/cooling especifico.",
+        "No mezclar piezas sueltas sin una estrategia clara de etapa final."
+      ],
+      "isFeatured": true
+    }
+  ]
+}

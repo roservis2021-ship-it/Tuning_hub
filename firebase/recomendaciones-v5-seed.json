@@ -1,0 +1,4449 @@
+{
+  "catalog_brands": [
+    {
+      "id": "brand-1",
+      "name": "Audi"
+    },
+    {
+      "id": "brand-2",
+      "name": "BMW"
+    },
+    {
+      "id": "brand-3",
+      "name": "Fiat"
+    },
+    {
+      "id": "brand-4",
+      "name": "Ford"
+    },
+    {
+      "id": "brand-5",
+      "name": "Opel"
+    },
+    {
+      "id": "brand-6",
+      "name": "Peugeot"
+    },
+    {
+      "id": "brand-7",
+      "name": "Renault"
+    },
+    {
+      "id": "brand-8",
+      "name": "SEAT"
+    },
+    {
+      "id": "brand-9",
+      "name": "Skoda"
+    },
+    {
+      "id": "brand-10",
+      "name": "Volkswagen"
+    }
+  ],
+  "catalog_models": [
+    {
+      "id": "model-1",
+      "brandId": "brand-1",
+      "name": "A3"
+    },
+    {
+      "id": "model-2",
+      "brandId": "brand-1",
+      "name": "A4"
+    },
+    {
+      "id": "model-3",
+      "brandId": "brand-1",
+      "name": "TT"
+    },
+    {
+      "id": "model-4",
+      "brandId": "brand-10",
+      "name": "Golf"
+    },
+    {
+      "id": "model-5",
+      "brandId": "brand-10",
+      "name": "Bora"
+    },
+    {
+      "id": "model-6",
+      "brandId": "brand-10",
+      "name": "Beetle"
+    },
+    {
+      "id": "model-7",
+      "brandId": "brand-9",
+      "name": "Octavia"
+    },
+    {
+      "id": "model-8",
+      "brandId": "brand-8",
+      "name": "Ibiza"
+    },
+    {
+      "id": "model-9",
+      "brandId": "brand-9",
+      "name": "Fabia"
+    },
+    {
+      "id": "model-10",
+      "brandId": "brand-8",
+      "name": "Altea"
+    },
+    {
+      "id": "model-11",
+      "brandId": "brand-8",
+      "name": "León"
+    },
+    {
+      "id": "model-12",
+      "brandId": "brand-10",
+      "name": "Passat"
+    },
+    {
+      "id": "model-13",
+      "brandId": "brand-4",
+      "name": "Focus"
+    },
+    {
+      "id": "model-14",
+      "brandId": "brand-4",
+      "name": "Fiesta"
+    },
+    {
+      "id": "model-15",
+      "brandId": "brand-6",
+      "name": "207"
+    },
+    {
+      "id": "model-16",
+      "brandId": "brand-6",
+      "name": "307"
+    },
+    {
+      "id": "model-17",
+      "brandId": "brand-6",
+      "name": "308"
+    },
+    {
+      "id": "model-18",
+      "brandId": "brand-7",
+      "name": "Clio"
+    },
+    {
+      "id": "model-19",
+      "brandId": "brand-7",
+      "name": "Mégane"
+    },
+    {
+      "id": "model-20",
+      "brandId": "brand-5",
+      "name": "Astra"
+    },
+    {
+      "id": "model-21",
+      "brandId": "brand-5",
+      "name": "Corsa"
+    },
+    {
+      "id": "model-22",
+      "brandId": "brand-3",
+      "name": "Grande Punto"
+    },
+    {
+      "id": "model-23",
+      "brandId": "brand-2",
+      "name": "Serie 3"
+    },
+    {
+      "id": "model-24",
+      "brandId": "brand-1",
+      "name": "A2"
+    },
+    {
+      "id": "model-25",
+      "brandId": "brand-10",
+      "name": "Fox"
+    },
+    {
+      "id": "model-26",
+      "brandId": "brand-10",
+      "name": "Lupo"
+    },
+    {
+      "id": "model-27",
+      "brandId": "brand-10",
+      "name": "Polo"
+    }
+  ],
+  "catalog_generations": [
+    {
+      "id": "generation-1",
+      "modelId": "model-1",
+      "name": "8L"
+    },
+    {
+      "id": "generation-2",
+      "modelId": "model-2",
+      "name": "B6"
+    },
+    {
+      "id": "generation-3",
+      "modelId": "model-3",
+      "name": "8N"
+    },
+    {
+      "id": "generation-4",
+      "modelId": "model-4",
+      "name": "Mk4"
+    },
+    {
+      "id": "generation-5",
+      "modelId": "model-5",
+      "name": "1J"
+    },
+    {
+      "id": "generation-6",
+      "modelId": "model-6",
+      "name": "9C"
+    },
+    {
+      "id": "generation-7",
+      "modelId": "model-7",
+      "name": "1U"
+    },
+    {
+      "id": "generation-8",
+      "modelId": "model-8",
+      "name": "6L"
+    },
+    {
+      "id": "generation-9",
+      "modelId": "model-9",
+      "name": "6Y"
+    },
+    {
+      "id": "generation-10",
+      "modelId": "model-10",
+      "name": "5P"
+    },
+    {
+      "id": "generation-11",
+      "modelId": "model-7",
+      "name": "1Z"
+    },
+    {
+      "id": "generation-12",
+      "modelId": "model-1",
+      "name": "8P"
+    },
+    {
+      "id": "generation-13",
+      "modelId": "model-4",
+      "name": "Mk5"
+    },
+    {
+      "id": "generation-14",
+      "modelId": "model-11",
+      "name": "1P"
+    },
+    {
+      "id": "generation-15",
+      "modelId": "model-12",
+      "name": "B6"
+    },
+    {
+      "id": "generation-16",
+      "modelId": "model-13",
+      "name": "Mk2"
+    },
+    {
+      "id": "generation-17",
+      "modelId": "model-14",
+      "name": "Mk6"
+    },
+    {
+      "id": "generation-18",
+      "modelId": "model-15",
+      "name": "A7"
+    },
+    {
+      "id": "generation-19",
+      "modelId": "model-16",
+      "name": "T5"
+    },
+    {
+      "id": "generation-20",
+      "modelId": "model-17",
+      "name": "T7"
+    },
+    {
+      "id": "generation-21",
+      "modelId": "model-18",
+      "name": "II"
+    },
+    {
+      "id": "generation-22",
+      "modelId": "model-18",
+      "name": "III"
+    },
+    {
+      "id": "generation-23",
+      "modelId": "model-19",
+      "name": "II"
+    },
+    {
+      "id": "generation-24",
+      "modelId": "model-20",
+      "name": "H"
+    },
+    {
+      "id": "generation-25",
+      "modelId": "model-21",
+      "name": "D"
+    },
+    {
+      "id": "generation-26",
+      "modelId": "model-22",
+      "name": "199"
+    },
+    {
+      "id": "generation-27",
+      "modelId": "model-23",
+      "name": "E46"
+    },
+    {
+      "id": "generation-28",
+      "modelId": "model-24",
+      "name": "8Z"
+    },
+    {
+      "id": "generation-29",
+      "modelId": "model-9",
+      "name": "5J"
+    },
+    {
+      "id": "generation-30",
+      "modelId": "model-25",
+      "name": "5Z"
+    },
+    {
+      "id": "generation-31",
+      "modelId": "model-26",
+      "name": "6X"
+    },
+    {
+      "id": "generation-32",
+      "modelId": "model-27",
+      "name": "9N"
+    }
+  ],
+  "catalog_engines": [
+    {
+      "id": "engine-1",
+      "generationId": "generation-1",
+      "name": "1.8T",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-2",
+      "generationId": "generation-2",
+      "name": "1.8T",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-3",
+      "generationId": "generation-3",
+      "name": "1.8T",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-4",
+      "generationId": "generation-4",
+      "name": "1.8T",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-5",
+      "generationId": "generation-5",
+      "name": "1.8T",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-6",
+      "generationId": "generation-6",
+      "name": "1.8T",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-7",
+      "generationId": "generation-7",
+      "name": "1.8T",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-8",
+      "generationId": "generation-8",
+      "name": "1.8T Cupra",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-9",
+      "generationId": "generation-1",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-10",
+      "generationId": "generation-2",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-11",
+      "generationId": "generation-4",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-12",
+      "generationId": "generation-5",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-13",
+      "generationId": "generation-6",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-14",
+      "generationId": "generation-7",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-15",
+      "generationId": "generation-8",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-16",
+      "generationId": "generation-8",
+      "name": "1.9 TDI FR",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-17",
+      "generationId": "generation-9",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-18",
+      "generationId": "generation-10",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-19",
+      "generationId": "generation-11",
+      "name": "1.9 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-20",
+      "generationId": "generation-12",
+      "name": "2.0 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-21",
+      "generationId": "generation-13",
+      "name": "2.0 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-22",
+      "generationId": "generation-14",
+      "name": "2.0 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-23",
+      "generationId": "generation-11",
+      "name": "2.0 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-24",
+      "generationId": "generation-10",
+      "name": "2.0 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-25",
+      "generationId": "generation-15",
+      "name": "2.0 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-26",
+      "generationId": "generation-16",
+      "name": "1.6 TDCi",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-27",
+      "generationId": "generation-17",
+      "name": "1.6 TDCi",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-28",
+      "generationId": "generation-18",
+      "name": "1.6 HDi",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-29",
+      "generationId": "generation-19",
+      "name": "1.6 HDi",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-30",
+      "generationId": "generation-20",
+      "name": "1.6 HDi",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-31",
+      "generationId": "generation-21",
+      "name": "1.5 dCi",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-32",
+      "generationId": "generation-22",
+      "name": "1.5 dCi",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-33",
+      "generationId": "generation-23",
+      "name": "1.5 dCi",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-34",
+      "generationId": "generation-21",
+      "name": "1.6 16v",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-35",
+      "generationId": "generation-22",
+      "name": "1.6 16v",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-36",
+      "generationId": "generation-24",
+      "name": "1.9 CDTI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-37",
+      "generationId": "generation-24",
+      "name": "1.7 CDTI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-38",
+      "generationId": "generation-25",
+      "name": "1.3 CDTI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-39",
+      "generationId": "generation-26",
+      "name": "1.9 Multijet",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-40",
+      "generationId": "generation-26",
+      "name": "1.3 Multijet",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-41",
+      "generationId": "generation-27",
+      "name": "320d",
+      "powertrain": "gasolina"
+    },
+    {
+      "id": "engine-42",
+      "generationId": "generation-27",
+      "name": "318i",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-43",
+      "generationId": "generation-27",
+      "name": "320i",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-44",
+      "generationId": "generation-27",
+      "name": "330i",
+      "powertrain": "electrico"
+    },
+    {
+      "id": "engine-45",
+      "generationId": "generation-28",
+      "name": "1.4 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-46",
+      "generationId": "generation-29",
+      "name": "1.4 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-47",
+      "generationId": "generation-30",
+      "name": "1.4 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-48",
+      "generationId": "generation-31",
+      "name": "1.4 TDI",
+      "powertrain": "diesel"
+    },
+    {
+      "id": "engine-49",
+      "generationId": "generation-32",
+      "name": "1.4 TDI",
+      "powertrain": "diesel"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "vehicle-1",
+      "brand": "Audi",
+      "model": "A3",
+      "generation": "8L",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "platformLookupKey": "audi|a3|8l|1.8t"
+    },
+    {
+      "id": "vehicle-2",
+      "brand": "Audi",
+      "model": "A4",
+      "generation": "B6",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "platformLookupKey": "audi|a4|b6|1.8t"
+    },
+    {
+      "id": "vehicle-3",
+      "brand": "Audi",
+      "model": "TT",
+      "generation": "8N",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "platformLookupKey": "audi|tt|8n|1.8t"
+    },
+    {
+      "id": "vehicle-4",
+      "brand": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk4",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "platformLookupKey": "volkswagen|golf|mk4|1.8t"
+    },
+    {
+      "id": "vehicle-5",
+      "brand": "Volkswagen",
+      "model": "Bora",
+      "generation": "1J",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "platformLookupKey": "volkswagen|bora|1j|1.8t"
+    },
+    {
+      "id": "vehicle-6",
+      "brand": "Volkswagen",
+      "model": "Beetle",
+      "generation": "9C",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "platformLookupKey": "volkswagen|beetle|9c|1.8t"
+    },
+    {
+      "id": "vehicle-7",
+      "brand": "Skoda",
+      "model": "Octavia",
+      "generation": "1U",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "platformLookupKey": "skoda|octavia|1u|1.8t"
+    },
+    {
+      "id": "vehicle-8",
+      "brand": "SEAT",
+      "model": "Ibiza",
+      "generation": "6L",
+      "engine": "1.8T Cupra",
+      "powertrain": "electrico",
+      "platformLookupKey": "seat|ibiza|6l|1.8t cupra"
+    },
+    {
+      "id": "vehicle-9",
+      "brand": "Audi",
+      "model": "A3",
+      "generation": "8L",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "audi|a3|8l|1.9 tdi"
+    },
+    {
+      "id": "vehicle-10",
+      "brand": "Audi",
+      "model": "A4",
+      "generation": "B6",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "audi|a4|b6|1.9 tdi"
+    },
+    {
+      "id": "vehicle-11",
+      "brand": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk4",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "volkswagen|golf|mk4|1.9 tdi"
+    },
+    {
+      "id": "vehicle-12",
+      "brand": "Volkswagen",
+      "model": "Bora",
+      "generation": "1J",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "volkswagen|bora|1j|1.9 tdi"
+    },
+    {
+      "id": "vehicle-13",
+      "brand": "Volkswagen",
+      "model": "Beetle",
+      "generation": "9C",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "volkswagen|beetle|9c|1.9 tdi"
+    },
+    {
+      "id": "vehicle-14",
+      "brand": "Skoda",
+      "model": "Octavia",
+      "generation": "1U",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "skoda|octavia|1u|1.9 tdi"
+    },
+    {
+      "id": "vehicle-15",
+      "brand": "SEAT",
+      "model": "Ibiza",
+      "generation": "6L",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "seat|ibiza|6l|1.9 tdi"
+    },
+    {
+      "id": "vehicle-16",
+      "brand": "SEAT",
+      "model": "Ibiza",
+      "generation": "6L",
+      "engine": "1.9 TDI FR",
+      "powertrain": "diesel",
+      "platformLookupKey": "seat|ibiza|6l|1.9 tdi fr"
+    },
+    {
+      "id": "vehicle-17",
+      "brand": "Skoda",
+      "model": "Fabia",
+      "generation": "6Y",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "skoda|fabia|6y|1.9 tdi"
+    },
+    {
+      "id": "vehicle-18",
+      "brand": "SEAT",
+      "model": "Altea",
+      "generation": "5P",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "seat|altea|5p|1.9 tdi"
+    },
+    {
+      "id": "vehicle-19",
+      "brand": "Skoda",
+      "model": "Octavia",
+      "generation": "1Z",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "skoda|octavia|1z|1.9 tdi"
+    },
+    {
+      "id": "vehicle-20",
+      "brand": "Audi",
+      "model": "A3",
+      "generation": "8P",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "audi|a3|8p|2.0 tdi"
+    },
+    {
+      "id": "vehicle-21",
+      "brand": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk5",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "volkswagen|golf|mk5|2.0 tdi"
+    },
+    {
+      "id": "vehicle-22",
+      "brand": "SEAT",
+      "model": "León",
+      "generation": "1P",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "seat|leon|1p|2.0 tdi"
+    },
+    {
+      "id": "vehicle-23",
+      "brand": "Skoda",
+      "model": "Octavia",
+      "generation": "1Z",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "skoda|octavia|1z|2.0 tdi"
+    },
+    {
+      "id": "vehicle-24",
+      "brand": "SEAT",
+      "model": "Altea",
+      "generation": "5P",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "seat|altea|5p|2.0 tdi"
+    },
+    {
+      "id": "vehicle-25",
+      "brand": "Volkswagen",
+      "model": "Passat",
+      "generation": "B6",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "volkswagen|passat|b6|2.0 tdi"
+    },
+    {
+      "id": "vehicle-26",
+      "brand": "Ford",
+      "model": "Focus",
+      "generation": "Mk2",
+      "engine": "1.6 TDCi",
+      "powertrain": "diesel",
+      "platformLookupKey": "ford|focus|mk2|1.6 tdci"
+    },
+    {
+      "id": "vehicle-27",
+      "brand": "Ford",
+      "model": "Fiesta",
+      "generation": "Mk6",
+      "engine": "1.6 TDCi",
+      "powertrain": "diesel",
+      "platformLookupKey": "ford|fiesta|mk6|1.6 tdci"
+    },
+    {
+      "id": "vehicle-28",
+      "brand": "Peugeot",
+      "model": "207",
+      "generation": "A7",
+      "engine": "1.6 HDi",
+      "powertrain": "diesel",
+      "platformLookupKey": "peugeot|207|a7|1.6 hdi"
+    },
+    {
+      "id": "vehicle-29",
+      "brand": "Peugeot",
+      "model": "307",
+      "generation": "T5",
+      "engine": "1.6 HDi",
+      "powertrain": "diesel",
+      "platformLookupKey": "peugeot|307|t5|1.6 hdi"
+    },
+    {
+      "id": "vehicle-30",
+      "brand": "Peugeot",
+      "model": "308",
+      "generation": "T7",
+      "engine": "1.6 HDi",
+      "powertrain": "diesel",
+      "platformLookupKey": "peugeot|308|t7|1.6 hdi"
+    },
+    {
+      "id": "vehicle-31",
+      "brand": "Renault",
+      "model": "Clio",
+      "generation": "II",
+      "engine": "1.5 dCi",
+      "powertrain": "diesel",
+      "platformLookupKey": "renault|clio|ii|1.5 dci"
+    },
+    {
+      "id": "vehicle-32",
+      "brand": "Renault",
+      "model": "Clio",
+      "generation": "III",
+      "engine": "1.5 dCi",
+      "powertrain": "diesel",
+      "platformLookupKey": "renault|clio|iii|1.5 dci"
+    },
+    {
+      "id": "vehicle-33",
+      "brand": "Renault",
+      "model": "Mégane",
+      "generation": "II",
+      "engine": "1.5 dCi",
+      "powertrain": "diesel",
+      "platformLookupKey": "renault|megane|ii|1.5 dci"
+    },
+    {
+      "id": "vehicle-34",
+      "brand": "Renault",
+      "model": "Clio",
+      "generation": "II",
+      "engine": "1.6 16v",
+      "powertrain": "electrico",
+      "platformLookupKey": "renault|clio|ii|1.6 16v"
+    },
+    {
+      "id": "vehicle-35",
+      "brand": "Renault",
+      "model": "Clio",
+      "generation": "III",
+      "engine": "1.6 16v",
+      "powertrain": "electrico",
+      "platformLookupKey": "renault|clio|iii|1.6 16v"
+    },
+    {
+      "id": "vehicle-36",
+      "brand": "Opel",
+      "model": "Astra",
+      "generation": "H",
+      "engine": "1.9 CDTI",
+      "powertrain": "diesel",
+      "platformLookupKey": "opel|astra|h|1.9 cdti"
+    },
+    {
+      "id": "vehicle-37",
+      "brand": "Opel",
+      "model": "Astra",
+      "generation": "H",
+      "engine": "1.7 CDTI",
+      "powertrain": "diesel",
+      "platformLookupKey": "opel|astra|h|1.7 cdti"
+    },
+    {
+      "id": "vehicle-38",
+      "brand": "Opel",
+      "model": "Corsa",
+      "generation": "D",
+      "engine": "1.3 CDTI",
+      "powertrain": "diesel",
+      "platformLookupKey": "opel|corsa|d|1.3 cdti"
+    },
+    {
+      "id": "vehicle-39",
+      "brand": "Fiat",
+      "model": "Grande Punto",
+      "generation": "199",
+      "engine": "1.9 Multijet",
+      "powertrain": "diesel",
+      "platformLookupKey": "fiat|grande punto|199|1.9 multijet"
+    },
+    {
+      "id": "vehicle-40",
+      "brand": "Fiat",
+      "model": "Grande Punto",
+      "generation": "199",
+      "engine": "1.3 Multijet",
+      "powertrain": "diesel",
+      "platformLookupKey": "fiat|grande punto|199|1.3 multijet"
+    },
+    {
+      "id": "vehicle-41",
+      "brand": "BMW",
+      "model": "Serie 3",
+      "generation": "E46",
+      "engine": "320d",
+      "powertrain": "gasolina",
+      "platformLookupKey": "bmw|serie 3|e46|320d"
+    },
+    {
+      "id": "vehicle-42",
+      "brand": "BMW",
+      "model": "Serie 3",
+      "generation": "E46",
+      "engine": "318i",
+      "powertrain": "electrico",
+      "platformLookupKey": "bmw|serie 3|e46|318i"
+    },
+    {
+      "id": "vehicle-43",
+      "brand": "BMW",
+      "model": "Serie 3",
+      "generation": "E46",
+      "engine": "320i",
+      "powertrain": "electrico",
+      "platformLookupKey": "bmw|serie 3|e46|320i"
+    },
+    {
+      "id": "vehicle-44",
+      "brand": "BMW",
+      "model": "Serie 3",
+      "generation": "E46",
+      "engine": "330i",
+      "powertrain": "electrico",
+      "platformLookupKey": "bmw|serie 3|e46|330i"
+    },
+    {
+      "id": "vehicle-45",
+      "brand": "Audi",
+      "model": "A2",
+      "generation": "8Z",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "audi|a2|8z|1.4 tdi"
+    },
+    {
+      "id": "vehicle-46",
+      "brand": "Skoda",
+      "model": "Fabia",
+      "generation": "5J",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "skoda|fabia|5j|1.4 tdi"
+    },
+    {
+      "id": "vehicle-47",
+      "brand": "Volkswagen",
+      "model": "Fox",
+      "generation": "5Z",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "volkswagen|fox|5z|1.4 tdi"
+    },
+    {
+      "id": "vehicle-48",
+      "brand": "Volkswagen",
+      "model": "Lupo",
+      "generation": "6X",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "volkswagen|lupo|6x|1.4 tdi"
+    },
+    {
+      "id": "vehicle-49",
+      "brand": "Volkswagen",
+      "model": "Polo",
+      "generation": "9N",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "platformLookupKey": "volkswagen|polo|9n|1.4 tdi"
+    }
+  ],
+  "builds": [
+    {
+      "id": "audi-a3-8l-1-8t-1",
+      "platformLookupKey": "audi|a3|8l|1.8t",
+      "brand": "Audi",
+      "model": "A3",
+      "generation": "8L",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Primero revisar fugas y DV; luego repro Stage 1",
+      "summary": "Ruta recomendada: mantenimiento al día, prueba de presión, revisar diverter valve (DV) y manguitos/vacío/PCV; después montar una Stage 1 conservadora. En estos 1.8T viejos la ganancia real…",
+      "estimatedBudget": 1250,
+      "expectedGain": "~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero revisar fugas y DV; luego repro Stage 1",
+            "Ruta recomendada: mantenimiento al día",
+            "prueba de presión",
+            "revisar diverter valve (DV) y manguitos/vacío/PCV"
+          ],
+          "note": "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Aceite correcto",
+            "bobinas/bujías bien",
+            "prueba de presión del circuito",
+            "DV y mangueras de vacío/PCV sanas."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "DV fatigada",
+            "fugas de boost",
+            "hoses viejos",
+            "coche alto de km antes de pedir más presión."
+          ],
+          "note": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+        }
+      ],
+      "reasons": [
+        "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "DV fatigada, fugas de boost, hoses viejos, coche alto de km antes de pedir más presión.",
+        "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.awesomegti.com/apr-stage-1-remap-1-8-20v-turbo-150-163-180bhp/",
+        "https://www.vwvortex.com/threads/could-a-bad-diverter-valve-make-my-car-feel-stock-again.4021321/",
+        "https://www.vwvortex.com/threads/diverter-valve-issue.7100001/"
+      ],
+      "legalNote": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+    },
+    {
+      "id": "audi-a4-b6-1-8t-2",
+      "platformLookupKey": "audi|a4|b6|1.8t",
+      "brand": "Audi",
+      "model": "A4",
+      "generation": "B6",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Primero revisar fugas y DV; luego repro Stage 1",
+      "summary": "Ruta recomendada: mantenimiento al día, prueba de presión, revisar diverter valve (DV) y manguitos/vacío/PCV; después montar una Stage 1 conservadora. En estos 1.8T viejos la ganancia real…",
+      "estimatedBudget": 1250,
+      "expectedGain": "~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero revisar fugas y DV; luego repro Stage 1",
+            "Ruta recomendada: mantenimiento al día",
+            "prueba de presión",
+            "revisar diverter valve (DV) y manguitos/vacío/PCV"
+          ],
+          "note": "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Aceite correcto",
+            "bobinas/bujías bien",
+            "prueba de presión del circuito",
+            "DV y mangueras de vacío/PCV sanas."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "DV fatigada",
+            "fugas de boost",
+            "hoses viejos",
+            "coche alto de km antes de pedir más presión."
+          ],
+          "note": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+        }
+      ],
+      "reasons": [
+        "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "DV fatigada, fugas de boost, hoses viejos, coche alto de km antes de pedir más presión.",
+        "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.awesomegti.com/apr-stage-1-remap-1-8-20v-turbo-150-163-180bhp/",
+        "https://www.vwvortex.com/threads/could-a-bad-diverter-valve-make-my-car-feel-stock-again.4021321/",
+        "https://www.vwvortex.com/threads/diverter-valve-issue.7100001/"
+      ],
+      "legalNote": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+    },
+    {
+      "id": "audi-tt-8n-1-8t-3",
+      "platformLookupKey": "audi|tt|8n|1.8t",
+      "brand": "Audi",
+      "model": "TT",
+      "generation": "8N",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Primero revisar fugas y DV; luego repro Stage 1",
+      "summary": "Ruta recomendada: mantenimiento al día, prueba de presión, revisar diverter valve (DV) y manguitos/vacío/PCV; después montar una Stage 1 conservadora. En estos 1.8T viejos la ganancia real…",
+      "estimatedBudget": 1250,
+      "expectedGain": "~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero revisar fugas y DV; luego repro Stage 1",
+            "Ruta recomendada: mantenimiento al día",
+            "prueba de presión",
+            "revisar diverter valve (DV) y manguitos/vacío/PCV"
+          ],
+          "note": "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Aceite correcto",
+            "bobinas/bujías bien",
+            "prueba de presión del circuito",
+            "DV y mangueras de vacío/PCV sanas."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "DV fatigada",
+            "fugas de boost",
+            "hoses viejos",
+            "coche alto de km antes de pedir más presión."
+          ],
+          "note": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+        }
+      ],
+      "reasons": [
+        "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "DV fatigada, fugas de boost, hoses viejos, coche alto de km antes de pedir más presión.",
+        "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.awesomegti.com/apr-stage-1-remap-1-8-20v-turbo-150-163-180bhp/",
+        "https://www.vwvortex.com/threads/could-a-bad-diverter-valve-make-my-car-feel-stock-again.4021321/",
+        "https://www.vwvortex.com/threads/diverter-valve-issue.7100001/"
+      ],
+      "legalNote": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+    },
+    {
+      "id": "volkswagen-golf-mk4-1-8t-4",
+      "platformLookupKey": "volkswagen|golf|mk4|1.8t",
+      "brand": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk4",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Primero revisar fugas y DV; luego repro Stage 1",
+      "summary": "Ruta recomendada: mantenimiento al día, prueba de presión, revisar diverter valve (DV) y manguitos/vacío/PCV; después montar una Stage 1 conservadora. En estos 1.8T viejos la ganancia real…",
+      "estimatedBudget": 1250,
+      "expectedGain": "~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero revisar fugas y DV; luego repro Stage 1",
+            "Ruta recomendada: mantenimiento al día",
+            "prueba de presión",
+            "revisar diverter valve (DV) y manguitos/vacío/PCV"
+          ],
+          "note": "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Aceite correcto",
+            "bobinas/bujías bien",
+            "prueba de presión del circuito",
+            "DV y mangueras de vacío/PCV sanas."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "DV fatigada",
+            "fugas de boost",
+            "hoses viejos",
+            "coche alto de km antes de pedir más presión."
+          ],
+          "note": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+        }
+      ],
+      "reasons": [
+        "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "DV fatigada, fugas de boost, hoses viejos, coche alto de km antes de pedir más presión.",
+        "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.awesomegti.com/apr-stage-1-remap-1-8-20v-turbo-150-163-180bhp/",
+        "https://www.vwvortex.com/threads/could-a-bad-diverter-valve-make-my-car-feel-stock-again.4021321/",
+        "https://www.vwvortex.com/threads/diverter-valve-issue.7100001/"
+      ],
+      "legalNote": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+    },
+    {
+      "id": "volkswagen-bora-1j-1-8t-5",
+      "platformLookupKey": "volkswagen|bora|1j|1.8t",
+      "brand": "Volkswagen",
+      "model": "Bora",
+      "generation": "1J",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Primero revisar fugas y DV; luego repro Stage 1",
+      "summary": "Ruta recomendada: mantenimiento al día, prueba de presión, revisar diverter valve (DV) y manguitos/vacío/PCV; después montar una Stage 1 conservadora. En estos 1.8T viejos la ganancia real…",
+      "estimatedBudget": 1250,
+      "expectedGain": "~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero revisar fugas y DV; luego repro Stage 1",
+            "Ruta recomendada: mantenimiento al día",
+            "prueba de presión",
+            "revisar diverter valve (DV) y manguitos/vacío/PCV"
+          ],
+          "note": "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Aceite correcto",
+            "bobinas/bujías bien",
+            "prueba de presión del circuito",
+            "DV y mangueras de vacío/PCV sanas."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "DV fatigada",
+            "fugas de boost",
+            "hoses viejos",
+            "coche alto de km antes de pedir más presión."
+          ],
+          "note": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+        }
+      ],
+      "reasons": [
+        "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "DV fatigada, fugas de boost, hoses viejos, coche alto de km antes de pedir más presión.",
+        "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.awesomegti.com/apr-stage-1-remap-1-8-20v-turbo-150-163-180bhp/",
+        "https://www.vwvortex.com/threads/could-a-bad-diverter-valve-make-my-car-feel-stock-again.4021321/",
+        "https://www.vwvortex.com/threads/diverter-valve-issue.7100001/"
+      ],
+      "legalNote": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+    },
+    {
+      "id": "volkswagen-beetle-9c-1-8t-6",
+      "platformLookupKey": "volkswagen|beetle|9c|1.8t",
+      "brand": "Volkswagen",
+      "model": "Beetle",
+      "generation": "9C",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Primero revisar fugas y DV; luego repro Stage 1",
+      "summary": "Ruta recomendada: mantenimiento al día, prueba de presión, revisar diverter valve (DV) y manguitos/vacío/PCV; después montar una Stage 1 conservadora. En estos 1.8T viejos la ganancia real…",
+      "estimatedBudget": 1250,
+      "expectedGain": "~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero revisar fugas y DV; luego repro Stage 1",
+            "Ruta recomendada: mantenimiento al día",
+            "prueba de presión",
+            "revisar diverter valve (DV) y manguitos/vacío/PCV"
+          ],
+          "note": "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Aceite correcto",
+            "bobinas/bujías bien",
+            "prueba de presión del circuito",
+            "DV y mangueras de vacío/PCV sanas."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "DV fatigada",
+            "fugas de boost",
+            "hoses viejos",
+            "coche alto de km antes de pedir más presión."
+          ],
+          "note": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+        }
+      ],
+      "reasons": [
+        "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "DV fatigada, fugas de boost, hoses viejos, coche alto de km antes de pedir más presión.",
+        "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.awesomegti.com/apr-stage-1-remap-1-8-20v-turbo-150-163-180bhp/",
+        "https://www.vwvortex.com/threads/could-a-bad-diverter-valve-make-my-car-feel-stock-again.4021321/",
+        "https://www.vwvortex.com/threads/diverter-valve-issue.7100001/"
+      ],
+      "legalNote": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+    },
+    {
+      "id": "skoda-octavia-1u-1-8t-7",
+      "platformLookupKey": "skoda|octavia|1u|1.8t",
+      "brand": "Skoda",
+      "model": "Octavia",
+      "generation": "1U",
+      "engine": "1.8T",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Primero revisar fugas y DV; luego repro Stage 1",
+      "summary": "Ruta recomendada: mantenimiento al día, prueba de presión, revisar diverter valve (DV) y manguitos/vacío/PCV; después montar una Stage 1 conservadora. En estos 1.8T viejos la ganancia real…",
+      "estimatedBudget": 1250,
+      "expectedGain": "~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero revisar fugas y DV; luego repro Stage 1",
+            "Ruta recomendada: mantenimiento al día",
+            "prueba de presión",
+            "revisar diverter valve (DV) y manguitos/vacío/PCV"
+          ],
+          "note": "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Aceite correcto",
+            "bobinas/bujías bien",
+            "prueba de presión del circuito",
+            "DV y mangueras de vacío/PCV sanas."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "DV fatigada",
+            "fugas de boost",
+            "hoses viejos",
+            "coche alto de km antes de pedir más presión."
+          ],
+          "note": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+        }
+      ],
+      "reasons": [
+        "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "DV fatigada, fugas de boost, hoses viejos, coche alto de km antes de pedir más presión.",
+        "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.awesomegti.com/apr-stage-1-remap-1-8-20v-turbo-150-163-180bhp/",
+        "https://www.vwvortex.com/threads/could-a-bad-diverter-valve-make-my-car-feel-stock-again.4021321/",
+        "https://www.vwvortex.com/threads/diverter-valve-issue.7100001/"
+      ],
+      "legalNote": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+    },
+    {
+      "id": "seat-ibiza-6l-1-8t-cupra-8",
+      "platformLookupKey": "seat|ibiza|6l|1.8t cupra",
+      "brand": "SEAT",
+      "model": "Ibiza",
+      "generation": "6L",
+      "engine": "1.8T Cupra",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Primero revisar fugas y DV; luego repro Stage 1",
+      "summary": "Ruta recomendada: mantenimiento al día, prueba de presión, revisar diverter valve (DV) y manguitos/vacío/PCV; después montar una Stage 1 conservadora. En estos 1.8T viejos la ganancia real…",
+      "estimatedBudget": 1250,
+      "expectedGain": "~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero revisar fugas y DV; luego repro Stage 1",
+            "Ruta recomendada: mantenimiento al día",
+            "prueba de presión",
+            "revisar diverter valve (DV) y manguitos/vacío/PCV"
+          ],
+          "note": "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Aceite correcto",
+            "bobinas/bujías bien",
+            "prueba de presión del circuito",
+            "DV y mangueras de vacío/PCV sanas."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "DV fatigada",
+            "fugas de boost",
+            "hoses viejos",
+            "coche alto de km antes de pedir más presión."
+          ],
+          "note": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+        }
+      ],
+      "reasons": [
+        "Objetivo típico Stage 1: ~195-205 bhp y ~245 lb-ft en variantes 150/163/180 bhp; la ganancia exacta depende de versión y combustible.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "DV fatigada, fugas de boost, hoses viejos, coche alto de km antes de pedir más presión.",
+        "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.awesomegti.com/apr-stage-1-remap-1-8-20v-turbo-150-163-180bhp/",
+        "https://www.vwvortex.com/threads/could-a-bad-diverter-valve-make-my-car-feel-stock-again.4021321/",
+        "https://www.vwvortex.com/threads/diverter-valve-issue.7100001/"
+      ],
+      "legalNote": "Pensado para uso calle/daily sin tocar emisiones; cualquier modificación debe ajustarse a la normativa local."
+    },
+    {
+      "id": "audi-a3-8l-1-9-tdi-9",
+      "platformLookupKey": "audi|a3|8l|1.9 tdi",
+      "brand": "Audi",
+      "model": "A3",
+      "generation": "8L",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 90,
+      "name": "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+      "summary": "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas, sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores tipo PP764 + bomba 11 m…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~150 hp / ~280 lb-ft con inyección + mapa",
+      "reliabilityIndex": 84,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+            "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas",
+            "sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores…",
+            "si se quiere ir más arriba"
+          ],
+          "note": "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor (ALH/ASV/AFN/otros)",
+            "mantenimiento al día",
+            "caudalímetro y vacío correctos.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague de serie si el par sube",
+            "intercooler de serie saturándose",
+            "humo/exceso de EGT si el mapa está mal hecho."
+          ],
+          "note": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+        }
+      ],
+      "reasons": [
+        "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'.",
+        "Nivel de respaldo medio-alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague de serie si el par sube, intercooler de serie saturándose, humo/exceso de EGT si el mapa está mal hecho.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://forums.tdiclub.com/index.php?threads%2Fbest-moderate-alh-power-mods.444468%2F=",
+        "https://forums.tdiclub.com/index.php?threads%2Fvnt-17-22-or-gt1756-for-alh.401421%2F="
+      ],
+      "legalNote": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+    },
+    {
+      "id": "audi-a4-b6-1-9-tdi-10",
+      "platformLookupKey": "audi|a4|b6|1.9 tdi",
+      "brand": "Audi",
+      "model": "A4",
+      "generation": "B6",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 90,
+      "name": "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+      "summary": "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas, sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores tipo PP764 + bomba 11 m…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~150 hp / ~280 lb-ft con inyección + mapa",
+      "reliabilityIndex": 84,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+            "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas",
+            "sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores…",
+            "si se quiere ir más arriba"
+          ],
+          "note": "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor (ALH/ASV/AFN/otros)",
+            "mantenimiento al día",
+            "caudalímetro y vacío correctos.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague de serie si el par sube",
+            "intercooler de serie saturándose",
+            "humo/exceso de EGT si el mapa está mal hecho."
+          ],
+          "note": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+        }
+      ],
+      "reasons": [
+        "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'.",
+        "Nivel de respaldo medio-alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague de serie si el par sube, intercooler de serie saturándose, humo/exceso de EGT si el mapa está mal hecho.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://forums.tdiclub.com/index.php?threads%2Fbest-moderate-alh-power-mods.444468%2F=",
+        "https://forums.tdiclub.com/index.php?threads%2Fvnt-17-22-or-gt1756-for-alh.401421%2F="
+      ],
+      "legalNote": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+    },
+    {
+      "id": "volkswagen-golf-mk4-1-9-tdi-11",
+      "platformLookupKey": "volkswagen|golf|mk4|1.9 tdi",
+      "brand": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk4",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 90,
+      "name": "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+      "summary": "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas, sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores tipo PP764 + bomba 11 m…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~150 hp / ~280 lb-ft con inyección + mapa",
+      "reliabilityIndex": 84,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+            "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas",
+            "sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores…",
+            "si se quiere ir más arriba"
+          ],
+          "note": "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor (ALH/ASV/AFN/otros)",
+            "mantenimiento al día",
+            "caudalímetro y vacío correctos.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague de serie si el par sube",
+            "intercooler de serie saturándose",
+            "humo/exceso de EGT si el mapa está mal hecho."
+          ],
+          "note": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+        }
+      ],
+      "reasons": [
+        "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'.",
+        "Nivel de respaldo medio-alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague de serie si el par sube, intercooler de serie saturándose, humo/exceso de EGT si el mapa está mal hecho.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://forums.tdiclub.com/index.php?threads%2Fbest-moderate-alh-power-mods.444468%2F=",
+        "https://forums.tdiclub.com/index.php?threads%2Fvnt-17-22-or-gt1756-for-alh.401421%2F="
+      ],
+      "legalNote": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+    },
+    {
+      "id": "volkswagen-bora-1j-1-9-tdi-12",
+      "platformLookupKey": "volkswagen|bora|1j|1.9 tdi",
+      "brand": "Volkswagen",
+      "model": "Bora",
+      "generation": "1J",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 90,
+      "name": "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+      "summary": "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas, sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores tipo PP764 + bomba 11 m…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~150 hp / ~280 lb-ft con inyección + mapa",
+      "reliabilityIndex": 84,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+            "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas",
+            "sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores…",
+            "si se quiere ir más arriba"
+          ],
+          "note": "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor (ALH/ASV/AFN/otros)",
+            "mantenimiento al día",
+            "caudalímetro y vacío correctos.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague de serie si el par sube",
+            "intercooler de serie saturándose",
+            "humo/exceso de EGT si el mapa está mal hecho."
+          ],
+          "note": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+        }
+      ],
+      "reasons": [
+        "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'.",
+        "Nivel de respaldo medio-alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague de serie si el par sube, intercooler de serie saturándose, humo/exceso de EGT si el mapa está mal hecho.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://forums.tdiclub.com/index.php?threads%2Fbest-moderate-alh-power-mods.444468%2F=",
+        "https://forums.tdiclub.com/index.php?threads%2Fvnt-17-22-or-gt1756-for-alh.401421%2F="
+      ],
+      "legalNote": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+    },
+    {
+      "id": "volkswagen-beetle-9c-1-9-tdi-13",
+      "platformLookupKey": "volkswagen|beetle|9c|1.9 tdi",
+      "brand": "Volkswagen",
+      "model": "Beetle",
+      "generation": "9C",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 90,
+      "name": "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+      "summary": "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas, sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores tipo PP764 + bomba 11 m…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~150 hp / ~280 lb-ft con inyección + mapa",
+      "reliabilityIndex": 84,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+            "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas",
+            "sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores…",
+            "si se quiere ir más arriba"
+          ],
+          "note": "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor (ALH/ASV/AFN/otros)",
+            "mantenimiento al día",
+            "caudalímetro y vacío correctos.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague de serie si el par sube",
+            "intercooler de serie saturándose",
+            "humo/exceso de EGT si el mapa está mal hecho."
+          ],
+          "note": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+        }
+      ],
+      "reasons": [
+        "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'.",
+        "Nivel de respaldo medio-alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague de serie si el par sube, intercooler de serie saturándose, humo/exceso de EGT si el mapa está mal hecho.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://forums.tdiclub.com/index.php?threads%2Fbest-moderate-alh-power-mods.444468%2F=",
+        "https://forums.tdiclub.com/index.php?threads%2Fvnt-17-22-or-gt1756-for-alh.401421%2F="
+      ],
+      "legalNote": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+    },
+    {
+      "id": "skoda-octavia-1u-1-9-tdi-14",
+      "platformLookupKey": "skoda|octavia|1u|1.9 tdi",
+      "brand": "Skoda",
+      "model": "Octavia",
+      "generation": "1U",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 90,
+      "name": "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+      "summary": "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas, sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores tipo PP764 + bomba 11 m…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~150 hp / ~280 lb-ft con inyección + mapa",
+      "reliabilityIndex": 84,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Si buscas algo que funcione: inyección + mapa bueno; turbo solo al subir un escalón",
+            "En 1.9 TDI antiguos la receta con más consenso no es llenar de piezas",
+            "sino una combinación sensata: para un punto medio muy usable se repite la mezcla de inyectores…",
+            "si se quiere ir más arriba"
+          ],
+          "note": "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor (ALH/ASV/AFN/otros)",
+            "mantenimiento al día",
+            "caudalímetro y vacío correctos.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague de serie si el par sube",
+            "intercooler de serie saturándose",
+            "humo/exceso de EGT si el mapa está mal hecho."
+          ],
+          "note": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+        }
+      ],
+      "reasons": [
+        "Punto medio muy repetido: ~150 hp / ~280 lb-ft con inyección + mapa; con VNT17 e intercooler el techo sube, pero ya no es una preparación 'barata'.",
+        "Nivel de respaldo medio-alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague de serie si el par sube, intercooler de serie saturándose, humo/exceso de EGT si el mapa está mal hecho.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://forums.tdiclub.com/index.php?threads%2Fbest-moderate-alh-power-mods.444468%2F=",
+        "https://forums.tdiclub.com/index.php?threads%2Fvnt-17-22-or-gt1756-for-alh.401421%2F="
+      ],
+      "legalNote": "No incluye anulación de sistemas anticontaminación; para uso vial revisa la normativa del país."
+    },
+    {
+      "id": "seat-ibiza-6l-1-9-tdi-15",
+      "platformLookupKey": "seat|ibiza|6l|1.9 tdi",
+      "brand": "SEAT",
+      "model": "Ibiza",
+      "generation": "6L",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "La Stage 1 es la mejor compra; vigila el límite del embrague",
+      "summary": "En los 1.9 TDI PD de calle, la modificación más lógica sigue siendo una Stage 1 bien hecha. La comunidad repite que es donde más ganas por euro invertido. Antes de pensar en escape/admisión…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~165-180 PS y ~269-284 lb-ft",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "La Stage 1 es la mejor compra; vigila el límite del embrague",
+            "En los 1.9 TDI PD de calle",
+            "la modificación más lógica sigue siendo una Stage 1 bien hecha",
+            "La comunidad repite que es donde más ganas por euro invertido"
+          ],
+          "note": "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Confirmar si el coche es PD130/PD150 (ASZ/ARL u otro PD)",
+            "revisar embrague antes de pedir un mapa agresivo.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Patinamiento de embrague",
+            "manguitos/intercooler sueltos",
+            "mapas que pidan demasiado par abajo."
+          ],
+          "note": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+        }
+      ],
+      "reasons": [
+        "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb.",
+        "Nivel de respaldo alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Patinamiento de embrague, manguitos/intercooler sueltos, mapas que pidan demasiado par abajo.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.onlyrevo.com/product-details/software/skoda/fabia-mk1-2000-2007/71/stage-1",
+        "https://www.seatcupra.net/forums/threads/standard-clutch-limit-pd130.398051/",
+        "https://www.seatcupra.net/forums/threads/ibiza-1-9-pd-130-worth-doing-a-remap.340615/"
+      ],
+      "legalNote": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+    },
+    {
+      "id": "seat-ibiza-6l-1-9-tdi-fr-16",
+      "platformLookupKey": "seat|ibiza|6l|1.9 tdi fr",
+      "brand": "SEAT",
+      "model": "Ibiza",
+      "generation": "6L",
+      "engine": "1.9 TDI FR",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "La Stage 1 es la mejor compra; vigila el límite del embrague",
+      "summary": "En los 1.9 TDI PD de calle, la modificación más lógica sigue siendo una Stage 1 bien hecha. La comunidad repite que es donde más ganas por euro invertido. Antes de pensar en escape/admisión…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~165-180 PS y ~269-284 lb-ft",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "La Stage 1 es la mejor compra; vigila el límite del embrague",
+            "En los 1.9 TDI PD de calle",
+            "la modificación más lógica sigue siendo una Stage 1 bien hecha",
+            "La comunidad repite que es donde más ganas por euro invertido"
+          ],
+          "note": "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Confirmar si el coche es PD130/PD150 (ASZ/ARL u otro PD)",
+            "revisar embrague antes de pedir un mapa agresivo.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Patinamiento de embrague",
+            "manguitos/intercooler sueltos",
+            "mapas que pidan demasiado par abajo."
+          ],
+          "note": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+        }
+      ],
+      "reasons": [
+        "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb.",
+        "Nivel de respaldo alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Patinamiento de embrague, manguitos/intercooler sueltos, mapas que pidan demasiado par abajo.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.onlyrevo.com/product-details/software/skoda/fabia-mk1-2000-2007/71/stage-1",
+        "https://www.seatcupra.net/forums/threads/standard-clutch-limit-pd130.398051/",
+        "https://www.seatcupra.net/forums/threads/ibiza-1-9-pd-130-worth-doing-a-remap.340615/"
+      ],
+      "legalNote": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+    },
+    {
+      "id": "skoda-fabia-6y-1-9-tdi-17",
+      "platformLookupKey": "skoda|fabia|6y|1.9 tdi",
+      "brand": "Skoda",
+      "model": "Fabia",
+      "generation": "6Y",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "La Stage 1 es la mejor compra; vigila el límite del embrague",
+      "summary": "En los 1.9 TDI PD de calle, la modificación más lógica sigue siendo una Stage 1 bien hecha. La comunidad repite que es donde más ganas por euro invertido. Antes de pensar en escape/admisión…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~165-180 PS y ~269-284 lb-ft",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "La Stage 1 es la mejor compra; vigila el límite del embrague",
+            "En los 1.9 TDI PD de calle",
+            "la modificación más lógica sigue siendo una Stage 1 bien hecha",
+            "La comunidad repite que es donde más ganas por euro invertido"
+          ],
+          "note": "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Confirmar si el coche es PD130/PD150 (ASZ/ARL u otro PD)",
+            "revisar embrague antes de pedir un mapa agresivo.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Patinamiento de embrague",
+            "manguitos/intercooler sueltos",
+            "mapas que pidan demasiado par abajo."
+          ],
+          "note": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+        }
+      ],
+      "reasons": [
+        "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb.",
+        "Nivel de respaldo alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Patinamiento de embrague, manguitos/intercooler sueltos, mapas que pidan demasiado par abajo.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.onlyrevo.com/product-details/software/skoda/fabia-mk1-2000-2007/71/stage-1",
+        "https://www.seatcupra.net/forums/threads/standard-clutch-limit-pd130.398051/",
+        "https://www.seatcupra.net/forums/threads/ibiza-1-9-pd-130-worth-doing-a-remap.340615/"
+      ],
+      "legalNote": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+    },
+    {
+      "id": "seat-altea-5p-1-9-tdi-18",
+      "platformLookupKey": "seat|altea|5p|1.9 tdi",
+      "brand": "SEAT",
+      "model": "Altea",
+      "generation": "5P",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "La Stage 1 es la mejor compra; vigila el límite del embrague",
+      "summary": "En los 1.9 TDI PD de calle, la modificación más lógica sigue siendo una Stage 1 bien hecha. La comunidad repite que es donde más ganas por euro invertido. Antes de pensar en escape/admisión…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~165-180 PS y ~269-284 lb-ft",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "La Stage 1 es la mejor compra; vigila el límite del embrague",
+            "En los 1.9 TDI PD de calle",
+            "la modificación más lógica sigue siendo una Stage 1 bien hecha",
+            "La comunidad repite que es donde más ganas por euro invertido"
+          ],
+          "note": "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Confirmar si el coche es PD130/PD150 (ASZ/ARL u otro PD)",
+            "revisar embrague antes de pedir un mapa agresivo.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Patinamiento de embrague",
+            "manguitos/intercooler sueltos",
+            "mapas que pidan demasiado par abajo."
+          ],
+          "note": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+        }
+      ],
+      "reasons": [
+        "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb.",
+        "Nivel de respaldo alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Patinamiento de embrague, manguitos/intercooler sueltos, mapas que pidan demasiado par abajo.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.onlyrevo.com/product-details/software/skoda/fabia-mk1-2000-2007/71/stage-1",
+        "https://www.seatcupra.net/forums/threads/standard-clutch-limit-pd130.398051/",
+        "https://www.seatcupra.net/forums/threads/ibiza-1-9-pd-130-worth-doing-a-remap.340615/"
+      ],
+      "legalNote": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+    },
+    {
+      "id": "skoda-octavia-1z-1-9-tdi-19",
+      "platformLookupKey": "skoda|octavia|1z|1.9 tdi",
+      "brand": "Skoda",
+      "model": "Octavia",
+      "generation": "1Z",
+      "engine": "1.9 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "La Stage 1 es la mejor compra; vigila el límite del embrague",
+      "summary": "En los 1.9 TDI PD de calle, la modificación más lógica sigue siendo una Stage 1 bien hecha. La comunidad repite que es donde más ganas por euro invertido. Antes de pensar en escape/admisión…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~165-180 PS y ~269-284 lb-ft",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "La Stage 1 es la mejor compra; vigila el límite del embrague",
+            "En los 1.9 TDI PD de calle",
+            "la modificación más lógica sigue siendo una Stage 1 bien hecha",
+            "La comunidad repite que es donde más ganas por euro invertido"
+          ],
+          "note": "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Confirmar si el coche es PD130/PD150 (ASZ/ARL u otro PD)",
+            "revisar embrague antes de pedir un mapa agresivo.",
+            "Confirmar codigo motor exacto antes de comprar piezas"
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Patinamiento de embrague",
+            "manguitos/intercooler sueltos",
+            "mapas que pidan demasiado par abajo."
+          ],
+          "note": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+        }
+      ],
+      "reasons": [
+        "Rango citado por Revo en 1.9 PD 130: ~165-180 PS y ~269-284 lb-ft; muchos foreros sitúan el embrague de serie cerca del límite alrededor de ~300 ft-lb.",
+        "Nivel de respaldo alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Patinamiento de embrague, manguitos/intercooler sueltos, mapas que pidan demasiado par abajo.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.onlyrevo.com/product-details/software/skoda/fabia-mk1-2000-2007/71/stage-1",
+        "https://www.seatcupra.net/forums/threads/standard-clutch-limit-pd130.398051/",
+        "https://www.seatcupra.net/forums/threads/ibiza-1-9-pd-130-worth-doing-a-remap.340615/"
+      ],
+      "legalNote": "Recomendación pensada para Stage 1 legal y utilizable; evita anular sistemas anticontaminación si va a circular por calle."
+    },
+    {
+      "id": "audi-a3-8p-2-0-tdi-20",
+      "platformLookupKey": "audi|a3|8p|2.0 tdi",
+      "brand": "Audi",
+      "model": "A3",
+      "generation": "8P",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 84,
+      "name": "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+      "summary": "Para los 2.0 TDI de diario, la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche en un proyecto. El salto a turbo híbrido ya se trata como Stage 2…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~170-175 bhp con mapa",
+      "reliabilityIndex": 78,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+            "Para los 2.0 TDI de diario",
+            "la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche…",
+            "El salto a turbo híbrido ya se trata como Stage 2 y pide más atención a embrague y frenos"
+          ],
+          "note": "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor e historial",
+            "mantenimiento",
+            "estado de turbo/DMF",
+            "caudal de aire correcto."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague/DMF",
+            "frenos justos si el par sube",
+            "mapas excesivos en coches muy gastados."
+          ],
+          "note": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+        }
+      ],
+      "reasons": [
+        "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1.",
+        "Nivel de respaldo alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague/DMF, frenos justos si el par sube, mapas excesivos en coches muy gastados.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+      ],
+      "isFeatured": false,
+      "sourceUrls": [
+        "https://www.audi-sport.net/xf/threads/301732/",
+        "https://www.vagtech.co.uk/products/vw/mk6-golf-2-0l-tdi/revo-stage-1-2-0l-common-rail-140-bhp/"
+      ],
+      "legalNote": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+    },
+    {
+      "id": "volkswagen-golf-mk5-2-0-tdi-21",
+      "platformLookupKey": "volkswagen|golf|mk5|2.0 tdi",
+      "brand": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk5",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 84,
+      "name": "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+      "summary": "Para los 2.0 TDI de diario, la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche en un proyecto. El salto a turbo híbrido ya se trata como Stage 2…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~170-175 bhp con mapa",
+      "reliabilityIndex": 78,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+            "Para los 2.0 TDI de diario",
+            "la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche…",
+            "El salto a turbo híbrido ya se trata como Stage 2 y pide más atención a embrague y frenos"
+          ],
+          "note": "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor e historial",
+            "mantenimiento",
+            "estado de turbo/DMF",
+            "caudal de aire correcto."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague/DMF",
+            "frenos justos si el par sube",
+            "mapas excesivos en coches muy gastados."
+          ],
+          "note": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+        }
+      ],
+      "reasons": [
+        "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1.",
+        "Nivel de respaldo alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague/DMF, frenos justos si el par sube, mapas excesivos en coches muy gastados.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+      ],
+      "isFeatured": false,
+      "sourceUrls": [
+        "https://www.audi-sport.net/xf/threads/301732/",
+        "https://www.vagtech.co.uk/products/vw/mk6-golf-2-0l-tdi/revo-stage-1-2-0l-common-rail-140-bhp/"
+      ],
+      "legalNote": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+    },
+    {
+      "id": "seat-leon-1p-2-0-tdi-22",
+      "platformLookupKey": "seat|leon|1p|2.0 tdi",
+      "brand": "SEAT",
+      "model": "León",
+      "generation": "1P",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 84,
+      "name": "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+      "summary": "Para los 2.0 TDI de diario, la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche en un proyecto. El salto a turbo híbrido ya se trata como Stage 2…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~170-175 bhp con mapa",
+      "reliabilityIndex": 78,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+            "Para los 2.0 TDI de diario",
+            "la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche…",
+            "El salto a turbo híbrido ya se trata como Stage 2 y pide más atención a embrague y frenos"
+          ],
+          "note": "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor e historial",
+            "mantenimiento",
+            "estado de turbo/DMF",
+            "caudal de aire correcto."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague/DMF",
+            "frenos justos si el par sube",
+            "mapas excesivos en coches muy gastados."
+          ],
+          "note": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+        }
+      ],
+      "reasons": [
+        "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1.",
+        "Nivel de respaldo alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague/DMF, frenos justos si el par sube, mapas excesivos en coches muy gastados.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+      ],
+      "isFeatured": false,
+      "sourceUrls": [
+        "https://www.audi-sport.net/xf/threads/301732/",
+        "https://www.vagtech.co.uk/products/vw/mk6-golf-2-0l-tdi/revo-stage-1-2-0l-common-rail-140-bhp/"
+      ],
+      "legalNote": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+    },
+    {
+      "id": "skoda-octavia-1z-2-0-tdi-23",
+      "platformLookupKey": "skoda|octavia|1z|2.0 tdi",
+      "brand": "Skoda",
+      "model": "Octavia",
+      "generation": "1Z",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 84,
+      "name": "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+      "summary": "Para los 2.0 TDI de diario, la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche en un proyecto. El salto a turbo híbrido ya se trata como Stage 2…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~170-175 bhp con mapa",
+      "reliabilityIndex": 78,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+            "Para los 2.0 TDI de diario",
+            "la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche…",
+            "El salto a turbo híbrido ya se trata como Stage 2 y pide más atención a embrague y frenos"
+          ],
+          "note": "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor e historial",
+            "mantenimiento",
+            "estado de turbo/DMF",
+            "caudal de aire correcto."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague/DMF",
+            "frenos justos si el par sube",
+            "mapas excesivos en coches muy gastados."
+          ],
+          "note": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+        }
+      ],
+      "reasons": [
+        "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1.",
+        "Nivel de respaldo alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague/DMF, frenos justos si el par sube, mapas excesivos en coches muy gastados.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+      ],
+      "isFeatured": false,
+      "sourceUrls": [
+        "https://www.audi-sport.net/xf/threads/301732/",
+        "https://www.vagtech.co.uk/products/vw/mk6-golf-2-0l-tdi/revo-stage-1-2-0l-common-rail-140-bhp/"
+      ],
+      "legalNote": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+    },
+    {
+      "id": "seat-altea-5p-2-0-tdi-24",
+      "platformLookupKey": "seat|altea|5p|2.0 tdi",
+      "brand": "SEAT",
+      "model": "Altea",
+      "generation": "5P",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 84,
+      "name": "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+      "summary": "Para los 2.0 TDI de diario, la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche en un proyecto. El salto a turbo híbrido ya se trata como Stage 2…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~170-175 bhp con mapa",
+      "reliabilityIndex": 78,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+            "Para los 2.0 TDI de diario",
+            "la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche…",
+            "El salto a turbo híbrido ya se trata como Stage 2 y pide más atención a embrague y frenos"
+          ],
+          "note": "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor e historial",
+            "mantenimiento",
+            "estado de turbo/DMF",
+            "caudal de aire correcto."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague/DMF",
+            "frenos justos si el par sube",
+            "mapas excesivos en coches muy gastados."
+          ],
+          "note": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+        }
+      ],
+      "reasons": [
+        "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1.",
+        "Nivel de respaldo alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague/DMF, frenos justos si el par sube, mapas excesivos en coches muy gastados.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+      ],
+      "isFeatured": false,
+      "sourceUrls": [
+        "https://www.audi-sport.net/xf/threads/301732/",
+        "https://www.vagtech.co.uk/products/vw/mk6-golf-2-0l-tdi/revo-stage-1-2-0l-common-rail-140-bhp/"
+      ],
+      "legalNote": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+    },
+    {
+      "id": "volkswagen-passat-b6-2-0-tdi-25",
+      "platformLookupKey": "volkswagen|passat|b6|2.0 tdi",
+      "brand": "Volkswagen",
+      "model": "Passat",
+      "generation": "B6",
+      "engine": "2.0 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 84,
+      "name": "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+      "summary": "Para los 2.0 TDI de diario, la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche en un proyecto. El salto a turbo híbrido ya se trata como Stage 2…",
+      "estimatedBudget": 3650,
+      "expectedGain": "~170-175 bhp con mapa",
+      "reliabilityIndex": 78,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Stage 1 primero; híbrido solo con embrague/frenos y código verificado",
+            "Para los 2.0 TDI de diario",
+            "la ruta con mejor respaldo es clara: una Stage 1 sensata da mucha mejora sin convertir el coche…",
+            "El salto a turbo híbrido ya se trata como Stage 2 y pide más atención a embrague y frenos"
+          ],
+          "note": "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Verificar código motor e historial",
+            "mantenimiento",
+            "estado de turbo/DMF",
+            "caudal de aire correcto."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Embrague/DMF",
+            "frenos justos si el par sube",
+            "mapas excesivos en coches muy gastados."
+          ],
+          "note": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+        }
+      ],
+      "reasons": [
+        "En BKD se cita a menudo ~170-175 bhp con mapa; con híbrido sano se habla de ~200-220 bhp. En 2.0 CR 140, Revo publica hasta ~180 PS y ~389 Nm en Stage 1.",
+        "Nivel de respaldo alto con confianza media.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Embrague/DMF, frenos justos si el par sube, mapas excesivos en coches muy gastados.",
+        "Conviene confirmar el codigo motor exacto antes de comprar piezas o cerrar la receta.",
+        "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+      ],
+      "isFeatured": false,
+      "sourceUrls": [
+        "https://www.audi-sport.net/xf/threads/301732/",
+        "https://www.vagtech.co.uk/products/vw/mk6-golf-2-0l-tdi/revo-stage-1-2-0l-common-rail-140-bhp/"
+      ],
+      "legalNote": "No he incluido DPF/EGR delete en la recomendación porque la legalidad depende del país y para uso calle conviene evitarlo."
+    },
+    {
+      "id": "ford-focus-mk2-1-6-tdci-26",
+      "platformLookupKey": "ford|focus|mk2|1.6 tdci",
+      "brand": "Ford",
+      "model": "Focus",
+      "generation": "Mk2",
+      "engine": "1.6 TDCi",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Repro dedicada mejor que caja; si aprietas, añade intercooler",
+      "summary": "En el 1.6 TDCi la mejora que más se repite es una repro dedicada y conservadora. La comunidad insiste bastante en que una buena calibración se nota mucho más que una tuning box. Si el coche…",
+      "estimatedBudget": 3650,
+      "expectedGain": "137 bhp y 115→150 bhp / 270→350 Nm",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Repro dedicada mejor que caja; si aprietas, añade intercooler",
+            "En el 1.6 TDCi la mejora que más se repite es una repro dedicada y conservadora",
+            "La comunidad insiste bastante en que una buena calibración se nota mucho más que una tuning box",
+            "Si el coche se usa fuerte o en verano"
+          ],
+          "note": "Casos citados por usuarios: 93→137 bhp y 115→150 bhp / 270→350 Nm, según versión y mapa."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Turbo y admisión sanos",
+            "mantenimiento correcto",
+            "elegir calibrador serio."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Mapas malos",
+            "exceso de par abajo",
+            "embrague viejo si el coche tiene mucho km."
+          ],
+          "note": "No recomiendo borrar DPF/EGR para uso calle; la legalidad y la ITV/MOT dependen de la normativa local."
+        }
+      ],
+      "reasons": [
+        "Casos citados por usuarios: 93→137 bhp y 115→150 bhp / 270→350 Nm, según versión y mapa.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Mapas malos, exceso de par abajo, embrague viejo si el coche tiene mucho km.",
+        "No recomiendo borrar DPF/EGR para uso calle; la legalidad y la ITV/MOT dependen de la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.fordownersclub.com/forums/topic/94233-ford-focus-16tdci-remap/",
+        "https://www.fordownersclub.com/forums/topic/91117-mk3-remapped-16-tdci-115ps/",
+        "https://www.fordownersclub.com/forums/topic/88853-what-options-do-i-have-for-more-performance-mk3-focus-16-econetic/"
+      ],
+      "legalNote": "No recomiendo borrar DPF/EGR para uso calle; la legalidad y la ITV/MOT dependen de la normativa local."
+    },
+    {
+      "id": "ford-fiesta-mk6-1-6-tdci-27",
+      "platformLookupKey": "ford|fiesta|mk6|1.6 tdci",
+      "brand": "Ford",
+      "model": "Fiesta",
+      "generation": "Mk6",
+      "engine": "1.6 TDCi",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Repro dedicada mejor que caja; si aprietas, añade intercooler",
+      "summary": "En el 1.6 TDCi la mejora que más se repite es una repro dedicada y conservadora. La comunidad insiste bastante en que una buena calibración se nota mucho más que una tuning box. Si el coche…",
+      "estimatedBudget": 3650,
+      "expectedGain": "137 bhp y 115→150 bhp / 270→350 Nm",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Repro dedicada mejor que caja; si aprietas, añade intercooler",
+            "En el 1.6 TDCi la mejora que más se repite es una repro dedicada y conservadora",
+            "La comunidad insiste bastante en que una buena calibración se nota mucho más que una tuning box",
+            "Si el coche se usa fuerte o en verano"
+          ],
+          "note": "Casos citados por usuarios: 93→137 bhp y 115→150 bhp / 270→350 Nm, según versión y mapa."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Turbo y admisión sanos",
+            "mantenimiento correcto",
+            "elegir calibrador serio."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Mapas malos",
+            "exceso de par abajo",
+            "embrague viejo si el coche tiene mucho km."
+          ],
+          "note": "No recomiendo borrar DPF/EGR para uso calle; la legalidad y la ITV/MOT dependen de la normativa local."
+        }
+      ],
+      "reasons": [
+        "Casos citados por usuarios: 93→137 bhp y 115→150 bhp / 270→350 Nm, según versión y mapa.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Mapas malos, exceso de par abajo, embrague viejo si el coche tiene mucho km.",
+        "No recomiendo borrar DPF/EGR para uso calle; la legalidad y la ITV/MOT dependen de la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.fordownersclub.com/forums/topic/94233-ford-focus-16tdci-remap/",
+        "https://www.fordownersclub.com/forums/topic/91117-mk3-remapped-16-tdci-115ps/",
+        "https://www.fordownersclub.com/forums/topic/88853-what-options-do-i-have-for-more-performance-mk3-focus-16-econetic/"
+      ],
+      "legalNote": "No recomiendo borrar DPF/EGR para uso calle; la legalidad y la ITV/MOT dependen de la normativa local."
+    },
+    {
+      "id": "peugeot-207-a7-1-6-hdi-28",
+      "platformLookupKey": "peugeot|207|a7|1.6 hdi",
+      "brand": "Peugeot",
+      "model": "207",
+      "generation": "A7",
+      "engine": "1.6 HDi",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Stage 1 suave y coche bien mantenido; no esperes milagros de piezas sueltas",
+      "summary": "En los 1.6 HDi comunes de 207/307/308 lo más repetido es una Stage 1 suave y bien hecha. No hace falta montar muchas piezas para un uso diario: lo importante es que el coche esté sano y que…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~125 bhp en 90 bhp hasta ~140 bhp en 110 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Stage 1 suave y coche bien mantenido; no esperes milagros de piezas sueltas",
+            "En los 1.6 HDi comunes de 207/307/308 lo más repetido es una Stage 1 suave y bien hecha",
+            "No hace falta montar muchas piezas para un uso diario: lo importante es que el coche esté sano…",
+            "no hacer una build extrema"
+          ],
+          "note": "Foros citan desde ~125 bhp en 90 bhp hasta ~140 bhp en 110 bhp, o una mejora de ~20-25% según versión."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Mantenimiento al día",
+            "comprobar estado de turbo/inyectores/admision y elegir mapa sensato."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Esperar demasiado de un 90 bhp",
+            "mala base mecánica",
+            "problemas de emisiones si se buscan atajos ilegales."
+          ],
+          "note": "Pensado para uso calle sin tocar emisiones. Cualquier cambio debe cumplir la normativa local."
+        }
+      ],
+      "reasons": [
+        "Foros citan desde ~125 bhp en 90 bhp hasta ~140 bhp en 110 bhp, o una mejora de ~20-25% según versión.",
+        "Nivel de respaldo medio-alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Esperar demasiado de un 90 bhp, mala base mecánica, problemas de emisiones si se buscan atajos ilegales.",
+        "Pensado para uso calle sin tocar emisiones. Cualquier cambio debe cumplir la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.peugeotforums.com/threads/307-1-6-hdi-increase-bhp.13581/",
+        "https://www.peugeotforums.com/threads/remap.309881/",
+        "https://www.peugeotforums.com/threads/307-hdi-90-bhp-power-boost.93418/"
+      ],
+      "legalNote": "Pensado para uso calle sin tocar emisiones. Cualquier cambio debe cumplir la normativa local."
+    },
+    {
+      "id": "peugeot-307-t5-1-6-hdi-29",
+      "platformLookupKey": "peugeot|307|t5|1.6 hdi",
+      "brand": "Peugeot",
+      "model": "307",
+      "generation": "T5",
+      "engine": "1.6 HDi",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Stage 1 suave y coche bien mantenido; no esperes milagros de piezas sueltas",
+      "summary": "En los 1.6 HDi comunes de 207/307/308 lo más repetido es una Stage 1 suave y bien hecha. No hace falta montar muchas piezas para un uso diario: lo importante es que el coche esté sano y que…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~125 bhp en 90 bhp hasta ~140 bhp en 110 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Stage 1 suave y coche bien mantenido; no esperes milagros de piezas sueltas",
+            "En los 1.6 HDi comunes de 207/307/308 lo más repetido es una Stage 1 suave y bien hecha",
+            "No hace falta montar muchas piezas para un uso diario: lo importante es que el coche esté sano…",
+            "no hacer una build extrema"
+          ],
+          "note": "Foros citan desde ~125 bhp en 90 bhp hasta ~140 bhp en 110 bhp, o una mejora de ~20-25% según versión."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Mantenimiento al día",
+            "comprobar estado de turbo/inyectores/admision y elegir mapa sensato."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Esperar demasiado de un 90 bhp",
+            "mala base mecánica",
+            "problemas de emisiones si se buscan atajos ilegales."
+          ],
+          "note": "Pensado para uso calle sin tocar emisiones. Cualquier cambio debe cumplir la normativa local."
+        }
+      ],
+      "reasons": [
+        "Foros citan desde ~125 bhp en 90 bhp hasta ~140 bhp en 110 bhp, o una mejora de ~20-25% según versión.",
+        "Nivel de respaldo medio-alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Esperar demasiado de un 90 bhp, mala base mecánica, problemas de emisiones si se buscan atajos ilegales.",
+        "Pensado para uso calle sin tocar emisiones. Cualquier cambio debe cumplir la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.peugeotforums.com/threads/307-1-6-hdi-increase-bhp.13581/",
+        "https://www.peugeotforums.com/threads/remap.309881/",
+        "https://www.peugeotforums.com/threads/307-hdi-90-bhp-power-boost.93418/"
+      ],
+      "legalNote": "Pensado para uso calle sin tocar emisiones. Cualquier cambio debe cumplir la normativa local."
+    },
+    {
+      "id": "peugeot-308-t7-1-6-hdi-30",
+      "platformLookupKey": "peugeot|308|t7|1.6 hdi",
+      "brand": "Peugeot",
+      "model": "308",
+      "generation": "T7",
+      "engine": "1.6 HDi",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Stage 1 suave y coche bien mantenido; no esperes milagros de piezas sueltas",
+      "summary": "En los 1.6 HDi comunes de 207/307/308 lo más repetido es una Stage 1 suave y bien hecha. No hace falta montar muchas piezas para un uso diario: lo importante es que el coche esté sano y que…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~125 bhp en 90 bhp hasta ~140 bhp en 110 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Stage 1 suave y coche bien mantenido; no esperes milagros de piezas sueltas",
+            "En los 1.6 HDi comunes de 207/307/308 lo más repetido es una Stage 1 suave y bien hecha",
+            "No hace falta montar muchas piezas para un uso diario: lo importante es que el coche esté sano…",
+            "no hacer una build extrema"
+          ],
+          "note": "Foros citan desde ~125 bhp en 90 bhp hasta ~140 bhp en 110 bhp, o una mejora de ~20-25% según versión."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Mantenimiento al día",
+            "comprobar estado de turbo/inyectores/admision y elegir mapa sensato."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Esperar demasiado de un 90 bhp",
+            "mala base mecánica",
+            "problemas de emisiones si se buscan atajos ilegales."
+          ],
+          "note": "Pensado para uso calle sin tocar emisiones. Cualquier cambio debe cumplir la normativa local."
+        }
+      ],
+      "reasons": [
+        "Foros citan desde ~125 bhp en 90 bhp hasta ~140 bhp en 110 bhp, o una mejora de ~20-25% según versión.",
+        "Nivel de respaldo medio-alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Esperar demasiado de un 90 bhp, mala base mecánica, problemas de emisiones si se buscan atajos ilegales.",
+        "Pensado para uso calle sin tocar emisiones. Cualquier cambio debe cumplir la normativa local."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.peugeotforums.com/threads/307-1-6-hdi-increase-bhp.13581/",
+        "https://www.peugeotforums.com/threads/remap.309881/",
+        "https://www.peugeotforums.com/threads/307-hdi-90-bhp-power-boost.93418/"
+      ],
+      "legalNote": "Pensado para uso calle sin tocar emisiones. Cualquier cambio debe cumplir la normativa local."
+    },
+    {
+      "id": "renault-clio-ii-1-5-dci-31",
+      "platformLookupKey": "renault|clio|ii|1.5 dci",
+      "brand": "Renault",
+      "model": "Clio",
+      "generation": "II",
+      "engine": "1.5 dCi",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 96,
+      "name": "Primero neumáticos/frenos/suspensión; luego repro conservadora",
+      "summary": "Para Clio/Mégane 1.5 dCi la recomendación más honesta no empieza por potencia. En foros se repite que primero compensa mejorar neumáticos, discos/pastillas y suspensión; después, una repro…",
+      "estimatedBudget": 1950,
+      "expectedGain": "30 bhp y +40 a +51 lb-ft",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero neumáticos/frenos/suspensión; luego repro conservadora",
+            "Para Clio/Mégane 1.5 dCi la recomendación más honesta no empieza por potencia",
+            "En foros se repite que primero compensa mejorar neumáticos",
+            "discos/pastillas y suspensión"
+          ],
+          "note": "Consenso típico: +22 a +30 bhp y +40 a +51 lb-ft; Superchips publica +22 bhp para Clio Mk3 GT 106."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Base sana",
+            "frenos y neumáticos decentes",
+            "mapa conservador."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Venderlo como sleeper serio: el salto útil está en par y agrado",
+            "no en una transformación radical."
+          ],
+          "note": "Recomendación pensada para uso calle; sin supresiones de emisiones."
+        }
+      ],
+      "reasons": [
+        "Consenso típico: +22 a +30 bhp y +40 a +51 lb-ft; Superchips publica +22 bhp para Clio Mk3 GT 106.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Venderlo como sleeper serio: el salto útil está en par y agrado, no en una transformación radical.",
+        "Recomendación pensada para uso calle; sin supresiones de emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.superchips.co.uk/ECU-Remap/Renault/Clio-MK3-2005-2013/Diesel/GT-1-5TD-106-bhp/stage-1",
+        "https://www.cliosport.net/threads/dci-remap-help-please.605261/",
+        "https://www.cliosport.net/threads/best-performance-mods-for-my-mk3-1-5dci-106bhp.835742/"
+      ],
+      "legalNote": "Recomendación pensada para uso calle; sin supresiones de emisiones."
+    },
+    {
+      "id": "renault-clio-iii-1-5-dci-32",
+      "platformLookupKey": "renault|clio|iii|1.5 dci",
+      "brand": "Renault",
+      "model": "Clio",
+      "generation": "III",
+      "engine": "1.5 dCi",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 96,
+      "name": "Primero neumáticos/frenos/suspensión; luego repro conservadora",
+      "summary": "Para Clio/Mégane 1.5 dCi la recomendación más honesta no empieza por potencia. En foros se repite que primero compensa mejorar neumáticos, discos/pastillas y suspensión; después, una repro…",
+      "estimatedBudget": 1950,
+      "expectedGain": "30 bhp y +40 a +51 lb-ft",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero neumáticos/frenos/suspensión; luego repro conservadora",
+            "Para Clio/Mégane 1.5 dCi la recomendación más honesta no empieza por potencia",
+            "En foros se repite que primero compensa mejorar neumáticos",
+            "discos/pastillas y suspensión"
+          ],
+          "note": "Consenso típico: +22 a +30 bhp y +40 a +51 lb-ft; Superchips publica +22 bhp para Clio Mk3 GT 106."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Base sana",
+            "frenos y neumáticos decentes",
+            "mapa conservador."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Venderlo como sleeper serio: el salto útil está en par y agrado",
+            "no en una transformación radical."
+          ],
+          "note": "Recomendación pensada para uso calle; sin supresiones de emisiones."
+        }
+      ],
+      "reasons": [
+        "Consenso típico: +22 a +30 bhp y +40 a +51 lb-ft; Superchips publica +22 bhp para Clio Mk3 GT 106.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Venderlo como sleeper serio: el salto útil está en par y agrado, no en una transformación radical.",
+        "Recomendación pensada para uso calle; sin supresiones de emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.superchips.co.uk/ECU-Remap/Renault/Clio-MK3-2005-2013/Diesel/GT-1-5TD-106-bhp/stage-1",
+        "https://www.cliosport.net/threads/dci-remap-help-please.605261/",
+        "https://www.cliosport.net/threads/best-performance-mods-for-my-mk3-1-5dci-106bhp.835742/"
+      ],
+      "legalNote": "Recomendación pensada para uso calle; sin supresiones de emisiones."
+    },
+    {
+      "id": "renault-megane-ii-1-5-dci-33",
+      "platformLookupKey": "renault|megane|ii|1.5 dci",
+      "brand": "Renault",
+      "model": "Mégane",
+      "generation": "II",
+      "engine": "1.5 dCi",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 96,
+      "name": "Primero neumáticos/frenos/suspensión; luego repro conservadora",
+      "summary": "Para Clio/Mégane 1.5 dCi la recomendación más honesta no empieza por potencia. En foros se repite que primero compensa mejorar neumáticos, discos/pastillas y suspensión; después, una repro…",
+      "estimatedBudget": 1950,
+      "expectedGain": "30 bhp y +40 a +51 lb-ft",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Primero neumáticos/frenos/suspensión; luego repro conservadora",
+            "Para Clio/Mégane 1.5 dCi la recomendación más honesta no empieza por potencia",
+            "En foros se repite que primero compensa mejorar neumáticos",
+            "discos/pastillas y suspensión"
+          ],
+          "note": "Consenso típico: +22 a +30 bhp y +40 a +51 lb-ft; Superchips publica +22 bhp para Clio Mk3 GT 106."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Base sana",
+            "frenos y neumáticos decentes",
+            "mapa conservador."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Venderlo como sleeper serio: el salto útil está en par y agrado",
+            "no en una transformación radical."
+          ],
+          "note": "Recomendación pensada para uso calle; sin supresiones de emisiones."
+        }
+      ],
+      "reasons": [
+        "Consenso típico: +22 a +30 bhp y +40 a +51 lb-ft; Superchips publica +22 bhp para Clio Mk3 GT 106.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Venderlo como sleeper serio: el salto útil está en par y agrado, no en una transformación radical.",
+        "Recomendación pensada para uso calle; sin supresiones de emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.superchips.co.uk/ECU-Remap/Renault/Clio-MK3-2005-2013/Diesel/GT-1-5TD-106-bhp/stage-1",
+        "https://www.cliosport.net/threads/dci-remap-help-please.605261/",
+        "https://www.cliosport.net/threads/best-performance-mods-for-my-mk3-1-5dci-106bhp.835742/"
+      ],
+      "legalNote": "Recomendación pensada para uso calle; sin supresiones de emisiones."
+    },
+    {
+      "id": "renault-clio-ii-1-6-16v-34",
+      "platformLookupKey": "renault|clio|ii|1.6 16v",
+      "brand": "Renault",
+      "model": "Clio",
+      "generation": "II",
+      "engine": "1.6 16v",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 96,
+      "name": "No vender humo: pocos cvs baratos; si inviertes, hazlo con objetivo claro",
+      "summary": "En los K4M 1.6 16v hay consenso en algo: las mejoras baratas dan poco. Lo sensato para una daily es dejar el coche fino, admisión/escape bien hechos y una repro personalizada si sale rentab…",
+      "estimatedBudget": 1950,
+      "expectedGain": "~120 bhp desde 110",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "No vender humo: pocos cvs baratos; si inviertes, hazlo con objetivo claro",
+            "En los K4M 1.6 16v hay consenso en algo: las mejoras baratas dan poco",
+            "Lo sensato para una daily es dejar el coche fino",
+            "admisión/escape bien hechos y una repro personalizada si sale rentable"
+          ],
+          "note": "Con filtro/escape/remap se suelen citar mejoras modestas (~120 bhp desde 110). Builds más trabajadas con colector/cams/remap llegaron a 133 bhp en banco."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Definir si el objetivo es daily o proyecto",
+            "no esperar milagros de un atmosférico 1.6 barato."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Gastar mucho para ganar poco",
+            "o vender como 'stage' algo que en realidad es casi stock."
+          ],
+          "note": "Evita decat o soluciones fuera de homologación si el coche va a calle."
+        }
+      ],
+      "reasons": [
+        "Con filtro/escape/remap se suelen citar mejoras modestas (~120 bhp desde 110). Builds más trabajadas con colector/cams/remap llegaron a 133 bhp en banco.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Gastar mucho para ganar poco, o vender como 'stage' algo que en realidad es casi stock.",
+        "Evita decat o soluciones fuera de homologación si el coche va a calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.cliosport.net/threads/1-6-16v-upgrades.364944/",
+        "https://www.cliosport.net/threads/whos-got-the-most-tuned-k4m.327676/",
+        "https://www.cliosport.net/threads/clio-gt-1-6-vvt-tuning.756416/"
+      ],
+      "legalNote": "Evita decat o soluciones fuera de homologación si el coche va a calle."
+    },
+    {
+      "id": "renault-clio-iii-1-6-16v-35",
+      "platformLookupKey": "renault|clio|iii|1.6 16v",
+      "brand": "Renault",
+      "model": "Clio",
+      "generation": "III",
+      "engine": "1.6 16v",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 96,
+      "name": "No vender humo: pocos cvs baratos; si inviertes, hazlo con objetivo claro",
+      "summary": "En los K4M 1.6 16v hay consenso en algo: las mejoras baratas dan poco. Lo sensato para una daily es dejar el coche fino, admisión/escape bien hechos y una repro personalizada si sale rentab…",
+      "estimatedBudget": 1950,
+      "expectedGain": "~120 bhp desde 110",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "No vender humo: pocos cvs baratos; si inviertes, hazlo con objetivo claro",
+            "En los K4M 1.6 16v hay consenso en algo: las mejoras baratas dan poco",
+            "Lo sensato para una daily es dejar el coche fino",
+            "admisión/escape bien hechos y una repro personalizada si sale rentable"
+          ],
+          "note": "Con filtro/escape/remap se suelen citar mejoras modestas (~120 bhp desde 110). Builds más trabajadas con colector/cams/remap llegaron a 133 bhp en banco."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Definir si el objetivo es daily o proyecto",
+            "no esperar milagros de un atmosférico 1.6 barato."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Gastar mucho para ganar poco",
+            "o vender como 'stage' algo que en realidad es casi stock."
+          ],
+          "note": "Evita decat o soluciones fuera de homologación si el coche va a calle."
+        }
+      ],
+      "reasons": [
+        "Con filtro/escape/remap se suelen citar mejoras modestas (~120 bhp desde 110). Builds más trabajadas con colector/cams/remap llegaron a 133 bhp en banco.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Gastar mucho para ganar poco, o vender como 'stage' algo que en realidad es casi stock.",
+        "Evita decat o soluciones fuera de homologación si el coche va a calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.cliosport.net/threads/1-6-16v-upgrades.364944/",
+        "https://www.cliosport.net/threads/whos-got-the-most-tuned-k4m.327676/",
+        "https://www.cliosport.net/threads/clio-gt-1-6-vvt-tuning.756416/"
+      ],
+      "legalNote": "Evita decat o soluciones fuera de homologación si el coche va a calle."
+    },
+    {
+      "id": "opel-astra-h-1-9-cdti-36",
+      "platformLookupKey": "opel|astra|h|1.9 cdti",
+      "brand": "Opel",
+      "model": "Astra",
+      "generation": "H",
+      "engine": "1.9 CDTI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "medio",
+      "fitScore": 96,
+      "name": "Va muy bien con repro, pero no ignores M32/embrague y fallos conocidos",
+      "summary": "El Astra H 1.9 CDTI responde muy bien a la Stage 1 y es una de las plataformas diesel baratas con mejor relación precio/par. Precisamente por eso conviene ser realista: antes de copiar cifr…",
+      "estimatedBudget": 1950,
+      "expectedGain": "209 bhp y 305 lb-ft en Stage 1",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Va muy bien con repro, pero no ignores M32/embrague y fallos conocidos",
+            "El Astra H 1.9 CDTI responde muy bien a la Stage 1 y es una de las plataformas diesel baratas c…",
+            "Precisamente por eso conviene ser realista: antes de copiar cifras",
+            "toca revisar fallos comunes y el estado de transmisión"
+          ],
+          "note": "Celtic publica 150→209 bhp y 305 lb-ft en Stage 1; en foros también se repite que el embrague puede pedir refuerzo y que el M32 no es famoso por aguantar abuso."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Revisar M32/embrague/DMF",
+            "estado de EGR/swirl flaps",
+            "distribución y mantenimiento."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Swirl flaps",
+            "EGR",
+            "correa/camshaft según historial",
+            "embrague/DMF tras la repro."
+          ],
+          "note": "No incluyo EGR/DPF delete como recomendación base para uso calle."
+        }
+      ],
+      "reasons": [
+        "Celtic publica 150→209 bhp y 305 lb-ft en Stage 1; en foros también se repite que el embrague puede pedir refuerzo y que el M32 no es famoso por aguantar abuso.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Swirl flaps, EGR, correa/camshaft según historial, embrague/DMF tras la repro.",
+        "No incluyo EGR/DPF delete como recomendación base para uso calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.celtictuning.co.uk/services/performance-stats/vauxhall/astra-h-2004-2010/diesel/1-9-cdti-150-bhp-2007-2010-ECU-remap-chiptuning/stage-1",
+        "https://www.astraownersnetwork.co.uk/threads/newbie-looking-for-advise-on-1-9cdti-150.132142/",
+        "https://www.astraownersnetwork.co.uk/threads/clutch-upgrade-1-9cdti-150-remapped.132676/"
+      ],
+      "legalNote": "No incluyo EGR/DPF delete como recomendación base para uso calle."
+    },
+    {
+      "id": "opel-astra-h-1-7-cdti-37",
+      "platformLookupKey": "opel|astra|h|1.7 cdti",
+      "brand": "Opel",
+      "model": "Astra",
+      "generation": "H",
+      "engine": "1.7 CDTI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "medio",
+      "fitScore": 96,
+      "name": "Una repro suave sí merece la pena; no necesita volverse proyecto",
+      "summary": "El 1.7 CDTI del Astra H suele responder bien a una repro suave de calle. La recomendación más repetida es hacer eso y no mezclarlo con inventos raros: un mapa conservador mejora mucho la co…",
+      "estimatedBudget": 1950,
+      "expectedGain": "130 bhp y hasta 150 bhp/348 Nm en algunos casos",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Una repro suave sí merece la pena; no necesita volverse proyecto",
+            "El 1.7 CDTI del Astra H suele responder bien a una repro suave de calle",
+            "La recomendación más repetida es hacer eso y no mezclarlo con inventos raros: un mapa conservad…",
+            "Para más presupuesto"
+          ],
+          "note": "En foros se citan fácilmente 130 bhp y hasta 150 bhp/348 Nm en algunos casos; Celtic publica una mejora fuerte en Stage 1 para la versión de 98 bhp."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Elegir buen calibrador",
+            "coche sano y no mezclar remap + box."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "No forzar una base muy cansada",
+            "asumir que las cifras dependen mucho de la versión exacta."
+          ],
+          "note": "Preparación pensada para calle, sin anular emisiones."
+        }
+      ],
+      "reasons": [
+        "En foros se citan fácilmente 130 bhp y hasta 150 bhp/348 Nm en algunos casos; Celtic publica una mejora fuerte en Stage 1 para la versión de 98 bhp.",
+        "Nivel de respaldo medio-alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "No forzar una base muy cansada; asumir que las cifras dependen mucho de la versión exacta.",
+        "Preparación pensada para calle, sin anular emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.celtictuning.co.uk/services/performance-stats/vauxhall/astra-h-2004-2010/diesel/1-7-cdti-98-bhp-2004-2010-ECU-remap-chiptuning/stage-1",
+        "https://www.astraownersnetwork.co.uk/threads/1-7-cdti-remap.125913/"
+      ],
+      "legalNote": "Preparación pensada para calle, sin anular emisiones."
+    },
+    {
+      "id": "opel-corsa-d-1-3-cdti-38",
+      "platformLookupKey": "opel|corsa|d|1.3 cdti",
+      "brand": "Opel",
+      "model": "Corsa",
+      "generation": "D",
+      "engine": "1.3 CDTI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Remap sí; tuning box no es la ruta recomendada",
+      "summary": "Para el Corsa 1.3 CDTI la recomendación que más consenso tiene es remap antes que tuning box. En un coche tan ligero, una mejora moderada de par se nota mucho en uso diario. La gracia está…",
+      "estimatedBudget": 1250,
+      "expectedGain": "95-101 bhp según versión y preparador",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Remap sí; tuning box no es la ruta recomendada",
+            "Para el Corsa 1.3 CDTI la recomendación que más consenso tiene es remap antes que tuning box",
+            "En un coche tan ligero",
+            "una mejora moderada de par se nota mucho en uso diario"
+          ],
+          "note": "Se citan alrededor de 95-101 bhp según versión y preparador; Celtic publica 66→81 kW y 199→249 Nm para la variante de 88 bhp."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Elegir remap de calidad y partir de una base sana."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "No vender gains exagerados ni mezclar caja + remap en una base desconocida."
+          ],
+          "note": "Enfoque daily/legal; sin supresión de emisiones para calle."
+        }
+      ],
+      "reasons": [
+        "Se citan alrededor de 95-101 bhp según versión y preparador; Celtic publica 66→81 kW y 199→249 Nm para la variante de 88 bhp.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "No vender gains exagerados ni mezclar caja + remap en una base desconocida.",
+        "Enfoque daily/legal; sin supresión de emisiones para calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.celtictuning.co.uk/services/performance-stats/vauxhall/corsa-d-2006-2014/diesel/1-3-cdti-88-bhp-2006-2014-ECU-remap-chiptuning/stage-1",
+        "https://www.corsa-c.co.uk/threads/1-3-cdti-remap-or-tuning-box.217925/"
+      ],
+      "legalNote": "Enfoque daily/legal; sin supresión de emisiones para calle."
+    },
+    {
+      "id": "fiat-grande-punto-199-1-9-multijet-39",
+      "platformLookupKey": "fiat|grande punto|199|1.9 multijet",
+      "brand": "Fiat",
+      "model": "Grande Punto",
+      "generation": "199",
+      "engine": "1.9 Multijet",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "medio",
+      "fitScore": 96,
+      "name": "La repro funciona; el cuello de botella es la transmisión, no la falta de piezas",
+      "summary": "En el Grande Punto 1.9 Multijet la Stage 1 es una mejora muy repetida y con resultados claros. La parte delicada no suele ser sacar potencia, sino convivir con embrague/caja si el coche se…",
+      "estimatedBudget": 1950,
+      "expectedGain": "31 bhp sobre 130",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "La repro funciona; el cuello de botella es la transmisión, no la falta de piezas",
+            "En el Grande Punto 1.9 Multijet la Stage 1 es una mejora muy repetida y con resultados claros",
+            "La parte delicada no suele ser sacar potencia",
+            "sino convivir con embrague/caja si el coche se usa fuerte"
+          ],
+          "note": "Superchips publica +31 bhp sobre 130; en FiatForum se cita a menudo un rango de 160-200 bhp ya remapeados y se advierte del M32/caja."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Revisar embrague/DMF/caja antes de pedir par alto."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "M32/gearbox",
+            "embrague y expectativas irreales si el coche está cansado."
+          ],
+          "note": "Uso calle: recomiendo Stage 1 conservadora y no soluciones ilegales de emisiones."
+        }
+      ],
+      "reasons": [
+        "Superchips publica +31 bhp sobre 130; en FiatForum se cita a menudo un rango de 160-200 bhp ya remapeados y se advierte del M32/caja.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "M32/gearbox, embrague y expectativas irreales si el coche está cansado.",
+        "Uso calle: recomiendo Stage 1 conservadora y no soluciones ilegales de emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.superchips.co.uk/ECU-Remap/Fiat/Grande-Punto-MK1-2006-2012/Diesel/Sporting-1-9TD-130-bhp/stage-1",
+        "https://www.fiatforum.com/threads/every-performance-md-for-1-9multijets.294001/"
+      ],
+      "legalNote": "Uso calle: recomiendo Stage 1 conservadora y no soluciones ilegales de emisiones."
+    },
+    {
+      "id": "fiat-grande-punto-199-1-3-multijet-40",
+      "platformLookupKey": "fiat|grande punto|199|1.3 multijet",
+      "brand": "Fiat",
+      "model": "Grande Punto",
+      "generation": "199",
+      "engine": "1.3 Multijet",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Una buena repro sí; chips milagro no",
+      "summary": "En el 1.3 Multijet la recomendación con mejor consenso es simple: remap sí, chips/cajas milagro no. La plataforma agradece una mejora moderada de par para calle, pero no conviene venderla c…",
+      "estimatedBudget": 1250,
+      "expectedGain": "~100 bhp y ~150 ft-lb con remap en ciertas versiones",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Una buena repro sí; chips milagro no",
+            "En el 1.3 Multijet la recomendación con mejor consenso es simple: remap sí",
+            "chips/cajas milagro no",
+            "La plataforma agradece una mejora moderada de par para calle"
+          ],
+          "note": "En foros se habla de ~100 bhp y ~150 ft-lb con remap en ciertas versiones; también se insiste en que subir de 84 a 130 con solo mapa no es realista."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Comprobar versión exacta y elegir calibración moderada."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Promesas imposibles",
+            "'chips' genéricos y sobrecargar una mecánica pequeña."
+          ],
+          "note": "Recomendación para uso vial sin tocar emisiones."
+        }
+      ],
+      "reasons": [
+        "En foros se habla de ~100 bhp y ~150 ft-lb con remap en ciertas versiones; también se insiste en que subir de 84 a 130 con solo mapa no es realista.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Promesas imposibles, 'chips' genéricos y sobrecargar una mecánica pequeña.",
+        "Recomendación para uso vial sin tocar emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.fiatforum.com/threads/1-3-multijet-performance-enhancements.474531/",
+        "https://www.fiatforum.com/threads/punto-sporting-1-4-95bhp-vs-1-3-multijet-diesel-can-be-remapped-to-95bhp.145619/"
+      ],
+      "legalNote": "Recomendación para uso vial sin tocar emisiones."
+    },
+    {
+      "id": "bmw-serie-3-e46-320d-41",
+      "platformLookupKey": "bmw|serie 3|e46|320d",
+      "brand": "BMW",
+      "model": "Serie 3",
+      "generation": "E46",
+      "engine": "320d",
+      "powertrain": "gasolina",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "medio",
+      "fitScore": 96,
+      "name": "Si remapeas, hazlo con cabeza y acompáñalo de freno/fluido/latiguillo",
+      "summary": "En el E46 320d la mejora útil no es solo 'meter mapa'. El consenso más serio combina una repro conservadora con trabajo de chasis/freno: pastilla decente, líquido fresco y latiguillos si to…",
+      "estimatedBudget": 1950,
+      "expectedGain": "150 bhp",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Si remapeas, hazlo con cabeza y acompáñalo de freno/fluido/latiguillo",
+            "En el E46 320d la mejora útil no es solo 'meter mapa'",
+            "El consenso más serio combina una repro conservadora con trabajo de chasis/freno: pastilla dece…",
+            "líquido fresco y latiguillos si toca"
+          ],
+          "note": "Celtic publica una Stage 1 muy fuerte sobre 150 bhp; en foros hay casos de 136→160 con remap y problemas de embrague, lo que apoya una ruta daily más conservad…"
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Revisión de embrague",
+            "mantenimiento y estado de frenos antes de remap."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Patinamiento de embrague/SAC",
+            "mapas de par excesivos y freno de serie descuidado."
+          ],
+          "note": "Sin recomendar anulaciones de emisiones; enfoque daily de calle."
+        }
+      ],
+      "reasons": [
+        "Celtic publica una Stage 1 muy fuerte sobre 150 bhp; en foros hay casos de 136→160 con remap y problemas de embrague, lo que apoya una ruta daily más conservad…",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Patinamiento de embrague/SAC, mapas de par excesivos y freno de serie descuidado.",
+        "Sin recomendar anulaciones de emisiones; enfoque daily de calle."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.celtictuning.co.uk/services/performance-stats/bmw/3-series-e46-1998-2005/diesel/320d-150-bhp-2003-2005-ECU-remap-chiptuning/stage-1",
+        "https://www.e46fanatics.com/threads/help-318i-318ti-320d-clutch-sac-replacement-for-non-sac.870613/",
+        "https://www.e46fanatics.com/threads/most-common-non-m-e46-brake-upgrade.376463/"
+      ],
+      "legalNote": "Sin recomendar anulaciones de emisiones; enfoque daily de calle."
+    },
+    {
+      "id": "bmw-serie-3-e46-318i-42",
+      "platformLookupKey": "bmw|serie 3|e46|318i",
+      "brand": "BMW",
+      "model": "Serie 3",
+      "generation": "E46",
+      "engine": "318i",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Antes que inventos: pastillas, líquido, latiguillos y luego valorar 330/M3 brakes",
+      "summary": "En los E46 gasolina normales, la recomendación más respaldada no es una admisión ruidosa ni mods dudosos, sino mejorar el sistema de freno: buenas pastillas, líquido nuevo y latiguillos. Si…",
+      "estimatedBudget": 900,
+      "expectedGain": "El propio consenso del foro resume que pads/fluid/SS lines ya mejoran tacto y f…",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Antes que inventos: pastillas, líquido, latiguillos y luego valorar 330/M3 brakes",
+            "En los E46 gasolina normales",
+            "la recomendación más respaldada no es una admisión ruidosa ni mods dudosos",
+            "sino mejorar el sistema de freno: buenas pastillas"
+          ],
+          "note": "El propio consenso del foro resume que pads/fluid/SS lines ya mejoran tacto y frenada; la guía de upgrades muestra rutas OEM más grandes si el uso lo exige."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Discos en buen estado",
+            "líquido correcto y objetivo de uso claro."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Comprar BBK por estética sin resolver primero pastilla/líquido/rueda."
+          ],
+          "note": "Mejora plenamente coherente con uso calle; homologar si tu país lo exige."
+        }
+      ],
+      "reasons": [
+        "El propio consenso del foro resume que pads/fluid/SS lines ya mejoran tacto y frenada; la guía de upgrades muestra rutas OEM más grandes si el uso lo exige.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Comprar BBK por estética sin resolver primero pastilla/líquido/rueda.",
+        "Mejora plenamente coherente con uso calle; homologar si tu país lo exige."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.e46fanatics.com/threads/most-common-non-m-e46-brake-upgrade.376463/",
+        "https://www.e46fanatics.com/threads/the-comprehensive-e46-brake-upgrade-guide.1108527/"
+      ],
+      "legalNote": "Mejora plenamente coherente con uso calle; homologar si tu país lo exige."
+    },
+    {
+      "id": "bmw-serie-3-e46-320i-43",
+      "platformLookupKey": "bmw|serie 3|e46|320i",
+      "brand": "BMW",
+      "model": "Serie 3",
+      "generation": "E46",
+      "engine": "320i",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Antes que inventos: pastillas, líquido, latiguillos y luego valorar 330/M3 brakes",
+      "summary": "En los E46 gasolina normales, la recomendación más respaldada no es una admisión ruidosa ni mods dudosos, sino mejorar el sistema de freno: buenas pastillas, líquido nuevo y latiguillos. Si…",
+      "estimatedBudget": 900,
+      "expectedGain": "El propio consenso del foro resume que pads/fluid/SS lines ya mejoran tacto y f…",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Antes que inventos: pastillas, líquido, latiguillos y luego valorar 330/M3 brakes",
+            "En los E46 gasolina normales",
+            "la recomendación más respaldada no es una admisión ruidosa ni mods dudosos",
+            "sino mejorar el sistema de freno: buenas pastillas"
+          ],
+          "note": "El propio consenso del foro resume que pads/fluid/SS lines ya mejoran tacto y frenada; la guía de upgrades muestra rutas OEM más grandes si el uso lo exige."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Discos en buen estado",
+            "líquido correcto y objetivo de uso claro."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Comprar BBK por estética sin resolver primero pastilla/líquido/rueda."
+          ],
+          "note": "Mejora plenamente coherente con uso calle; homologar si tu país lo exige."
+        }
+      ],
+      "reasons": [
+        "El propio consenso del foro resume que pads/fluid/SS lines ya mejoran tacto y frenada; la guía de upgrades muestra rutas OEM más grandes si el uso lo exige.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Comprar BBK por estética sin resolver primero pastilla/líquido/rueda.",
+        "Mejora plenamente coherente con uso calle; homologar si tu país lo exige."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.e46fanatics.com/threads/most-common-non-m-e46-brake-upgrade.376463/",
+        "https://www.e46fanatics.com/threads/the-comprehensive-e46-brake-upgrade-guide.1108527/"
+      ],
+      "legalNote": "Mejora plenamente coherente con uso calle; homologar si tu país lo exige."
+    },
+    {
+      "id": "bmw-serie-3-e46-330i-44",
+      "platformLookupKey": "bmw|serie 3|e46|330i",
+      "brand": "BMW",
+      "model": "Serie 3",
+      "generation": "E46",
+      "engine": "330i",
+      "powertrain": "electrico",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "equilibrio",
+      "budget": "bajo",
+      "fitScore": 96,
+      "name": "Antes que inventos: pastillas, líquido, latiguillos y luego valorar 330/M3 brakes",
+      "summary": "En los E46 gasolina normales, la recomendación más respaldada no es una admisión ruidosa ni mods dudosos, sino mejorar el sistema de freno: buenas pastillas, líquido nuevo y latiguillos. Si…",
+      "estimatedBudget": 900,
+      "expectedGain": "El propio consenso del foro resume que pads/fluid/SS lines ya mejoran tacto y f…",
+      "reliabilityIndex": 90,
+      "executionTime": "1 a 2 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Antes que inventos: pastillas, líquido, latiguillos y luego valorar 330/M3 brakes",
+            "En los E46 gasolina normales",
+            "la recomendación más respaldada no es una admisión ruidosa ni mods dudosos",
+            "sino mejorar el sistema de freno: buenas pastillas"
+          ],
+          "note": "El propio consenso del foro resume que pads/fluid/SS lines ya mejoran tacto y frenada; la guía de upgrades muestra rutas OEM más grandes si el uso lo exige."
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Discos en buen estado",
+            "líquido correcto y objetivo de uso claro."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Comprar BBK por estética sin resolver primero pastilla/líquido/rueda."
+          ],
+          "note": "Mejora plenamente coherente con uso calle; homologar si tu país lo exige."
+        }
+      ],
+      "reasons": [
+        "El propio consenso del foro resume que pads/fluid/SS lines ya mejoran tacto y frenada; la guía de upgrades muestra rutas OEM más grandes si el uso lo exige.",
+        "Nivel de respaldo alto con confianza alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Comprar BBK por estética sin resolver primero pastilla/líquido/rueda.",
+        "Mejora plenamente coherente con uso calle; homologar si tu país lo exige."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.e46fanatics.com/threads/most-common-non-m-e46-brake-upgrade.376463/",
+        "https://www.e46fanatics.com/threads/the-comprehensive-e46-brake-upgrade-guide.1108527/"
+      ],
+      "legalNote": "Mejora plenamente coherente con uso calle; homologar si tu país lo exige."
+    },
+    {
+      "id": "audi-a2-8z-1-4-tdi-45",
+      "platformLookupKey": "audi|a2|8z|1.4 tdi",
+      "brand": "Audi",
+      "model": "A2",
+      "generation": "8Z",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Remap ligero y listo; no necesita una build rara",
+      "summary": "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera. En coches tan ligeros, pasar cerca de 100 bhp cambia bastante el uso real. La clave es mante…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~100 bhp con remap",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Remap ligero y listo; no necesita una build rara",
+            "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera",
+            "En coches tan ligeros",
+            "pasar cerca de 100 bhp cambia bastante el uso real"
+          ],
+          "note": "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…"
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Base sana",
+            "turbo bien",
+            "mapa conservador."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Turbo VNT15 si el mapa se pasa de rosca",
+            "no buscar cifras 'de vRS' a costa de fiabilidad."
+          ],
+          "note": "Enfoque calle/daily; sin tocar emisiones."
+        }
+      ],
+      "reasons": [
+        "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…",
+        "Nivel de respaldo medio-alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Turbo VNT15 si el mapa se pasa de rosca; no buscar cifras 'de vRS' a costa de fiabilidad.",
+        "Enfoque calle/daily; sin tocar emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.clubpolo.co.uk/topic/166965-tell-me-about-2000-14-tdis/",
+        "https://www.briskoda.net/forums/topic/64575-seriously-14tdi-remap-vrs/"
+      ],
+      "legalNote": "Enfoque calle/daily; sin tocar emisiones."
+    },
+    {
+      "id": "skoda-fabia-5j-1-4-tdi-46",
+      "platformLookupKey": "skoda|fabia|5j|1.4 tdi",
+      "brand": "Skoda",
+      "model": "Fabia",
+      "generation": "5J",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Remap ligero y listo; no necesita una build rara",
+      "summary": "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera. En coches tan ligeros, pasar cerca de 100 bhp cambia bastante el uso real. La clave es mante…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~100 bhp con remap",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Remap ligero y listo; no necesita una build rara",
+            "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera",
+            "En coches tan ligeros",
+            "pasar cerca de 100 bhp cambia bastante el uso real"
+          ],
+          "note": "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…"
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Base sana",
+            "turbo bien",
+            "mapa conservador."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Turbo VNT15 si el mapa se pasa de rosca",
+            "no buscar cifras 'de vRS' a costa de fiabilidad."
+          ],
+          "note": "Enfoque calle/daily; sin tocar emisiones."
+        }
+      ],
+      "reasons": [
+        "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…",
+        "Nivel de respaldo medio-alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Turbo VNT15 si el mapa se pasa de rosca; no buscar cifras 'de vRS' a costa de fiabilidad.",
+        "Enfoque calle/daily; sin tocar emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.clubpolo.co.uk/topic/166965-tell-me-about-2000-14-tdis/",
+        "https://www.briskoda.net/forums/topic/64575-seriously-14tdi-remap-vrs/"
+      ],
+      "legalNote": "Enfoque calle/daily; sin tocar emisiones."
+    },
+    {
+      "id": "volkswagen-fox-5z-1-4-tdi-47",
+      "platformLookupKey": "volkswagen|fox|5z|1.4 tdi",
+      "brand": "Volkswagen",
+      "model": "Fox",
+      "generation": "5Z",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Remap ligero y listo; no necesita una build rara",
+      "summary": "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera. En coches tan ligeros, pasar cerca de 100 bhp cambia bastante el uso real. La clave es mante…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~100 bhp con remap",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Remap ligero y listo; no necesita una build rara",
+            "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera",
+            "En coches tan ligeros",
+            "pasar cerca de 100 bhp cambia bastante el uso real"
+          ],
+          "note": "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…"
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Base sana",
+            "turbo bien",
+            "mapa conservador."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Turbo VNT15 si el mapa se pasa de rosca",
+            "no buscar cifras 'de vRS' a costa de fiabilidad."
+          ],
+          "note": "Enfoque calle/daily; sin tocar emisiones."
+        }
+      ],
+      "reasons": [
+        "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…",
+        "Nivel de respaldo medio-alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Turbo VNT15 si el mapa se pasa de rosca; no buscar cifras 'de vRS' a costa de fiabilidad.",
+        "Enfoque calle/daily; sin tocar emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.clubpolo.co.uk/topic/166965-tell-me-about-2000-14-tdis/",
+        "https://www.briskoda.net/forums/topic/64575-seriously-14tdi-remap-vrs/"
+      ],
+      "legalNote": "Enfoque calle/daily; sin tocar emisiones."
+    },
+    {
+      "id": "volkswagen-lupo-6x-1-4-tdi-48",
+      "platformLookupKey": "volkswagen|lupo|6x|1.4 tdi",
+      "brand": "Volkswagen",
+      "model": "Lupo",
+      "generation": "6X",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Remap ligero y listo; no necesita una build rara",
+      "summary": "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera. En coches tan ligeros, pasar cerca de 100 bhp cambia bastante el uso real. La clave es mante…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~100 bhp con remap",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Remap ligero y listo; no necesita una build rara",
+            "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera",
+            "En coches tan ligeros",
+            "pasar cerca de 100 bhp cambia bastante el uso real"
+          ],
+          "note": "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…"
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Base sana",
+            "turbo bien",
+            "mapa conservador."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Turbo VNT15 si el mapa se pasa de rosca",
+            "no buscar cifras 'de vRS' a costa de fiabilidad."
+          ],
+          "note": "Enfoque calle/daily; sin tocar emisiones."
+        }
+      ],
+      "reasons": [
+        "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…",
+        "Nivel de respaldo medio-alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Turbo VNT15 si el mapa se pasa de rosca; no buscar cifras 'de vRS' a costa de fiabilidad.",
+        "Enfoque calle/daily; sin tocar emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.clubpolo.co.uk/topic/166965-tell-me-about-2000-14-tdis/",
+        "https://www.briskoda.net/forums/topic/64575-seriously-14tdi-remap-vrs/"
+      ],
+      "legalNote": "Enfoque calle/daily; sin tocar emisiones."
+    },
+    {
+      "id": "volkswagen-polo-9n-1-4-tdi-49",
+      "platformLookupKey": "volkswagen|polo|9n|1.4 tdi",
+      "brand": "Volkswagen",
+      "model": "Polo",
+      "generation": "9N",
+      "engine": "1.4 TDI",
+      "powertrain": "diesel",
+      "usage": "diario",
+      "goal": "calle",
+      "priority": "potencia",
+      "budget": "alto",
+      "fitScore": 96,
+      "name": "Remap ligero y listo; no necesita una build rara",
+      "summary": "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera. En coches tan ligeros, pasar cerca de 100 bhp cambia bastante el uso real. La clave es mante…",
+      "estimatedBudget": 2950,
+      "expectedGain": "~100 bhp con remap",
+      "reliabilityIndex": 90,
+      "executionTime": "2 a 4 semanas",
+      "stages": [
+        {
+          "label": "STAGE 1",
+          "focus": "Ruta principal",
+          "parts": [
+            "Remap ligero y listo; no necesita una build rara",
+            "En los 1.4 TDI pequeños (Polo/Fabia/A2/Lupo/Fox) la mejora con más consenso es una repro ligera",
+            "En coches tan ligeros",
+            "pasar cerca de 100 bhp cambia bastante el uso real"
+          ],
+          "note": "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…"
+        },
+        {
+          "label": "STAGE 2",
+          "focus": "Prerequisitos",
+          "parts": [
+            "Base sana",
+            "turbo bien",
+            "mapa conservador."
+          ],
+          "note": "Antes de apretar mas, conviene asegurar que la base mecanica y el soporte acompanen la recomendacion."
+        },
+        {
+          "label": "STAGE 3",
+          "focus": "Lo que debes vigilar",
+          "parts": [
+            "Turbo VNT15 si el mapa se pasa de rosca",
+            "no buscar cifras 'de vRS' a costa de fiabilidad."
+          ],
+          "note": "Enfoque calle/daily; sin tocar emisiones."
+        }
+      ],
+      "reasons": [
+        "En foros se repite que estos coches pueden quedar sobre ~100 bhp con remap; Briskoda también advierte que varios VNT15 han terminado muriendo cuando se les exi…",
+        "Nivel de respaldo medio-alto con confianza media-alta.",
+        "La recomendacion parte de referencias reales y no de una build generica inventada."
+      ],
+      "warnings": [
+        "Turbo VNT15 si el mapa se pasa de rosca; no buscar cifras 'de vRS' a costa de fiabilidad.",
+        "Enfoque calle/daily; sin tocar emisiones."
+      ],
+      "isFeatured": true,
+      "sourceUrls": [
+        "https://www.clubpolo.co.uk/topic/166965-tell-me-about-2000-14-tdis/",
+        "https://www.briskoda.net/forums/topic/64575-seriously-14tdi-remap-vrs/"
+      ],
+      "legalNote": "Enfoque calle/daily; sin tocar emisiones."
+    }
+  ]
+}
