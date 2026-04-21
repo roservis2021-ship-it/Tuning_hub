@@ -529,6 +529,63 @@ select {
   font-size: 0.94rem;
 }
 
+.factory-source-link {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 0.8rem;
+  color: #ffb18c;
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 177, 140, 0.28);
+}
+
+.build-source {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.95rem;
+}
+
+.build-source__badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  min-height: 32px;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffd6c6;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.build-source__note {
+  margin: 0;
+  color: var(--warning);
+  font-size: 0.86rem;
+}
+
+.build-actions {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.build-actions__primary,
+.build-actions__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.build-actions--stack {
+  margin-top: 1rem;
+}
+
 .vehicle-preview {
   padding: 0;
   border: none;
@@ -550,6 +607,414 @@ select {
 .build-card--stats h2,
 .build-section__heading h2 {
   font-size: 1.45rem;
+}
+
+.build-card--cta,
+.build-card--lead {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.build-card--vision {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.build-card--hero-story {
+  gap: 1.2rem;
+}
+
+.stage-progress {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.stage-progress__item {
+  display: grid;
+  gap: 0.28rem;
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.stage-progress__item span {
+  color: #ff9c6a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stage-progress__item strong {
+  color: var(--text-main);
+  font-size: 1rem;
+}
+
+.stage-progress__item--active {
+  border-color: rgba(255, 91, 31, 0.28);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+.stage-progress__item--done {
+  border-color: rgba(122, 211, 125, 0.14);
+}
+
+.build-card--stage-focus,
+.build-card--closing {
+  display: grid;
+  gap: 1rem;
+}
+
+.build-card--stage-focus {
+  isolation: isolate;
+  animation: stage-reveal 0.72s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+}
+
+.build-card--stage-focus-ignition {
+  background:
+    radial-gradient(circle at top right, rgba(255, 122, 31, 0.16), transparent 28%),
+    linear-gradient(180deg, rgba(18, 20, 27, 0.98), rgba(14, 16, 22, 0.98));
+}
+
+.build-card--stage-focus-boost {
+  background:
+    radial-gradient(circle at top right, rgba(255, 91, 31, 0.22), transparent 30%),
+    radial-gradient(circle at left center, rgba(255, 170, 90, 0.08), transparent 26%),
+    linear-gradient(180deg, rgba(18, 20, 27, 0.98), rgba(14, 16, 22, 0.98));
+}
+
+.build-card--stage-focus-redline {
+  background:
+    radial-gradient(circle at top right, rgba(255, 91, 31, 0.18), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(255, 60, 31, 0.1), transparent 28%),
+    linear-gradient(180deg, rgba(18, 20, 27, 0.98), rgba(14, 16, 22, 0.98));
+}
+
+.stage-motion {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.stage-motion__gauge {
+  position: absolute;
+  top: -6rem;
+  right: -2rem;
+  width: 14rem;
+  height: 14rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 91, 31, 0.07),
+    0 0 0 18px rgba(255, 255, 255, 0.015);
+}
+
+.stage-motion__gauge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 210deg,
+    transparent 0deg 120deg,
+    rgba(255, 122, 31, 0.12) 120deg 155deg,
+    rgba(255, 91, 31, 0.55) 155deg 176deg,
+    transparent 176deg 360deg
+  );
+}
+
+.stage-motion__gauge::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 38%;
+  height: 2px;
+  transform-origin: left center;
+  transform: rotate(-38deg);
+  background: linear-gradient(90deg, rgba(255, 214, 198, 0.9), rgba(255, 91, 31, 0.08));
+  box-shadow: 0 0 16px rgba(255, 91, 31, 0.28);
+  animation: gauge-sweep 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.stage-motion__pulse {
+  position: absolute;
+  inset: auto -2rem -2rem auto;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 91, 31, 0.22), transparent 68%);
+  filter: blur(2px);
+  animation: turbo-pulse 1.5s ease-out both;
+}
+
+.stage-motion__spark {
+  position: absolute;
+  width: 9rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 122, 31, 0.7), transparent);
+  opacity: 0;
+}
+
+.stage-motion__spark--one {
+  top: 28%;
+  left: -2rem;
+  transform: rotate(12deg);
+  animation: spark-run 0.9s ease-out 0.12s both;
+}
+
+.stage-motion__spark--two {
+  top: 64%;
+  right: -3rem;
+  transform: rotate(-14deg);
+  animation: spark-run 0.9s ease-out 0.2s both reverse;
+}
+
+.build-stage-focus__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+.build-stage-focus__badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #ff8b53;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.build-stage-focus__counter {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.build-stage-focus__intro h2 {
+  margin: 0;
+  color: var(--text-main);
+  font-size: clamp(1.8rem, 6vw, 2.5rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+}
+
+.build-stage-focus__intro,
+.build-stage-focus__stats,
+.cv-progress-card,
+.stage-parts,
+.stage-story-cta {
+  position: relative;
+  z-index: 1;
+}
+
+.build-stage-focus__intro p {
+  margin: 0.7rem 0 0;
+  color: var(--text-soft);
+  font-size: 1rem;
+}
+
+.build-stage-focus__stats {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.build-highlight {
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  border: 1px solid var(--line-soft);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.025));
+  backdrop-filter: blur(6px);
+  animation: part-fade-up 0.56s ease both;
+}
+
+.build-highlight span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.build-highlight strong {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--text-main);
+  font-size: 1.05rem;
+}
+
+.cv-progress-card {
+  padding: 1rem;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow);
+  animation: part-fade-up 0.7s ease both;
+}
+
+.cv-progress-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.cv-progress-card__eyebrow {
+  color: #ff9c6a;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cv-progress-card__gain {
+  color: #ffd6c6;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.cv-progress-card__numbers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.cv-progress-card__numbers span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.cv-progress-card__numbers strong {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--text-main);
+  font-size: 1.1rem;
+  letter-spacing: -0.03em;
+}
+
+.cv-progress-card__numbers-current strong {
+  color: #fff1ea;
+  text-shadow: 0 0 20px rgba(255, 91, 31, 0.18);
+}
+
+.cv-progress-card__track {
+  position: relative;
+  height: 18px;
+  margin-top: 1rem;
+}
+
+.cv-progress-card__track-base,
+.cv-progress-card__track-fill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 8px;
+  border-radius: 999px;
+  transform: translateY(-50%);
+}
+
+.cv-progress-card__track-base {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.cv-progress-card__track-fill {
+  background: linear-gradient(90deg, rgba(255, 122, 31, 0.55), rgba(255, 91, 31, 1));
+  box-shadow: 0 0 24px rgba(255, 91, 31, 0.32);
+  transition: width 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cv-progress-card__track-glow {
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3eb 0%, #ff8b53 38%, rgba(255, 91, 31, 0.18) 72%, transparent 74%);
+  transform: translate(-50%, -50%);
+  transition: left 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: cv-node-pulse 1.2s ease-in-out infinite;
+}
+
+.stage-parts {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.stage-part-card {
+  padding: 1rem;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(26, 28, 36, 0.98), rgba(18, 20, 27, 0.98));
+  box-shadow: var(--shadow);
+  animation: part-fade-up 0.65s ease both;
+}
+
+.stage-part-card__tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.28rem 0.62rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffd6c6;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.stage-part-card h3 {
+  margin: 0.8rem 0 0;
+  color: var(--text-main);
+  font-size: 1.08rem;
+}
+
+.stage-part-card p {
+  margin: 0.5rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.94rem;
+}
+
+.stage-story-cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.stage-story-cta__spacer {
+  display: block;
+}
+
+.stage-story-cta__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .build-stats {
@@ -661,6 +1126,11 @@ select {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+.lead-form {
+  display: grid;
+  gap: 0.8rem;
 }
 
 .loading-screen {
@@ -856,6 +1326,89 @@ select {
   }
 }
 
+@keyframes stage-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: var(--shadow);
+  }
+}
+
+@keyframes gauge-sweep {
+  from {
+    transform: rotate(-132deg);
+    opacity: 0.2;
+  }
+
+  to {
+    transform: rotate(-28deg);
+    opacity: 1;
+  }
+}
+
+@keyframes turbo-pulse {
+  0% {
+    transform: scale(0.55);
+    opacity: 0;
+  }
+
+  45% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+}
+
+@keyframes spark-run {
+  from {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+
+  40% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(5rem);
+  }
+}
+
+@keyframes part-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cv-node-pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0.86;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: 1;
+  }
+}
+
 @keyframes pulse-glow {
   0%,
   100% {
@@ -914,8 +1467,18 @@ select {
   .primary-button,
   .secondary-button,
   .build-stage-card,
-  .build-stat {
+  .build-stat,
+  .build-card--stage-focus,
+  .build-highlight,
+  .cv-progress-card,
+  .cv-progress-card__track-fill,
+  .cv-progress-card__track-glow,
+  .stage-part-card,
+  .stage-motion__gauge::after,
+  .stage-motion__pulse,
+  .stage-motion__spark {
     transition: none;
+    animation: none;
   }
 }
 
@@ -953,5 +1516,24 @@ select {
 
   .build-stages {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .product-card__actions,
+  .build-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stage-progress {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .build-stage-focus__stats,
+  .stage-parts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lead-form {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
   }
 }

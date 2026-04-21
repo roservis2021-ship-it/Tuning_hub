@@ -86,6 +86,7 @@ function HomePage() {
   const [currentScreen, setCurrentScreen] = useState('form');
   const [loadingStepIndex, setLoadingStepIndex] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(8);
+  const [buildMeta, setBuildMeta] = useState(null);
 
   useEffect(() => {
     if (currentScreen !== 'loading') {
@@ -109,8 +110,10 @@ function HomePage() {
 
   async function handleBuildSearch(vehicleData) {
     let nextResult = null;
+    let aiErrorMessage = '';
     setVehicle(vehicleData);
     setCurrentScreen('loading');
+    setBuildMeta(null);
 
     try {
       nextResult = await findMatchingBuild(vehicleData);
@@ -122,16 +125,21 @@ function HomePage() {
       try {
         nextResult = await generateAiBuild(vehicleData);
       } catch (error) {
+        aiErrorMessage = error?.message || 'La IA no estuvo disponible en este intento.';
         nextResult = null;
       }
     }
 
     if (!nextResult) {
       nextResult = generateBuildRecommendation(vehicleData);
+      if (aiErrorMessage) {
+        nextResult.warnings = [aiErrorMessage, ...nextResult.warnings];
+      }
     }
 
     setLoadingProgress(100);
     setResult(nextResult);
+    setBuildMeta({ source: nextResult.source, aiErrorMessage });
     setCurrentScreen('build');
 
     try {
@@ -232,7 +240,12 @@ function HomePage() {
         </section>
       ) : (
         <section className="screen-shell">
-          <BuildResult result={result} vehicle={vehicle} onBack={handleBackToForm} />
+          <BuildResult
+            result={result}
+            vehicle={vehicle}
+            buildMeta={buildMeta}
+            onBack={handleBackToForm}
+          />
         </section>
       )}
     </main>

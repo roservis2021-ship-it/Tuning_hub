@@ -63,6 +63,16 @@ function formatBudget(amount) {
   }).format(amount);
 }
 
+function hasCompletePowerProfile(build) {
+  return Boolean(
+    Number(build?.basePowerCv) > 0 &&
+      Number(build?.finalPowerCv) > 0 &&
+      Array.isArray(build?.stages) &&
+      build.stages.length === 3 &&
+      build.stages.every((stage) => Number(stage?.gainCv) > 0 && Number(stage?.powerAfterCv) > 0),
+  );
+}
+
 function toResultShape(build, vehicle) {
   const vehicleDescriptor = [vehicle.model, vehicle.generation, vehicle.engine]
     .filter(Boolean)
@@ -74,6 +84,10 @@ function toResultShape(build, vehicle) {
     summary: build.summary,
     fitScore: build.fitScore,
     source: 'database',
+    basePowerCv: build.basePowerCv ?? null,
+    finalPowerCv: build.finalPowerCv ?? null,
+    factoryPowerSourceTitle: build.factoryPowerSourceTitle ?? '',
+    factoryPowerSourceUrl: build.factoryPowerSourceUrl ?? '',
     stats: [
       {
         label: 'Presupuesto estimado',
@@ -116,7 +130,8 @@ async function findExactBuild(vehicle) {
   }
 
   const firstDoc = snapshot.docs[0];
-  return { id: firstDoc.id, ...firstDoc.data() };
+  const build = { id: firstDoc.id, ...firstDoc.data() };
+  return hasCompletePowerProfile(build) ? build : null;
 }
 
 async function findGoalBuild(vehicle) {
@@ -134,6 +149,7 @@ async function findGoalBuild(vehicle) {
 
   const candidates = snapshot.docs
     .map((buildDoc) => ({ id: buildDoc.id, ...buildDoc.data() }))
+    .filter(hasCompletePowerProfile)
     .sort((left, right) => {
       const leftFeatured = left.isFeatured ? 1 : 0;
       const rightFeatured = right.isFeatured ? 1 : 0;
@@ -165,6 +181,7 @@ async function findPlatformBuild(vehicle) {
 
   const candidates = snapshot.docs
     .map((buildDoc) => ({ id: buildDoc.id, ...buildDoc.data() }))
+    .filter(hasCompletePowerProfile)
     .filter((build) => {
       const matchesPowertrain = !build.powertrain || build.powertrain === vehicle.powertrain;
       const matchesYear =

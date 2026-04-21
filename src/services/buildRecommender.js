@@ -99,7 +99,13 @@ const PRIORITIES = {
   },
 };
 
-function createStages(goal, priority, powertrain, usageNote) {
+function createStages(goal, priority, powertrain, usageNote, basePowerCv) {
+  const stageGains =
+    powertrain.basePowerGain >= 30 ? [18, 12, 8] : powertrain.basePowerGain >= 24 ? [16, 10, 6] : [10, 7, 4];
+  const stageOnePower = basePowerCv + stageGains[0];
+  const stageTwoPower = stageOnePower + stageGains[1];
+  const stageThreePower = stageTwoPower + stageGains[2];
+
   return [
     {
       label: 'STAGE 1',
@@ -111,6 +117,8 @@ function createStages(goal, priority, powertrain, usageNote) {
         priority.bonusPart,
       ],
       note: `${powertrain.note} ${usageNote}`,
+      gainCv: stageGains[0],
+      powerAfterCv: stageOnePower,
     },
     {
       label: 'STAGE 2',
@@ -122,6 +130,8 @@ function createStages(goal, priority, powertrain, usageNote) {
         goal.stages[1],
       ],
       note: 'Esta etapa consolida la build para que no sea solo vistosa, sino utilizable.',
+      gainCv: stageGains[1],
+      powerAfterCv: stageTwoPower,
     },
     {
       label: 'STAGE 3',
@@ -133,6 +143,8 @@ function createStages(goal, priority, powertrain, usageNote) {
         goal.stages[2],
       ],
       note: 'La ultima capa busca que el coche quede coherente y presentable para entregar al usuario.',
+      gainCv: stageGains[2],
+      powerAfterCv: stageThreePower,
     },
   ];
 }
@@ -164,12 +176,26 @@ export function generateBuildRecommendation(vehicle) {
   const vehicleDescriptor = [vehicle.model, vehicle.generation, vehicle.engine]
     .filter(Boolean)
     .join(' ');
+  const basePowerCv =
+    vehicle.powertrain === 'diesel'
+      ? 105
+      : vehicle.aspiration === 'turbo'
+        ? 150
+        : 125;
+  const stages = createStages(goal, priority, powertrain, usageNote, basePowerCv);
+  const finalPowerCv = stages[stages.length - 1]?.powerAfterCv ?? basePowerCv;
 
   return {
     title: `${vehicle.brand} ${vehicleDescriptor}: build ${goal.label}`,
     summary: `Configuracion pensada para ${usageLabel}, con ${drivetrainLabel}, prioridad en ${vehicle.priority} y una hoja de ruta clara de tres etapas.`,
-    source: 'generated',
-    stages: createStages(goal, priority, powertrain, usageNote),
+    source: 'fallback',
+    basePowerCv,
+    finalPowerCv,
+    expectedGain: vehicle.powertrain === 'diesel' ? '+25 hp / +55 Nm' : '+30 hp / +40 Nm',
+    estimatedBudget: Math.round(520 * goal.costMod * priority.budget * powertrain.budgetBias),
+    reliabilityIndex: Math.min(94, Math.round(72 * goal.reliabilityMod + priority.score)),
+    executionTime: vehicle.usage === 'diario' ? '1 a 2 semanas' : '2 a 4 semanas',
+    stages,
     reasons: [
       `La build se apoya en un ${vehicle.powertrain} ${vehicle.transmission} con enfoque realista para un ${vehicle.year}.`,
       vehicle.generation
@@ -181,7 +207,7 @@ export function generateBuildRecommendation(vehicle) {
     warnings: [
       'Antes de vender la build como definitiva, conviene validar compatibilidades reales por plataforma y motorizacion exacta.',
       'Si hay reprogramacion o cambios de emisiones, hay que revisar homologacion e ITV.',
-      'El resultado actual es una recomendacion inteligente de MVP; despues podemos conectarlo a una base de datos real de piezas.',
+      'Esta build es una recomendacion de respaldo porque no habia una coincidencia especifica en base de datos ni una respuesta disponible de IA.',
     ],
   };
 }
