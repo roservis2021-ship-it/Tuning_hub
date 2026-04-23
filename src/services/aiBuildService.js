@@ -9,11 +9,23 @@ export async function generateAiBuild(vehicle) {
     body: JSON.stringify(vehicle),
   });
 
-  const payload = await response.json();
+  const responseText = await response.text();
+  let payload = null;
 
-  if (!response.ok) {
-    throw new Error(payload.error || 'No se pudo generar la build con IA.');
+  if (responseText) {
+    try {
+      payload = JSON.parse(responseText);
+    } catch (error) {
+      throw new Error('El backend no devolvio una respuesta valida.');
+    }
   }
 
-  return payload.result ?? null;
+  if (!response.ok) {
+    const error = new Error(payload?.error || 'No se pudo generar la build con IA.');
+    error.code = payload?.code;
+    error.status = response.status;
+    throw error;
+  }
+
+  return payload?.result ?? null;
 }

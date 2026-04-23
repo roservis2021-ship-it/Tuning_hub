@@ -49,6 +49,20 @@ const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 const OPENAI_ENABLE_WEB_SEARCH = process.env.OPENAI_ENABLE_WEB_SEARCH !== 'false';
 const OPENAI_WEB_SEARCH_TOOL = process.env.OPENAI_WEB_SEARCH_TOOL || 'web_search_preview';
 
+class BadRequestError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'BadRequestError';
+  }
+}
+
+class VerificationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'VerificationError';
+  }
+}
+
 function resolveFromRoot(targetPath) {
   return path.isAbsolute(targetPath) ? targetPath : path.resolve(projectRoot, targetPath);
 }
@@ -125,6 +139,7 @@ function describePriority(priority) {
     fiabilidad: 'fiabilidad, temperatura y soporte mecanico',
     equilibrio: 'equilibrio entre respuesta, coste, fiabilidad y sensaciones',
     estetica: 'presencia y coherencia OEM+ sin olvidar la base mecanica',
+    radical: 'maximo rendimiento dentro del limite razonable de la plataforma, aunque suba coste y exigencia mecanica',
   }[priority] ?? 'equilibrio general';
 }
 
@@ -275,7 +290,16 @@ async function readBody(request) {
   }
 
   const rawBody = Buffer.concat(chunks).toString('utf8');
-  return rawBody ? JSON.parse(rawBody) : {};
+
+  if (!rawBody) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(rawBody);
+  } catch (error) {
+    throw new BadRequestError('El cuerpo de la peticion no es JSON valido.');
+  }
 }
 
 function sendJson(response, statusCode, payload) {
@@ -323,21 +347,56 @@ async function findExistingBuild(db, vehicle) {
 
 function buildPrompt(vehicle) {
   const profile = inferEngineProfile(vehicle);
+  const userVehicleJson = JSON.stringify(
+    {
+      brand: vehicle.brand,
+      model: vehicle.model,
+      generation: vehicle.generation,
+      engine: vehicle.engine,
+      powertrain: vehicle.powertrain,
+      aspiration: vehicle.aspiration,
+      transmission: vehicle.transmission,
+      drivetrain: vehicle.drivetrain,
+      usage: vehicle.usage,
+      goal: vehicle.goal,
+      priority: vehicle.priority,
+      budget: vehicle.budget,
+    },
+    null,
+    2,
+  );
 
   return [
-    'Eres un especialista en preparaciones realistas para coches de calle.',
-    'Tu trabajo es recomendar una build que parezca escrita por alguien que conoce de verdad esa plataforma.',
-    'Genera una build en español muy utilizable, concreta y nada fantasiosa.',
-    'No recomiendes anulaciones ilegales ni piezas absurdas.',
-    'Si el codigo motor exacto no esta confirmado, dilo claramente en advertencias.',
-    'Piensa en uso real, fiabilidad y coherencia mecanica.',
-    `Vehiculo: ${vehicle.brand} ${vehicle.model} ${vehicle.generation} ${vehicle.engine}.`,
-    `Combustible: ${vehicle.powertrain}.`,
-    `Admision: ${vehicle.aspiration}.`,
-    `Cambio: ${vehicle.transmission}.`,
-    `Traccion: ${describeDrivetrain(vehicle.drivetrain)}.`,
+    'Actua como un experto en tuning de coches especializado en el mercado espanol, con foco en builds realistas, progresivas y habituales en Espana.',
+    'Tu trabajo tiene dos fases obligatorias: primero identificar el vehiculo con precision y despues proponer una build coherente.',
+    'Tu prioridad absoluta es IDENTIFICAR correctamente el vehiculo antes de recomendar ninguna modificacion.',
+    'No puedes inventar CV, motor, generacion, traccion, transmision, aspiracion ni caracteristicas tecnicas.',
+    'Si no puedes verificar una coincidencia exacta o casi exacta, marca vehicleIdentity.confidence como "baja" y explica la duda en warnings.',
+    'La build solo sera aceptada si vehicleIdentity.confidence es "alta", hay fuente de CV y los numeros cuadran.',
+    'Entrada del usuario en JSON:',
+    userVehicleJson,
+    '',
+    'Proceso obligatorio:',
+    '1. Interpreta marca, modelo, generacion/fase y motor como una consulta de identificacion, no como verdad garantizada.',
+    '2. Busca o contrasta una fuente tecnica fiable para la potencia de serie: ficha oficial, catalogo tecnico, ficha de fabricante, base de datos tecnica reconocida o pagina especializada con especificacion concreta.',
+    '3. Si hay varias variantes con el mismo motor, elige solo la que coincida con generacion, rango de produccion, combustible, aspiracion y potencia. Si no se puede distinguir, baja la confianza.',
+    '4. No mezcles generaciones. No uses datos de otro mercado si cambian CV, motor o transmision sin avisar.',
+    '5. basePowerCv debe ser exactamente la potencia de serie verificada en CV/PS para esa variante. Si la fuente esta en HP/BHP/kW, convierte con prudencia y menciona la fuente.',
+    '6. factoryPowerSourceTitle y factoryPowerSourceUrl son obligatorios si confidence es "alta".',
+    '7. Genera una build REALISTA y bien estructurada para Espana, priorizando el objetivo real del usuario por encima de una receta generica.',
+    '8. Usa modificaciones comunes y reales en Espana. No inventes piezas irreales, configuraciones raras ni anulaciones ilegales.',
+    '9. Cada modificacion debe tener nombre especifico, precio aproximado en euros y explicacion breve de una sola linea.',
+    '10. Los stages deben ser matematicamente coherentes: powerAfterCv de STAGE 1 = basePowerCv + gainCv; cada stage siguiente suma sobre el anterior; finalPowerCv = powerAfterCv de STAGE 3.',
+    '11. Las piezas deben ser compatibles con el tipo de motor. No recomiendes turbo/downpipe/intercooler en atmosfericos salvo que expliques una conversion realista.',
+    '12. Si el codigo motor exacto no esta confirmado, la advertencia debe decirlo y la confianza no debe ser alta.',
+    '',
+    `Traccion declarada por usuario: ${describeDrivetrain(vehicle.drivetrain)}.`,
     `Uso: ${describeUsage(vehicle.usage)}.`,
     `Prioridad: ${describePriority(vehicle.priority)}.`,
+    `Objetivo principal declarado: ${vehicle.goal}.`,
+    vehicle.priority === 'radical'
+      ? 'El usuario ha pedido una build ambiciosa. No recortes la receta por conservadurismo: puedes acercarte al limite razonable de la plataforma, siempre con soporte mecanico, frenos, temperatura, transmision y advertencias honestas.'
+      : 'Si el objetivo no es radical, evita exagerar cifras o montar una receta demasiado extrema para el uso declarado.',
     vehicle.aspiration === 'atmosferico'
       ? 'Si el motor es atmosferico, evita vender ganancias exageradas y prioriza respuesta, admision, escape, chasis y coherencia.'
       : 'Si el motor es turbo, puedes plantear una ruta de stage mas clara, pero siempre indicando soporte de embrague, temperatura o frenos cuando haga falta.',
@@ -354,25 +413,28 @@ function buildPrompt(vehicle) {
       ? `Criterio de stages: ${profile.stagePriorities.join('; ')}.`
       : 'Criterio de stages: construir una ruta progresiva y con soporte mecanico.',
     OPENAI_ENABLE_WEB_SEARCH
-      ? 'Antes de estimar la potencia, busca en la web la ficha tecnica o una fuente razonable para el coche exacto indicado por marca, modelo, generacion/fase y motor.'
+      ? 'Usa busqueda web antes de fijar CV de serie y caracteristicas. No basta con memoria general.'
       : 'Antes de estimar la potencia, usa tu conocimiento tecnico y se prudente si no tienes confirmacion exacta.',
-    'El objetivo es encontrar los CV de serie del vehiculo exacto. Si hay varias variantes, elige la que coincida mejor con motor, generacion y combustible.',
-    'Devuelve factoryPowerSourceTitle y factoryPowerSourceUrl con la fuente usada para los CV de serie. Si no encuentras fuente clara, usa cadenas vacias y explica la incertidumbre en warnings.',
+    'vehicleIdentity debe resumir la variante identificada: canonicalBrand, canonicalModel, canonicalGeneration, canonicalEngine, productionYears, powertrain, aspiration, transmission, drivetrain, factoryPowerCv, confidence, sourceTitle y sourceUrl.',
+    'La build debe estar escrita en espanol claro, directo y practico.',
     'Cada stage debe sonar especifico para la plataforma y no como una plantilla universal.',
-    'En STAGE 1 prioriza la mejora mas razonable. En STAGE 2 solo escala si tiene sentido. En STAGE 3 refuerza soporte, frenos, temperatura, embrague, diferencial o chasis segun corresponda.',
+    'En STAGE 1 prioriza la mejora mas razonable para el objetivo declarado. En STAGE 2 solo escala si tiene sentido. En STAGE 3 refuerza soporte, frenos, temperatura, embrague, diferencial o chasis segun corresponda y solo si de verdad tiene sentido para ese coche.',
     'No repitas la misma pieza con otro nombre en distintos stages.',
     'No uses frases vacias como "mejora integral" o "setup equilibrado" sin concretar piezas y motivo.',
     'Si el coche es una base de diario, evita una STAGE 3 absurda; puede ser un stage de soporte y afinado final, no necesariamente una locura de potencia.',
-    'Las parts deben ser piezas o acciones concretas, cortas y utiles para el usuario final.',
+    'Si el usuario busca maxima potencia o una build radical, la STAGE 3 si puede ser claramente mas seria, siempre que expliques por que sigue siendo razonable para esa plataforma.',
+    'Las parts deben ser un array de objetos con name, priceEuro y explanation.',
+    'priceEuro debe ser un numero entero aproximado en euros para esa modificacion concreta.',
+    'explanation debe explicar en una sola linea por que encaja esa modificacion en la build.',
     'Las warnings deben ser honestas y especificas para ese tipo de coche, no advertencias universales sin valor.',
     'Las reasons deben explicar por que esa ruta tiene sentido para ese coche en particular.',
     'Debes estimar los CV de partida del coche, la ganancia aproximada de cada STAGE y los CV aproximados despues de cada STAGE.',
     'Usa cifras prudentes y creibles para ese motor. Si no es un motor claramente potenciable, manten ganancias discretas.',
-    'expectedGain debe ser prudente y creible. estimatedBudget debe ser un numero entero en euros. reliabilityIndex debe ser un numero del 1 al 100.',
-    'summary debe sonar premium, concreta y orientada al usuario final.',
+    'expectedGain debe ser prudente y creible. estimatedBudget debe ser un numero entero en euros y coherente con la suma de las modificaciones. reliabilityIndex debe ser un numero del 1 al 100.',
+    'summary debe sonar premium, concreta y orientada al usuario final, incluyendo mejora estimada, nivel de coste y nivel de fiabilidad.',
     'Devuelve exactamente 3 stages: STAGE 1, STAGE 2 y STAGE 3.',
     'Cada stage debe incluir focus, parts, note, gainCv y powerAfterCv.',
-    'La respuesta debe ser estrictamente JSON siguiendo el schema.',
+    'La respuesta debe ser estrictamente JSON siguiendo el schema. No incluyas texto fuera del JSON.',
   ].join('\n');
 }
 
@@ -383,6 +445,40 @@ function getBuildSchema() {
     properties: {
       title: { type: 'string' },
       summary: { type: 'string' },
+      vehicleIdentity: {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+          canonicalBrand: { type: 'string' },
+          canonicalModel: { type: 'string' },
+          canonicalGeneration: { type: 'string' },
+          canonicalEngine: { type: 'string' },
+          productionYears: { type: 'string' },
+          powertrain: { type: 'string' },
+          aspiration: { type: 'string' },
+          transmission: { type: 'string' },
+          drivetrain: { type: 'string' },
+          factoryPowerCv: { type: 'number' },
+          confidence: { type: 'string', enum: ['alta', 'media', 'baja'] },
+          sourceTitle: { type: 'string' },
+          sourceUrl: { type: 'string' },
+        },
+        required: [
+          'canonicalBrand',
+          'canonicalModel',
+          'canonicalGeneration',
+          'canonicalEngine',
+          'productionYears',
+          'powertrain',
+          'aspiration',
+          'transmission',
+          'drivetrain',
+          'factoryPowerCv',
+          'confidence',
+          'sourceTitle',
+          'sourceUrl',
+        ],
+      },
       basePowerCv: { type: 'number' },
       finalPowerCv: { type: 'number' },
       factoryPowerSourceTitle: { type: 'string' },
@@ -405,7 +501,16 @@ function getBuildSchema() {
               type: 'array',
               minItems: 2,
               maxItems: 6,
-              items: { type: 'string' },
+              items: {
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                  name: { type: 'string' },
+                  priceEuro: { type: 'number' },
+                  explanation: { type: 'string' },
+                },
+                required: ['name', 'priceEuro', 'explanation'],
+              },
             },
             note: { type: 'string' },
             gainCv: { type: 'number' },
@@ -430,6 +535,7 @@ function getBuildSchema() {
     required: [
       'title',
       'summary',
+      'vehicleIdentity',
       'basePowerCv',
       'finalPowerCv',
       'factoryPowerSourceTitle',
@@ -442,6 +548,108 @@ function getBuildSchema() {
       'reasons',
       'warnings',
     ],
+  };
+}
+
+function isHttpUrl(value) {
+  return /^https?:\/\//i.test(String(value ?? '').trim());
+}
+
+function almostEqual(left, right, tolerance = 1) {
+  return Math.abs(Number(left) - Number(right)) <= tolerance;
+}
+
+function validateGeneratedBuild(aiBuild, vehicle) {
+  const errors = [];
+  const identity = aiBuild?.vehicleIdentity;
+  const stages = Array.isArray(aiBuild?.stages) ? aiBuild.stages : [];
+
+  if (!identity) {
+    errors.push('falta la identificacion tecnica del vehiculo');
+  } else {
+    if (identity.confidence !== 'alta') {
+      errors.push('la IA no alcanzo confianza alta en la variante exacta');
+    }
+
+    if (!isHttpUrl(identity.sourceUrl) || !identity.sourceTitle.trim()) {
+      errors.push('falta una fuente tecnica verificable para los CV de serie');
+    }
+
+    if (!almostEqual(aiBuild.basePowerCv, identity.factoryPowerCv)) {
+      errors.push('basePowerCv no coincide con los CV de serie verificados');
+    }
+
+    if (normalize(identity.canonicalBrand) && normalize(vehicle.brand) !== normalize(identity.canonicalBrand)) {
+      errors.push('la marca identificada no coincide con la marca solicitada');
+    }
+
+    if (vehicle.powertrain && identity.powertrain && normalize(vehicle.powertrain) !== normalize(identity.powertrain)) {
+      errors.push('el combustible identificado no coincide con el declarado');
+    }
+  }
+
+  if (stages.length !== 3) {
+    errors.push('la build no contiene exactamente tres stages');
+  }
+
+  let expectedPower = Number(aiBuild?.basePowerCv);
+
+  for (const [index, stage] of stages.entries()) {
+    const expectedLabel = `STAGE ${index + 1}`;
+    const gainCv = Number(stage?.gainCv);
+    const powerAfterCv = Number(stage?.powerAfterCv);
+
+    if (stage?.label !== expectedLabel) {
+      errors.push(`la etiqueta del stage ${index + 1} no es ${expectedLabel}`);
+    }
+
+    if (!Number.isFinite(gainCv) || gainCv <= 0) {
+      errors.push(`la ganancia del stage ${index + 1} no es valida`);
+    }
+
+    if (!Array.isArray(stage?.parts) || stage.parts.length < 2) {
+      errors.push(`el stage ${index + 1} no tiene suficientes modificaciones`);
+    }
+
+    for (const [partIndex, part] of (stage?.parts ?? []).entries()) {
+      if (!part?.name?.trim()) {
+        errors.push(`falta el nombre de la modificacion ${partIndex + 1} del stage ${index + 1}`);
+      }
+
+      if (!Number.isFinite(Number(part?.priceEuro)) || Number(part.priceEuro) <= 0) {
+        errors.push(`el precio de la modificacion ${partIndex + 1} del stage ${index + 1} no es valido`);
+      }
+
+      if (!part?.explanation?.trim()) {
+        errors.push(`falta la explicacion de la modificacion ${partIndex + 1} del stage ${index + 1}`);
+      }
+    }
+
+    expectedPower += gainCv;
+
+    if (!almostEqual(powerAfterCv, expectedPower)) {
+      errors.push(`los CV despues del stage ${index + 1} no cuadran con la suma acumulada`);
+    }
+  }
+
+  if (!almostEqual(aiBuild?.finalPowerCv, stages.at(-1)?.powerAfterCv)) {
+    errors.push('finalPowerCv no coincide con la potencia despues del STAGE 3');
+  }
+
+  if (!almostEqual(aiBuild?.basePowerCv, aiBuild?.vehicleIdentity?.factoryPowerCv)) {
+    errors.push('la potencia base no coincide con la identidad verificada');
+  }
+
+  if (errors.length) {
+    throw new VerificationError(
+      `No se pudo verificar con suficiente precision el vehiculo y sus CV: ${errors.join('; ')}.`,
+    );
+  }
+
+  return {
+    ...aiBuild,
+    factoryPowerSourceTitle: aiBuild.factoryPowerSourceTitle || identity.sourceTitle,
+    factoryPowerSourceUrl: aiBuild.factoryPowerSourceUrl || identity.sourceUrl,
   };
 }
 
@@ -489,7 +697,7 @@ async function generateBuildWithOpenAI(vehicle) {
     throw new Error('OpenAI no devolvio texto estructurado.');
   }
 
-  return JSON.parse(outputText);
+  return validateGeneratedBuild(JSON.parse(outputText), vehicle);
 }
 
 function extractStructuredOutput(payload) {
@@ -557,6 +765,7 @@ function buildFirestoreDocument(aiBuild, vehicle) {
     name: aiBuild.title,
     title: aiBuild.title,
     summary: aiBuild.summary,
+    vehicleIdentity: aiBuild.vehicleIdentity,
     basePowerCv: Number(aiBuild.basePowerCv || 0),
     finalPowerCv: Number(aiBuild.finalPowerCv || 0),
     factoryPowerSourceTitle: aiBuild.factoryPowerSourceTitle || '',
@@ -584,12 +793,14 @@ async function upsertBuild(db, documentData) {
 }
 
 const server = createServer(async (request, response) => {
+  const requestPath = new URL(request.url, `http://${request.headers.host ?? 'localhost'}`).pathname;
+
   if (request.method === 'OPTIONS') {
     sendJson(response, 204, {});
     return;
   }
 
-  if (request.url === '/' && request.method === 'GET') {
+  if (requestPath === '/' && request.method === 'GET') {
     sendJson(response, 200, {
       ok: true,
       service: 'tuning-hub-api',
@@ -598,12 +809,12 @@ const server = createServer(async (request, response) => {
     return;
   }
 
-  if (request.url === '/api/health' && request.method === 'GET') {
+  if (requestPath === '/api/health' && request.method === 'GET') {
     sendJson(response, 200, { ok: true });
     return;
   }
 
-  if (request.url === '/api/generate-build' && request.method === 'POST') {
+  if (requestPath === '/api/generate-build' && request.method === 'POST') {
     try {
       const vehicle = await readBody(request);
 
@@ -634,6 +845,16 @@ const server = createServer(async (request, response) => {
       });
       return;
     } catch (error) {
+      if (error instanceof BadRequestError) {
+        sendJson(response, 400, { error: error.message });
+        return;
+      }
+
+      if (error instanceof VerificationError) {
+        sendJson(response, 422, { error: error.message, code: 'VEHICLE_VERIFICATION_FAILED' });
+        return;
+      }
+
       sendJson(response, 500, {
         error: error.message || 'No se pudo generar la build con OpenAI.',
       });

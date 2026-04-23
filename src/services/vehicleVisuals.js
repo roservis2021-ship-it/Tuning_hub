@@ -1,3 +1,15 @@
+import audiA18XWorkshop from '../assets/vehicles/audi-a1-8x-workshop.png';
+import audiA1GbWorkshop from '../assets/vehicles/audi-a1-gb-workshop.png';
+import audiA38LWorkshop from '../assets/vehicles/audi-a3-8l-workshop.png';
+import audiA38PWorkshop from '../assets/vehicles/audi-a3-8p-workshop.png';
+import audiA38VWorkshop from '../assets/vehicles/audi-a3-8v-workshop.png';
+import audiA38YWorkshop from '../assets/vehicles/audi-a3-8y-workshop.png';
+import audiA4B5Workshop from '../assets/vehicles/audi-a4-b5-workshop.png';
+import audiA4B6Workshop from '../assets/vehicles/audi-a4-b6-workshop.png';
+import audiA4B7Workshop from '../assets/vehicles/audi-a4-b7-workshop.png';
+import audiA4B8Workshop from '../assets/vehicles/audi-a4-b8-workshop.png';
+import audiA4B9Workshop from '../assets/vehicles/audi-a4-b9-workshop.png';
+
 const BRAND_THEMES = {
   Audi: { start: '#7c8a99', end: '#1f242b' },
   BMW: { start: '#4aa8ff', end: '#0f1824' },
@@ -15,6 +27,41 @@ const BRAND_THEMES = {
 };
 
 const DEFAULT_THEME = { start: '#ff7a1a', end: '#151c25' };
+
+const VEHICLE_PHOTOS = {
+  'audi|a1|8x': audiA18XWorkshop,
+  'audi|a1|gb': audiA1GbWorkshop,
+  'audi|a3|8l': audiA38LWorkshop,
+  'audi|a3|8p': audiA38PWorkshop,
+  'audi|a3|8v': audiA38VWorkshop,
+  'audi|a3|8y': audiA38YWorkshop,
+  'audi|a4|b5': audiA4B5Workshop,
+  'audi|a4|b6': audiA4B6Workshop,
+  'audi|a4|b7': audiA4B7Workshop,
+  'audi|a4|b8': audiA4B8Workshop,
+  'audi|a4|b9': audiA4B9Workshop,
+};
+
+function normalizeVehicleToken(value) {
+  return String(value ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function buildVehiclePhotoKey({ brand, model, generation }) {
+  return [brand, model, generation].map(normalizeVehicleToken).join('|');
+}
+
+export function getVehiclePhoto(vehicle) {
+  if (!vehicle?.brand || !vehicle?.model || !vehicle?.generation) {
+    return null;
+  }
+
+  return VEHICLE_PHOTOS[buildVehiclePhotoKey(vehicle)] ?? null;
+}
 
 function escapeSvg(value) {
   return String(value)
@@ -122,7 +169,7 @@ function createSilhouette(bodyStyle) {
   `;
 }
 
-export function getVehicleImage({ brand, model, generation, engine }) {
+function createFallbackSvg({ brand, model, generation, engine }) {
   const theme = BRAND_THEMES[brand] ?? DEFAULT_THEME;
   const title = [brand, model].filter(Boolean).join(' ');
   const subtitle = [generation, engine].filter(Boolean).join('  |  ') || 'Build visual';
@@ -157,4 +204,8 @@ export function getVehicleImage({ brand, model, generation, engine }) {
   `;
 
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+export function getVehicleImage(vehicle) {
+  return getVehiclePhoto(vehicle) ?? createFallbackSvg(vehicle ?? {});
 }

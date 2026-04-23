@@ -4,6 +4,12 @@ import BuildResult from '../components/BuildResult';
 import { generateBuildRecommendation } from '../services/buildRecommender';
 import { findMatchingBuild, logUserSearch } from '../services/firebaseBuildLibraryService';
 import { generateAiBuild } from '../services/aiBuildService';
+import {
+  initAnalytics,
+  trackBuildError,
+  trackBuildResult,
+  trackBuildSearch,
+} from '../services/analyticsService';
 import heroBanner from '../assets/hero-banner.jpeg';
 
 const LOADING_STEPS = [
@@ -89,6 +95,12 @@ function HomePage() {
   const [buildMeta, setBuildMeta] = useState(null);
 
   useEffect(() => {
+    initAnalytics().catch(() => {
+      // Analytics no debe interrumpir la app.
+    });
+  }, []);
+
+  useEffect(() => {
     if (currentScreen !== 'loading') {
       return undefined;
     }
@@ -111,9 +123,14 @@ function HomePage() {
   async function handleBuildSearch(vehicleData) {
     let nextResult = null;
     let aiErrorMessage = '';
+    let strictVerificationFailed = false;
     setVehicle(vehicleData);
     setCurrentScreen('loading');
     setBuildMeta(null);
+
+    trackBuildSearch(vehicleData).catch(() => {
+      // Analytics no debe bloquear el flujo principal.
+    });
 
     try {
       nextResult = await findMatchingBuild(vehicleData);
@@ -125,8 +142,16 @@ function HomePage() {
       try {
         nextResult = await generateAiBuild(vehicleData);
       } catch (error) {
-        aiErrorMessage = error?.message || 'La IA no estuvo disponible en este intento.';
-        nextResult = null;
+        if (error?.code === 'VEHICLE_VERIFICATION_FAILED') {
+          strictVerificationFailed = true;
+          aiErrorMessage =
+            error.message ||
+            'No se pudo verificar al 100% la variante exacta, asi que hemos mostrado una build orientativa.';
+          trackBuildError(error.message, error.code).catch(() => {});
+        } else {
+          aiErrorMessage = error?.message || 'La IA no estuvo disponible en este intento.';
+          trackBuildError(aiErrorMessage, error?.code || 'AI_BUILD_FAILED').catch(() => {});
+        }
       }
     }
 
@@ -139,8 +164,16 @@ function HomePage() {
 
     setLoadingProgress(100);
     setResult(nextResult);
-    setBuildMeta({ source: nextResult.source, aiErrorMessage });
+    setBuildMeta({
+      source: nextResult.source,
+      aiErrorMessage,
+      strictVerificationFailed,
+    });
     setCurrentScreen('build');
+
+    trackBuildResult(nextResult, vehicleData).catch(() => {
+      // Analytics no debe bloquear la experiencia principal.
+    });
 
     try {
       await logUserSearch(

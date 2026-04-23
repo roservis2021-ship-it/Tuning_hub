@@ -13,7 +13,6 @@ const initialForm = {
   customGeneration: '',
   engine: '',
   customEngine: '',
-  year: '',
   powertrain: 'gasolina',
   aspiration: 'turbo',
   transmission: 'automatico',
@@ -21,6 +20,22 @@ const initialForm = {
   usage: 'diario',
   priority: 'equilibrio',
 };
+
+function resolveGoalFromForm({ priority, usage }) {
+  if (priority === 'estetica') {
+    return 'stance';
+  }
+
+  if (priority === 'radical') {
+    return usage === 'proyecto' ? 'radical' : usage === 'finde' ? 'tandas' : 'calle';
+  }
+
+  if (priority === 'potencia') {
+    return usage === 'diario' ? 'calle' : 'tandas';
+  }
+
+  return 'calle';
+}
 
 function CarForm({ onSubmit }) {
   const [formData, setFormData] = useState(initialForm);
@@ -37,6 +52,7 @@ function CarForm({ onSubmit }) {
   const isCustomModel = formData.model === '__custom__';
   const isCustomGeneration = formData.generation === '__custom__';
   const isCustomEngine = formData.engine === '__custom__';
+  const canChooseVehicleDetails = Boolean(formData.brand && (selectedModelKey || isCustomModel));
   const availableEngines =
     selectedVariantData?.generationEngines?.[formData.generation] ??
     selectedVariantData?.engines ??
@@ -104,11 +120,19 @@ function CarForm({ onSubmit }) {
       return;
     }
 
+    if (!selectedGeneration || !selectedEngine) {
+      setError('Indica la generacion y el motor para que la build sea precisa.');
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       await onSubmit({
         ...formData,
-        goal: 'calle',
+        goal: resolveGoalFromForm({
+          priority: formData.priority,
+          usage: formData.usage,
+        }),
         budget: 'medio',
         brand: formData.brand.trim(),
         model: selectedModel,
@@ -116,7 +140,10 @@ function CarForm({ onSubmit }) {
         engine: selectedEngine,
       });
     } catch (submitError) {
-      setError('No hemos podido generar la build en este momento. Intentalo de nuevo en unos segundos.');
+      setError(
+        submitError?.message ||
+          'No hemos podido generar la build en este momento. Intentalo de nuevo en unos segundos.',
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -183,10 +210,10 @@ function CarForm({ onSubmit }) {
               name="generation"
               value={formData.generation}
               onChange={handleChange}
-              disabled={!formData.brand || !selectedModelKey}
+              disabled={!canChooseVehicleDetails}
             >
               <option value="">
-                {selectedModelKey ? 'Generacion / fase' : 'Selecciona primero una marca y un modelo'}
+                {canChooseVehicleDetails ? 'Generacion / fase' : 'Selecciona primero una marca y un modelo'}
               </option>
               {availableGenerations.map((generation) => (
                 <option key={generation} value={generation}>
@@ -202,10 +229,10 @@ function CarForm({ onSubmit }) {
               name="engine"
               value={formData.engine}
               onChange={handleChange}
-              disabled={!formData.brand || !selectedModelKey}
+              disabled={!canChooseVehicleDetails}
             >
               <option value="">
-                {selectedModelKey ? 'Motor' : 'Selecciona primero una marca y un modelo'}
+                {canChooseVehicleDetails ? 'Motor' : 'Selecciona primero una marca y un modelo'}
               </option>
               {availableEngines.map((engine) => (
                 <option key={engine} value={engine}>
@@ -290,6 +317,7 @@ function CarForm({ onSubmit }) {
             <option value="potencia">Potencia</option>
             <option value="fiabilidad">Fiabilidad</option>
             <option value="estetica">Estetica</option>
+            <option value="radical">Maximo rendimiento / al limite</option>
           </select>
         </label>
 
