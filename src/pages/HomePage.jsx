@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import CarForm from '../components/CarForm';
 import BuildResult from '../components/BuildResult';
+import PremiumPlan from '../components/PremiumPlan';
+import StripeCheckoutScreen from '../components/StripeCheckoutScreen';
 import { generateBuildRecommendation } from '../services/buildRecommender';
-import { findMatchingBuild, logUserSearch } from '../services/firebaseBuildLibraryService';
+import { logUserSearch } from '../services/firebaseBuildLibraryService';
 import { generateAiBuild } from '../services/aiBuildService';
+import { getCheckoutSessionStatus } from '../services/stripeCheckoutService';
 import {
   initAnalytics,
   trackBuildError,
@@ -30,6 +33,8 @@ const LOADING_STEPS = [
     copy: 'Pulimos advertencias, piezas clave y una propuesta pensada para calle y uso real.',
   },
 ];
+
+const PENDING_CHECKOUT_STORAGE_KEY = 'tuningHubPendingCheckout';
 
 function LoadingScreen({ vehicle, stepIndex, progress }) {
   const activeStep = LOADING_STEPS[Math.min(stepIndex, LOADING_STEPS.length - 1)];
@@ -89,7 +94,7 @@ function LoadingScreen({ vehicle, stepIndex, progress }) {
 function HomePage() {
   const [result, setResult] = useState(null);
   const [vehicle, setVehicle] = useState(null);
-  const [currentScreen, setCurrentScreen] = useState('form');
+  const [currentScreen, setCurrentScreen] = useState('landing');
   const [loadingStepIndex, setLoadingStepIndex] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(8);
   const [buildMeta, setBuildMeta] = useState(null);
@@ -98,6 +103,57 @@ function HomePage() {
     initAnalytics().catch(() => {
       // Analytics no debe interrumpir la app.
     });
+  }, []);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const checkoutStatus = searchParams.get('checkout');
+
+    if (!checkoutStatus) {
+      return;
+    }
+
+    async function restoreCheckout() {
+      try {
+        const storedCheckout = JSON.parse(
+          window.sessionStorage.getItem(PENDING_CHECKOUT_STORAGE_KEY) || '{}',
+        );
+
+        if (!storedCheckout.result || !storedCheckout.vehicle) {
+          setCurrentScreen('landing');
+          return;
+        }
+
+        if (checkoutStatus === 'success') {
+          const sessionId = searchParams.get('session_id');
+          const sessionStatus = await getCheckoutSessionStatus(sessionId);
+
+          if (!sessionStatus.paid) {
+            setResult(storedCheckout.result);
+            setVehicle(storedCheckout.vehicle);
+            setBuildMeta(storedCheckout.buildMeta || null);
+            setCurrentScreen('build');
+            return;
+          }
+
+          window.sessionStorage.removeItem(PENDING_CHECKOUT_STORAGE_KEY);
+          setResult(storedCheckout.result);
+          setVehicle(storedCheckout.vehicle);
+          setBuildMeta(storedCheckout.buildMeta || null);
+          setCurrentScreen('premium');
+        } else {
+          setResult(storedCheckout.result);
+          setVehicle(storedCheckout.vehicle);
+          setBuildMeta(storedCheckout.buildMeta || null);
+          setCurrentScreen('build');
+        }
+      } catch (error) {
+        setCurrentScreen('landing');
+      }
+    }
+
+    window.history.replaceState({}, '', window.location.pathname);
+    restoreCheckout();
   }, []);
 
   useEffect(() => {
@@ -133,30 +189,23 @@ function HomePage() {
     });
 
     try {
-      nextResult = await findMatchingBuild(vehicleData);
+      nextResult = await generateAiBuild(vehicleData);
     } catch (error) {
-      nextResult = null;
-    }
-
-    if (!nextResult) {
-      try {
-        nextResult = await generateAiBuild(vehicleData);
-      } catch (error) {
-        if (error?.code === 'VEHICLE_VERIFICATION_FAILED') {
-          strictVerificationFailed = true;
-          aiErrorMessage =
-            error.message ||
-            'No se pudo verificar al 100% la variante exacta, asi que hemos mostrado una build orientativa.';
-          trackBuildError(error.message, error.code).catch(() => {});
-        } else {
-          aiErrorMessage = error?.message || 'La IA no estuvo disponible en este intento.';
-          trackBuildError(aiErrorMessage, error?.code || 'AI_BUILD_FAILED').catch(() => {});
-        }
+      if (error?.code === 'VEHICLE_VERIFICATION_FAILED') {
+        strictVerificationFailed = true;
+        aiErrorMessage =
+          error.message ||
+          'No se pudo verificar al 100% la variante exacta, asi que hemos mostrado una build orientativa.';
+        trackBuildError(error.message, error.code).catch(() => {});
+      } else {
+        aiErrorMessage = error?.message || 'La IA no estuvo disponible en este intento.';
+        trackBuildError(aiErrorMessage, error?.code || 'AI_BUILD_FAILED').catch(() => {});
       }
     }
 
     if (!nextResult) {
       nextResult = generateBuildRecommendation(vehicleData);
+      nextResult.aiFallbackReason = aiErrorMessage || 'La IA no ha podido generar una build optimizada.';
       if (aiErrorMessage) {
         nextResult.warnings = [aiErrorMessage, ...nextResult.warnings];
       }
@@ -190,77 +239,68 @@ function HomePage() {
     setCurrentScreen('form');
   }
 
+  function handleStartBuild() {
+    setCurrentScreen('form');
+  }
+
+  function handleOpenOptimizedPlan() {
+    if (!result) {
+      return;
+    }
+
+    const vehicleName = [
+      result?.vehicleIdentity?.canonicalBrand || vehicle?.brand,
+      result?.vehicleIdentity?.canonicalModel || vehicle?.model,
+      result?.vehicleIdentity?.canonicalGeneration || vehicle?.generation,
+      result?.vehicleIdentity?.canonicalEngine || vehicle?.engine,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    window.sessionStorage.setItem(
+      PENDING_CHECKOUT_STORAGE_KEY,
+      JSON.stringify({
+        result,
+        vehicle,
+        buildMeta,
+      }),
+    );
+
+    setCurrentScreen('checkout');
+  }
+
   return (
     <main className="layout">
-      {currentScreen === 'form' ? (
+      {currentScreen === 'landing' ? (
+        <section
+          className="hero hero--mobile"
+          style={{ '--hero-banner': `url(${heroBanner})` }}
+        >
+          <div className="hero__copy">
+            <div className="brand-logo-wordmark" aria-label="Tuning Hub">
+              <span className="brand-logo-wordmark__arc" aria-hidden="true" />
+              <span className="brand-logo-wordmark__text">
+                <span className="brand-logo-wordmark__tuning">TUNING</span>
+                <span className="brand-logo-wordmark__hub">HUB</span>
+              </span>
+            </div>
+            <span className="hero__tagline">Recomendaciones reales para coches reales</span>
+            <h1>
+              Descubre una guia especifica para modificar <span>correctamente</span> tu coche
+            </h1>
+            <p>
+              Descubre que piezas montar, cuales evitar y el orden <span>correcto</span> para no
+              dañar tu coche.
+            </p>
+            <button className="hero__cta" type="button" onClick={handleStartBuild}>
+              Modifica tu coche
+            </button>
+          </div>
+        </section>
+      ) : currentScreen === 'form' ? (
         <>
-          <section
-            className="hero hero--mobile"
-            style={{ '--hero-banner': `url(${heroBanner})` }}
-          >
-            <div className="hero__copy">
-              <div className="brand-logo-wordmark" aria-label="Tuning Hub">
-                <span className="brand-logo-wordmark__arc" aria-hidden="true" />
-                <span className="brand-logo-wordmark__text">
-                  <span className="brand-logo-wordmark__tuning">TUNING</span>
-                  <span className="brand-logo-wordmark__hub">HUB</span>
-                </span>
-              </div>
-              <span className="hero__tagline">Recomendaciones reales para coches reales</span>
-              <h1>
-                Mejora tu coche con <span>recomendaciones reales</span>
-              </h1>
-              <p>
-                Basadas en motores, no en suposiciones. Selecciona tu coche y obten una guia
-                clara para mejorar potencia, fiabilidad y coste.
-              </p>
-              <button
-                className="hero__cta"
-                type="button"
-                onClick={() => {
-                  const formCard = document.querySelector('.panel--form');
-                  formCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }}
-              >
-                Empieza con tu coche
-              </button>
-            </div>
-          </section>
-
-          <section className="screen-shell">
-            <div className="screen-steps screen-steps--reference">
-              <span className="screen-step screen-step--active">1. Tu vehiculo</span>
-              <span className="screen-step">2. Configuracion</span>
-            </div>
-
+          <section className="screen-shell" id="vehicle-form-section">
             <CarForm onSubmit={handleBuildSearch} />
-
-            <section className="example-card">
-              <span className="example-card__eyebrow">Ejemplo real</span>
-              <div className="example-card__grid">
-                <div>
-                  <h3>Golf 1.9 TDI</h3>
-                  <ul className="example-list example-list--checks">
-                    <li>+30 hp en Stage 1</li>
-                    <li>Bajo coste de entrada</li>
-                    <li>Fiabilidad alta si la base esta sana</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4>Recomendado</h4>
-                  <ul className="example-list">
-                    <li>Repro</li>
-                    <li>Suspension</li>
-                    <li>Frenos</li>
-                  </ul>
-                </div>
-              </div>
-            </section>
-
-            <section className="info-card">
-              <span className="info-card__eyebrow">Como funciona</span>
-              <p>Seleccionas tu coche, comprobamos la configuracion y te devolvemos una build dividida por STAGES.</p>
-            </section>
           </section>
         </>
       ) : currentScreen === 'loading' ? (
@@ -271,6 +311,29 @@ function HomePage() {
             progress={loadingProgress}
           />
         </section>
+      ) : currentScreen === 'premium' ? (
+        <section className="screen-shell">
+          <PremiumPlan
+            result={result}
+            vehicle={vehicle}
+            onBack={() => setCurrentScreen('build')}
+          />
+        </section>
+      ) : currentScreen === 'checkout' ? (
+        <section className="screen-shell">
+          <StripeCheckoutScreen
+            result={result}
+            vehicleName={[
+              result?.vehicleIdentity?.canonicalBrand || vehicle?.brand,
+              result?.vehicleIdentity?.canonicalModel || vehicle?.model,
+              result?.vehicleIdentity?.canonicalGeneration || vehicle?.generation,
+              result?.vehicleIdentity?.canonicalEngine || vehicle?.engine,
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            onBack={() => setCurrentScreen('build')}
+          />
+        </section>
       ) : (
         <section className="screen-shell">
           <BuildResult
@@ -278,6 +341,7 @@ function HomePage() {
             vehicle={vehicle}
             buildMeta={buildMeta}
             onBack={handleBackToForm}
+            onOpenOptimizedPlan={handleOpenOptimizedPlan}
           />
         </section>
       )}

@@ -1,4 +1,22 @@
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+function resolveApiBaseUrl() {
+  const configuredUrl = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+
+  if (configuredUrl) {
+    return configuredUrl;
+  }
+
+  if (typeof window !== 'undefined') {
+    const isLocalHost = ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
+
+    if (isLocalHost) {
+      return 'http://127.0.0.1:8787';
+    }
+  }
+
+  return '';
+}
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 export async function generateAiBuild(vehicle) {
   const response = await fetch(`${API_BASE_URL}/api/generate-build`, {

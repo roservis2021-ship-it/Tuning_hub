@@ -64,12 +64,15 @@ function formatBudget(amount) {
 }
 
 function hasCompletePowerProfile(build) {
+  const stages = Array.isArray(build?.stages) ? build.stages : [];
+  const performanceStages = stages[0]?.label === 'STAGE 0' ? stages.slice(1) : stages;
+
   return Boolean(
     Number(build?.basePowerCv) > 0 &&
       Number(build?.finalPowerCv) > 0 &&
-      Array.isArray(build?.stages) &&
-      build.stages.length === 3 &&
-      build.stages.every((stage) => Number(stage?.gainCv) > 0 && Number(stage?.powerAfterCv) > 0),
+      (stages.length === 3 || stages.length === 4) &&
+      performanceStages.length === 3 &&
+      performanceStages.every((stage) => Number(stage?.gainCv) > 0 && Number(stage?.powerAfterCv) > 0),
   );
 }
 
@@ -88,6 +91,19 @@ function toResultShape(build, vehicle) {
     finalPowerCv: build.finalPowerCv ?? null,
     factoryPowerSourceTitle: build.factoryPowerSourceTitle ?? '',
     factoryPowerSourceUrl: build.factoryPowerSourceUrl ?? '',
+    ownerProfile: build.ownerProfile ?? '',
+    drivability: build.drivability ?? '',
+    maintenanceLevel: build.maintenanceLevel ?? '',
+    legalNote: build.legalNote ?? '',
+    vehicleDiagnosis: build.vehicleDiagnosis ?? null,
+    technicalProfile: build.technicalProfile ?? null,
+    vehicleIdentity: build.vehicleIdentity ?? null,
+    freeBuild: build.freeBuild ?? null,
+    recommendedParts: build.recommendedParts ?? [],
+    conversionTrigger: build.conversionTrigger ?? '',
+    premiumUpsell: build.premiumUpsell ?? '',
+    conclusion: build.conclusion ?? null,
+    accessTier: build.accessTier ?? 'free',
     stats: [
       {
         label: 'Presupuesto estimado',

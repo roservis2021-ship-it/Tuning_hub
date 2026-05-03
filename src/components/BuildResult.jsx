@@ -1,52 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
+import freeBuildFichaBg from '../assets/free-build-ficha.png';
+import freeBuildModificacionesBg from '../assets/free-build-modificaciones.png';
+import freeBuildPreinstalacionBg from '../assets/free-build-preinstalacion.png';
+import freeBuildPremiumBg from '../assets/free-build-premium.png';
+import freeBuildRiesgosBg from '../assets/free-build-riesgos.png';
 import { getPartVisual } from '../services/partVisuals';
 import { getVehicleImage } from '../services/vehicleVisuals';
-
-function getSourceMeta(source) {
-  if (source === 'database') {
-    return 'Build validada para esta plataforma';
-  }
-
-  if (source === 'generated') {
-    return 'Build generada para tu configuracion actual';
-  }
-
-  return 'Build de respaldo mientras ampliamos referencias';
-}
-
-function getPartDescription(part) {
-  const normalized = String(part ?? '').toLowerCase();
-
-  if (normalized.includes('repro') || normalized.includes('ecu')) {
-    return 'Libera el potencial de la base con una calibracion coherente y utilizable.';
-  }
-
-  if (normalized.includes('admi') || normalized.includes('filtro')) {
-    return 'Mejora la respiracion del conjunto y acompana mejor la respuesta del motor.';
-  }
-
-  if (normalized.includes('downpipe') || normalized.includes('escape')) {
-    return 'Ayuda a que la plataforma respire mejor y prepara el siguiente salto.';
-  }
-
-  if (normalized.includes('intercooler') || normalized.includes('termica')) {
-    return 'Controla temperaturas y hace que el rendimiento sea mas consistente.';
-  }
-
-  if (normalized.includes('embrague')) {
-    return 'Soporte mecanico clave cuando el par empieza a subir de verdad.';
-  }
-
-  if (normalized.includes('freno')) {
-    return 'La frenada tiene que crecer junto al proyecto para que todo tenga sentido.';
-  }
-
-  if (normalized.includes('llanta') || normalized.includes('neumatico')) {
-    return 'Gran parte de la sensacion final del coche se gana aqui, no solo con potencia.';
-  }
-
-  return 'Pieza o accion recomendada para que esta etapa tenga sentido como conjunto.';
-}
 
 function formatPriceEuro(value) {
   const numericValue = Number(value);
@@ -56,630 +15,906 @@ function formatPriceEuro(value) {
         currency: 'EUR',
         maximumFractionDigits: 0,
       }).format(numericValue)
-    : 'Precio por confirmar';
+    : 'Por confirmar';
 }
 
-function normalizeStagePart(part) {
+function formatCv(value) {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) && numericValue > 0 ? `${numericValue} CV` : 'Por confirmar';
+}
+
+function formatNm(value) {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) && numericValue > 0 ? `${numericValue} Nm` : 'Por confirmar';
+}
+
+function formatGain(value, unit) {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) ? `+${numericValue} ${unit}` : 'Por confirmar';
+}
+
+function normalizeLabel(value) {
+  return String(value ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function normalizePart(part) {
   if (typeof part === 'string') {
     return {
       key: part,
       name: part,
       priceEuro: null,
-      explanation: getPartDescription(part),
+      explanation: 'Modificacion incluida en esta etapa.',
       visual: getPartVisual(part),
     };
   }
 
-  const name = part?.name ?? 'Modificacion';
+  const name = part?.name || 'Modificacion';
 
   return {
     key: `${name}-${part?.priceEuro ?? 'price'}`,
     name,
     priceEuro: Number(part?.priceEuro) || null,
-    explanation: part?.explanation?.trim() || getPartDescription(name),
+    explanation: part?.explanation || 'Modificacion incluida en esta etapa.',
     visual: getPartVisual(name),
   };
 }
 
-function collectBuildParts(stages = []) {
-  const uniqueParts = new Map();
-
-  stages.forEach((stage) => {
-    (stage?.parts ?? []).forEach((rawPart) => {
-      const part = normalizeStagePart(rawPart);
-      const visualKey = part.visual?.key ?? part.name.toLowerCase();
-
-      if (!uniqueParts.has(visualKey)) {
-        uniqueParts.set(visualKey, part);
-      }
-    });
-  });
-
-  return Array.from(uniqueParts.values());
-}
-
-function buildShareText(vehicleName, result) {
-  return [
-    `Quiero empezar esta build para ${vehicleName}.`,
-    '',
-    `Build: ${result.title}`,
-    `Ganancia estimada: ${result.expectedGain || 'Por definir'}`,
-    '',
-    ...result.stages.map((stage) => `${stage.label} - ${stage.focus}`),
-  ].join('\n');
-}
-
-function getStageTheme(index) {
-  return ['ignition', 'boost', 'redline'][index] ?? 'ignition';
-}
-
-function toNumber(value) {
-  const numericValue = Number(value);
-  return Number.isFinite(numericValue) && numericValue > 0 ? numericValue : null;
-}
-
-function formatCv(value) {
-  const numericValue = toNumber(value);
-  return Number.isFinite(numericValue) && numericValue > 0 ? `${numericValue} CV` : 'Por definir';
-}
-
-function inferFactoryPowerCv(vehicle) {
-  const vehicleText = [vehicle?.brand, vehicle?.model, vehicle?.generation, vehicle?.engine]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase();
-  const explicitPowerMatch = vehicleText.match(/(\d{2,3})\s*(cv|hp|bhp|ps)/);
-
-  if (explicitPowerMatch) {
-    return Number(explicitPowerMatch[1]);
-  }
-
-  const knownEnginePower = [
-    [/1\.9\s*tdi.*(105|bkc|bxe|bls)/, 105],
-    [/1\.9\s*tdi.*(110|asv|ahf)/, 110],
-    [/1\.9\s*tdi.*(130|asz)/, 130],
-    [/1\.9\s*tdi.*(150|arl)/, 150],
-    [/1\.9\s*tdi/, 105],
-    [/2\.0\s*tdi.*(140|bkd)/, 140],
-    [/2\.0\s*tdi.*150/, 150],
-    [/2\.0\s*tdi/, 140],
-    [/1\.6\s*tdi/, 105],
-    [/1\.8\s*t/, 150],
-    [/2\.0\s*tfsi.*(s3|8p)/, 265],
-    [/2\.0\s*tfsi.*(gti|a3|leon)/, 200],
-    [/2\.0\s*tfsi/, 200],
-    [/2\.0\s*tsi/, 200],
-    [/1\.4\s*tsi/, 122],
-    [/1\.4\s*t-?jet/, 135],
-    [/1\.6\s*hdi/, 110],
-    [/2\.0\s*hdi/, 136],
-    [/1\.5\s*dci/, 105],
-    [/2\.0\s*dci/, 150],
-    [/320d/, 184],
-    [/330d/, 245],
-    [/335d/, 286],
-    [/m140i|m135i/, 340],
-  ];
-  const match = knownEnginePower.find(([pattern]) => pattern.test(vehicleText));
-
-  if (match) {
-    return match[1];
-  }
-
-  if (vehicle?.powertrain === 'diesel') {
-    return 110;
-  }
-
-  if (vehicle?.aspiration === 'turbo') {
-    return 150;
-  }
-
-  return 120;
-}
-
-function getFallbackStageGains(result, vehicle) {
-  const text = `${vehicle?.engine ?? ''} ${vehicle?.model ?? ''}`.toLowerCase();
-
-  if (vehicle?.powertrain === 'diesel' || /tdi|hdi|jtd|dci|cdti/.test(text)) {
-    return [25, 20, 15];
-  }
-
-  if (vehicle?.aspiration === 'atmosferico') {
-    return [8, 6, 4];
-  }
-
-  if (/s3|cupra|gti|tfsi|tsi|1\.8t|2\.0t|t-jet/.test(text)) {
-    return [45, 35, 25];
-  }
-
-  return [30, 25, 15];
-}
-
-function resolvePowerProfile(result, vehicle) {
-  const rawStages = result.stages ?? [];
-  const fallbackBase = inferFactoryPowerCv(vehicle);
-  const fallbackGains = getFallbackStageGains(result, vehicle);
-  const stages = rawStages.map((stage, index) => ({
-    ...stage,
-    gainCv: toNumber(stage.gainCv) ?? fallbackGains[index] ?? 10,
-  }));
-  const finalFromStage = toNumber(stages.at(-1)?.powerAfterCv);
-  const totalStageGain = stages.reduce((total, stage) => total + (toNumber(stage.gainCv) ?? 0), 0);
-  const baseFromResult = toNumber(result.basePowerCv);
-  const finalFromResult = toNumber(result.finalPowerCv);
-  const baseFromStages = finalFromStage && totalStageGain > 0 ? finalFromStage - totalStageGain : null;
-  const basePowerCv = baseFromResult ?? baseFromStages ?? fallbackBase;
-  let runningPower = basePowerCv;
-  const stagesWithPower = stages.map((stage) => {
-    const gainCv = toNumber(stage.gainCv) ?? 0;
-    const powerAfterCv = toNumber(stage.powerAfterCv) ?? runningPower + gainCv;
-    runningPower = powerAfterCv;
-
-    return {
-      ...stage,
-      gainCv,
-      powerAfterCv,
-    };
-  });
-  const finalPowerCv = finalFromResult ?? finalFromStage ?? stagesWithPower.at(-1)?.powerAfterCv ?? basePowerCv;
+function normalizeRecommendedPart(part) {
+  const name = part?.name || 'Pieza recomendada';
 
   return {
-    basePowerCv,
-    finalPowerCv,
-    stages: stagesWithPower,
+    key: `${name}-${part?.estimatedPriceEuro ?? part?.priceEuro ?? 'price'}`,
+    name,
+    reason: part?.reason || part?.explanation || 'Pieza recomendada para esta build.',
+    priceEuro: Number(part?.estimatedPriceEuro ?? part?.priceEuro) || null,
+    visual: getPartVisual(name),
   };
 }
 
-function AnimatedCvNumber({ from, value, animationKey }) {
-  const safeFrom = toNumber(from) ?? toNumber(value) ?? 0;
-  const safeValue = toNumber(value) ?? safeFrom;
-  const [displayValue, setDisplayValue] = useState(safeFrom);
+function getVehicleName(vehicle, result) {
+  const identity = result?.vehicleIdentity || {};
 
-  useEffect(() => {
-    setDisplayValue(safeFrom);
-
-    const startValue = safeFrom;
-    const targetValue = safeValue;
-    const duration = 720;
-    const startTime = window.performance.now();
-
-    let frameId = 0;
-
-    function tick(now) {
-      const progress = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - (1 - progress) ** 3;
-      setDisplayValue(Math.round(startValue + (targetValue - startValue) * eased));
-
-      if (progress < 1) {
-        frameId = window.requestAnimationFrame(tick);
-      }
-    }
-
-    frameId = window.requestAnimationFrame(tick);
-
-    return () => window.cancelAnimationFrame(frameId);
-  }, [safeFrom, safeValue, animationKey]);
-
-  return <strong>{formatCv(displayValue)}</strong>;
+  return [
+    identity.canonicalBrand || vehicle?.brand,
+    identity.canonicalModel || vehicle?.model,
+    identity.canonicalGeneration || vehicle?.generation,
+    identity.canonicalEngine || vehicle?.engine,
+  ]
+    .filter(Boolean)
+    .join(' ');
 }
 
-function CvProgress({ basePowerCv, previousPowerCv, currentPowerCv, finalPowerCv, gainCv, animationKey }) {
-  const safeBase = toNumber(basePowerCv) ?? 0;
-  const safePrevious = toNumber(previousPowerCv) ?? safeBase;
-  const safeCurrent = toNumber(currentPowerCv) ?? safePrevious;
-  const safeFinal = toNumber(finalPowerCv) ?? safeCurrent;
-  const progress =
-    safeFinal > safeBase ? Math.max(0, Math.min(100, ((safeCurrent - safeBase) / (safeFinal - safeBase)) * 100)) : 0;
+function getStageTitle(stage) {
+  const label = stage?.label || 'STAGE';
+  const focus = stage?.focus || stage?.objective || 'Preparacion';
+  return `${label} - ${focus}`.toUpperCase();
+}
 
+function getStageSubtitle(stage) {
+  if (stage?.label === 'STAGE 0') {
+    return 'Mantenimiento';
+  }
+
+  if (stage?.label === 'STAGE 1') {
+    return 'Mejora diaria';
+  }
+
+  if (stage?.label === 'STAGE 2') {
+    return 'Intermedio';
+  }
+
+  if (stage?.label === 'STAGE 3') {
+    return 'Avanzado';
+  }
+
+  return stage?.focus || 'Stage';
+}
+
+function getStageIcon(stageLabel) {
+  if (stageLabel === 'STAGE 0') return 'car';
+  if (stageLabel === 'STAGE 1') return 'boost';
+  if (stageLabel === 'STAGE 2') return 'road';
+  return 'lock';
+}
+
+function IconBadge({ type }) {
   return (
-    <section className="cv-progress-card">
-      <div className="cv-progress-card__head">
-        <span className="cv-progress-card__eyebrow">Progreso de potencia</span>
-        <span className="cv-progress-card__gain">+{gainCv ?? 0} CV en esta etapa</span>
-      </div>
-
-      <div className="cv-progress-card__numbers">
-        <div>
-          <span>Base</span>
-          <strong>{formatCv(safeBase)}</strong>
-        </div>
-        <div className="cv-progress-card__numbers-current">
-          <span>Ahora</span>
-          <AnimatedCvNumber from={safePrevious} value={safeCurrent} animationKey={animationKey} />
-        </div>
-        <div>
-          <span>Final</span>
-          <strong>{formatCv(safeFinal)}</strong>
-        </div>
-      </div>
-
-      <div className="cv-progress-card__track" aria-hidden="true">
-        <span className="cv-progress-card__track-base" />
-        <span className="cv-progress-card__track-fill" style={{ width: `${progress}%` }} />
-        <span className="cv-progress-card__track-glow" style={{ left: `${progress}%` }} />
-      </div>
-    </section>
+    <span className={`build-dashboard-icon build-dashboard-icon--${type}`} aria-hidden="true">
+      {type === 'car' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M4 13l2-5h12l2 5M5 13h14v5H5z" />
+          <path d="M7 18v2M17 18v2M7 13h.01M17 13h.01" />
+        </svg>
+      )}
+      {type === 'boost' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M4 19h16" />
+          <path d="M6 16l4-4 3 3 5-7" />
+          <path d="M15 8h3v3" />
+        </svg>
+      )}
+      {type === 'road' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M8 21l2-18M16 21L14 3" />
+          <path d="M12 6v2M12 11v2M12 16v2" />
+        </svg>
+      )}
+      {type === 'lock' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M7 11V8a5 5 0 0110 0v3" />
+          <path d="M6 11h12v9H6z" />
+        </svg>
+      )}
+      {type === 'engine' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M4 10h3l2-3h5l2 3h4v7h-3l-2 2H8l-2-2H4z" />
+          <path d="M10 7V4M14 7V4M20 13h2M2 13h2" />
+        </svg>
+      )}
+      {type === 'gauge' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M4 15a8 8 0 1116 0" />
+          <path d="M12 15l5-5" />
+          <path d="M8 17h8" />
+        </svg>
+      )}
+      {type === 'fuel' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M6 3h8v18H6z" />
+          <path d="M14 8h3l2 2v8a2 2 0 01-4 0v-4h-1" />
+          <path d="M8 7h4" />
+        </svg>
+      )}
+      {type === 'calendar' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M5 5h14v15H5zM5 9h14M8 3v4M16 3v4" />
+        </svg>
+      )}
+      {type === 'shield' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z" />
+          <path d="M9 12l2 2 4-5" />
+        </svg>
+      )}
+      {type === 'cart' && (
+        <svg viewBox="0 0 24 24">
+          <path d="M4 5h2l2 10h9l2-7H7" />
+          <path d="M9 20h.01M17 20h.01" />
+        </svg>
+      )}
+    </span>
   );
 }
 
-function formatPriceRange(result) {
-  const budget = Number(result?.estimatedBudget);
-
-  if (!Number.isFinite(budget) || budget <= 0) {
-    return 'Presupuesto por confirmar';
-  }
-
-  const lowerBound = Math.round((budget * 0.82) / 50) * 50;
-  const upperBound = Math.round((budget * 1.18) / 50) * 50;
-
-  return `${formatPriceEuro(lowerBound)} - ${formatPriceEuro(upperBound)}`;
-}
-
-function getReliabilityLabel(value) {
-  const numericValue = Number(value);
-
-  if (numericValue >= 82) {
-    return 'Alta';
-  }
-
-  if (numericValue >= 65) {
-    return 'Media';
-  }
-
-  return 'Baja';
+function WarningIcon() {
+  return (
+    <span className="free-build-warning-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 3L2.5 20h19L12 3z" />
+        <path d="M12 9v5" />
+        <path d="M12 17h.01" />
+      </svg>
+    </span>
+  );
 }
 
 function getStagePriceRange(stage) {
-  const parts = stage?.parts ?? [];
-  const total = parts.reduce((sum, rawPart) => {
-    const part = normalizeStagePart(rawPart);
-    return sum + (part.priceEuro || 0);
-  }, 0);
+  if (stage?.costRangeEuro) {
+    return stage.costRangeEuro;
+  }
+
+  const total = (stage?.parts || []).reduce((sum, part) => sum + (normalizePart(part).priceEuro || 0), 0);
 
   if (!total) {
-    return 'Precio por confirmar';
+    return 'Por confirmar';
   }
 
-  const lowerBound = Math.round((total * 0.9) / 50) * 50;
-  const upperBound = Math.round((total * 1.1) / 50) * 50;
-  return `${formatPriceEuro(lowerBound)} - ${formatPriceEuro(upperBound)}`;
+  return `${formatPriceEuro(Math.round(total * 0.9))} - ${formatPriceEuro(Math.round(total * 1.1))}`;
 }
 
-function getVehicleSpecs(vehicle, powerProfile) {
-  return [
-    { label: 'Motor', value: vehicle?.engine || 'Por confirmar' },
-    { label: 'Potencia', value: formatCv(powerProfile.basePowerCv) },
-    {
-      label: 'Cambio',
-      value:
-        vehicle?.transmission === 'manual'
-          ? 'Manual'
-          : vehicle?.transmission === 'automatico'
-            ? 'Automatico'
-            : 'Por confirmar',
-    },
-    {
-      label: 'Traccion',
-      value:
-        vehicle?.drivetrain === 'fwd'
-          ? 'Delantera'
-          : vehicle?.drivetrain === 'rwd'
-            ? 'Trasera'
-            : vehicle?.drivetrain === 'awd'
-              ? 'Total'
-              : 'Por confirmar',
-    },
-    {
-      label: 'Uso',
-      value:
-        vehicle?.usage === 'diario'
-          ? 'Uso diario'
-          : vehicle?.usage === 'finde'
-            ? 'Finde'
-            : vehicle?.usage === 'proyecto'
-              ? 'Proyecto'
-              : 'General',
-    },
-  ];
+function splitPriceRange(stage) {
+  const range = getStagePriceRange(stage);
+  return range.replaceAll('EUR', '€');
 }
 
-function buildStageTags(stage, index) {
-  const tags = [stage?.focus || 'Build'];
-
-  if (index === 0) {
-    tags.push('Uso diario', 'Base fiable');
-  } else if (index === 1) {
-    tags.push('Equilibrio', 'Rendimiento real');
-  } else {
-    tags.push('Uso deportivo', 'Proyecto serio');
-  }
-
-  return tags;
-}
-
-function BuildResult({ result, vehicle, onBack }) {
-  const [activeStageIndex, setActiveStageIndex] = useState(0);
-  const vehicleName = [vehicle?.brand, vehicle?.model, vehicle?.generation, vehicle?.engine]
-    .filter(Boolean)
-    .join(' ');
-  const shareText = buildShareText(
-    vehicleName || 'tu coche',
-    result ?? { title: 'Build recomendada', expectedGain: 'Por definir', stages: [] },
+function InfoItem({ icon, label, value }) {
+  return (
+    <div className="build-dashboard-info-item">
+      <IconBadge type={icon} />
+      <div>
+        <span>{label}</span>
+        <strong>{value || 'Por confirmar'}</strong>
+      </div>
+    </div>
   );
-  const heroImage = getVehicleImage(vehicle ?? {});
+}
+
+function BulletList({ title, items, tone = 'ok' }) {
+  const cleanItems = (items || []).filter(Boolean).slice(0, 5);
+
+  if (!cleanItems.length) {
+    return null;
+  }
+
+  return (
+    <article className="build-dashboard-card build-dashboard-list-card">
+      <h3>{title}</h3>
+      <ul className={`build-dashboard-bullets build-dashboard-bullets--${tone}`}>
+        {cleanItems.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </article>
+  );
+}
+
+function getInstallOrder(stage) {
+  if (Array.isArray(stage?.installOrder) && stage.installOrder.length) {
+    return stage.installOrder.map((name) => ({
+      name,
+      note: '',
+      visual: getPartVisual(name),
+    }));
+  }
+
+  const parts = (stage?.parts || []).map(normalizePart);
+  const ecuParts = parts.filter((part) => normalizeLabel(part.name).includes('repro') || normalizeLabel(part.name).includes('ecu'));
+  const nonEcuParts = parts.filter((part) => !ecuParts.includes(part));
+
+  return [...nonEcuParts, ...ecuParts].map((part, index, collection) => ({
+    name: part.name,
+    note:
+      collection.length > 1 && index === collection.length - 1 && ecuParts.includes(part)
+        ? 'Ajuste final'
+        : '',
+    visual: part.visual,
+  }));
+}
+
+function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }) {
+  const stages = Array.isArray(result?.stages) ? result.stages : [];
+  const initialStageIndex = Math.max(
+    0,
+    stages.findIndex((stage) => stage.label === 'STAGE 1'),
+  );
+  const [activeStageIndex, setActiveStageIndex] = useState(initialStageIndex);
+  const [activeFreeSlide, setActiveFreeSlide] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(null);
+  const activeStage = stages[activeStageIndex] || stages[0];
+  const identity = result?.vehicleIdentity || {};
+  const technicalProfile = result?.technicalProfile || {};
+  const diagnosis = result?.vehicleDiagnosis || {};
+  const vehicleName = getVehicleName(vehicle, result);
+  const heroImage = getVehicleImage(vehicle || {});
+  const stageParts = (activeStage?.parts || []).map(normalizePart);
+  const recommendedParts = useMemo(() => {
+    const aiParts = (result?.recommendedParts || []).map(normalizeRecommendedPart);
+    const stageFallback = stageParts.map((part) => ({
+      key: part.key,
+      name: part.name,
+      reason: part.explanation,
+      priceEuro: part.priceEuro,
+      visual: part.visual,
+    }));
+
+    return (aiParts.length ? aiParts : stageFallback).slice(0, 4);
+  }, [result?.recommendedParts, stageParts]);
+  const isPremiumLockedStage = Boolean(activeStage?.premiumLocked);
+  const salesBlock = result?.premiumSalesBlock || {};
+  const basePower = result?.basePowerCv || identity.factoryPowerCv;
+  const stagePower = activeStage?.powerAfterCv || result?.finalPowerCv;
+  const stageTorque = activeStage?.estimatedTorqueNm;
+  const reliableLimit = technicalProfile.reliablePowerLimitCv || result?.finalPowerCv;
+
+  function goToFreeSlide(index) {
+    setActiveFreeSlide(Math.min(Math.max(index, 0), 4));
+  }
+
+  function handleFreeTouchEnd(event) {
+    if (touchStartX === null) {
+      return;
+    }
+
+    const deltaX = event.changedTouches[0].clientX - touchStartX;
+    setTouchStartX(null);
+
+    if (Math.abs(deltaX) < 44) {
+      return;
+    }
+
+    goToFreeSlide(activeFreeSlide + (deltaX < 0 ? 1 : -1));
+  }
 
   if (!result) {
     return (
-      <section className="build-screen">
-        <div className="build-card build-card--empty">
-          <span className="section-heading__eyebrow">Build optimizada</span>
-          <h2>Aqui apareceran tus resultados</h2>
-          <p>Completa los datos de tu coche para ver una propuesta organizada por etapas.</p>
-        </div>
+      <section className="build-dashboard">
+        <article className="build-dashboard-card">
+          <h2>Aqui aparecera tu build</h2>
+          <p>Completa el formulario para generar una preparacion especifica para tu coche.</p>
+        </article>
       </section>
     );
   }
 
-  const powerProfile = resolvePowerProfile(result, vehicle);
-  const stages = powerProfile.stages;
-  const activeStage = stages[activeStageIndex] ?? null;
-  const isFirstStage = activeStageIndex === 0;
-  const isLastStage = activeStageIndex === stages.length - 1;
-  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-  const previousPowerCv =
-    activeStageIndex === 0
-      ? powerProfile.basePowerCv
-      : toNumber(stages[activeStageIndex - 1]?.powerAfterCv) ?? powerProfile.basePowerCv;
-  const activeStagePowerAfter =
-    toNumber(activeStage?.powerAfterCv) ??
-    ((previousPowerCv ?? 0) + (toNumber(activeStage?.gainCv) ?? 0));
-  const vehicleSpecs = getVehicleSpecs(vehicle, powerProfile);
-  const buildParts = collectBuildParts(stages);
+  const stageOne = stages.find((stage) => stage.label === 'STAGE 1') || activeStage || stages[0];
+  const stageOneParts = (stageOne?.parts || []).map(normalizePart).slice(0, 4);
+  const freeBuild = result?.freeBuild || {};
+  const freeVehicleSheet = freeBuild.vehicleSheet || {};
+  const freePreInstallation = freeBuild.preInstallation || {};
+  const freeModifications = freeBuild.modifications || {};
+  const freePremiumOffer = freeBuild.premiumOffer || {};
+  const stageOnePower = stageOne?.powerAfterCv || result?.finalPowerCv;
+  const stageOneTorque = stageOne?.estimatedTorqueNm;
+  const stockTorque = identity.factoryTorqueNm || result?.baseTorqueNm || null;
+  const vehicleInfoText =
+    freeVehicleSheet.infoText ||
+    result?.summary ||
+    `${vehicleName || 'Este coche'} tiene potencial de mejora si se parte de una base sana y se prioriza compatibilidad, temperatura y mantenimiento antes de buscar cifras.`;
+  const preInstallItems = [
+    ...(freePreInstallation.items || []),
+    ...(stages.find((stage) => stage.label === 'STAGE 0')?.parts || []).map((part) => normalizePart(part).name),
+    ...(diagnosis.mechanicalRisks || []).map((risk) => `Revisar: ${risk}`),
+    'Comprobar historial de mantenimiento y estado de fluidos',
+    'Verificar fugas, sensores, admision, escape y temperatura de trabajo',
+    'No aumentar potencia si hay fallos activos o mantenimientos pendientes',
+  ].filter(Boolean).slice(0, 6);
+  const potentialText = freeModifications.potentialText || (
+    technicalProfile.reliablePowerLimitCv || stageOnePower
+      ? `Con los datos indicados, el margen razonable ronda ${formatCv(stageOnePower)} en una primera configuracion conservadora, siempre condicionado por kilometraje, traccion, aspiracion y estado mecanico.`
+      : 'El potencial exacto depende de confirmar codigo de motor, estado mecanico, kilometraje y compatibilidades por referencia OEM o VIN.'
+  );
+  const freeModificationParts = (freeModifications.parts || []).map(normalizeRecommendedPart);
+  const modificationParts = (freeModificationParts.length ? freeModificationParts : recommendedParts.length ? recommendedParts : stageOneParts).slice(0, 4);
+  const defaultRiskItems = [
+    'Montar piezas sin orden puede forzar turbo y mezcla.',
+    'Subir par sin revisar embrague puede salir caro.',
+    'Comprar piezas sin referencias puede generar doble gasto.',
+  ];
+  const cleanRiskItem = (item) => {
+    const text = String(item);
+    return text
+      .replace(/\bEl plan premium\b.*$/i, '')
+      .replace(/\bPremium\b.*$/i, '')
+      .replace(/\bplan completo\b.*$/i, '')
+      .trim();
+  };
+  const isUsefulRisk = (item) => {
+    const text = cleanRiskItem(item);
+    const lower = text.toLowerCase();
+    if (!text || text.length > 95) return false;
+    if (
+      lower.includes('se recomienda') ||
+      lower.includes('es esencial') ||
+      lower.includes('talleres especializados') ||
+      lower.includes('piezas de calidad') ||
+      lower.includes('mantenimientos periodicos') ||
+      lower.includes('combustibles de alta calidad')
+    ) {
+      return false;
+    }
+    return (
+      lower.includes('sin ') ||
+      lower.includes('puede') ||
+      lower.includes('romper') ||
+      lower.includes('forzar') ||
+      lower.includes('salir caro') ||
+      lower.includes('doble gasto') ||
+      lower.includes('temperatura') ||
+      lower.includes('embrague') ||
+      lower.includes('turbo')
+    );
+  };
+  const freeRiskItemsLimited = [
+    ...(freeBuild.risks || []).filter(isUsefulRisk).map(cleanRiskItem),
+    ...defaultRiskItems,
+  ].slice(0, 3);
+  const premiumBenefits = (freePremiumOffer.benefits?.length ? freePremiumOffer.benefits : salesBlock.benefits || [
+    'Plan completo de instalaciones',
+    'Orden exacto de instalacion',
+    'Piezas recomendadas para tu configuracion',
+    'Errores especificos de tu motor',
+  ]).filter(Boolean).slice(0, 4);
+  const freeSlides = [
+    'Ficha',
+    'Preinstalacion',
+    'Modificaciones',
+    'Riesgos',
+    'Plan optimizado',
+  ];
 
   return (
-    <section className="build-screen build-screen--garage">
-      <div className="build-topbar">
-        <button className="secondary-button secondary-button--dark" type="button" onClick={onBack}>
+    <section className="free-build">
+      <header className="free-build-topbar">
+        <button type="button" className="build-dashboard-back" onClick={onBack}>
+          <span aria-hidden="true">&lt;</span>
+          Volver
+        </button>
+        <button type="button" className="build-dashboard-change" onClick={onBack}>
+          <IconBadge type="car" />
           Cambiar vehiculo
         </button>
-      </div>
+      </header>
 
-      <article className="build-garage-hero">
-        <img src={heroImage} alt={vehicleName || 'Vehiculo recomendado'} className="build-garage-hero__backdrop" />
-        <div className="build-garage-hero__overlay" aria-hidden="true" />
-
-        <div className="build-garage-hero__content">
-          <div className="build-garage-hero__info">
-            <span className="build-garage-hero__eyebrow">Build recomendada</span>
-            <h1>{vehicle?.brand}</h1>
-            <h2>{[vehicle?.model, vehicle?.generation, vehicle?.engine].filter(Boolean).join(' ')}</h2>
-            <p className="build-garage-hero__summary">{result.summary}</p>
-            <p className="build-card__kicker">{getSourceMeta(result.source)}</p>
-            {result.factoryPowerSourceUrl ? (
-              <a
-                className="factory-source-link"
-                href={result.factoryPowerSourceUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                CV de serie contrastados con {result.factoryPowerSourceTitle || 'fuente externa'}
-              </a>
-            ) : null}
-
-            <div className="build-tech-sheet">
-              {vehicleSpecs.map((spec) => (
-                <div key={spec.label} className="build-tech-sheet__item">
-                  <span>{spec.label}</span>
-                  <strong>{spec.value}</strong>
+      <section
+        className="free-build-slider"
+        onTouchStart={(event) => setTouchStartX(event.touches[0].clientX)}
+        onTouchEnd={handleFreeTouchEnd}
+      >
+        <div
+          className="free-build-track"
+          style={{ transform: `translateX(-${activeFreeSlide * 100}%)` }}
+        >
+          <article className="free-build-slide free-build-slide--hero">
+            <img className="free-build-slide__bg" src={freeBuildFichaBg} alt="" />
+            <div className="free-build-slide__shade" />
+            <div className="free-build-slide__content">
+              <span className="free-build-eyebrow">Ficha del vehiculo</span>
+              <h1>{vehicleName || result.title}</h1>
+              {(result?.source === 'fallback' || buildMeta?.aiErrorMessage) && (
+                <p className="free-build-alert">
+                  Build orientativa: no se ha podido generar una build optimizada con IA. Confirma codigo motor por VIN para afinar piezas y resultados.
+                </p>
+              )}
+              <dl className="free-build-specs">
+                <div>
+                  <dt>Codigo de motor</dt>
+                  <dd>{freeVehicleSheet.engineCode || technicalProfile.engineCode || identity.canonicalEngine || 'Por confirmar'}</dd>
                 </div>
-              ))}
+                <div>
+                  <dt>Potencia</dt>
+                  <dd>{formatCv(freeVehicleSheet.powerCv || basePower)}</dd>
+                </div>
+                <div>
+                  <dt>Torque</dt>
+                  <dd>{formatNm(freeVehicleSheet.torqueNm || stockTorque)}</dd>
+                </div>
+                <div>
+                  <dt>Motor</dt>
+                  <dd>{freeVehicleSheet.engine || identity.canonicalEngine || vehicle?.engine || 'Por confirmar'}</dd>
+                </div>
+              </dl>
+              <p>{vehicleInfoText}</p>
             </div>
-          </div>
-        </div>
-      </article>
+          </article>
 
-      <section className="build-summary-strip">
-        <article className="build-summary-chip">
-          <span>Potencia estimada</span>
-          <strong>{result.expectedGain || 'Por definir'}</strong>
+          <article className="free-build-slide">
+            <img className="free-build-slide__bg" src={freeBuildPreinstalacionBg} alt="" />
+            <div className="free-build-slide__shade" />
+            <div className="free-build-slide__content">
+              <span className="free-build-eyebrow">Preinstalacion</span>
+              <h2>{freePreInstallation.title || 'Antes de modificar'}</h2>
+              <p>
+                {freePreInstallation.intro ||
+                  'Antes de montar piezas conviene asegurar que la base esta sana. Una modificacion sobre mantenimiento pendiente suele ocultar fallos y acabar costando mas.'}
+              </p>
+              <ul className="free-build-checks">
+                {preInstallItems.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+
+          <article className="free-build-slide">
+            <img className="free-build-slide__bg" src={freeBuildModificacionesBg} alt="" />
+            <div className="free-build-slide__shade" />
+            <div className="free-build-slide__content">
+              <span className="free-build-eyebrow">Modificaciones recomendadas</span>
+              <h2>Potencial y piezas con sentido</h2>
+              <p>{potentialText}</p>
+              <div className="free-build-result">
+                <div>
+                  <IconBadge type="gauge" />
+                  <span>Potencia posible</span>
+                  <strong>{formatCv(freeModifications.possiblePowerCv || stageOnePower)}</strong>
+                </div>
+                <div>
+                  <IconBadge type="boost" />
+                  <span>Torque posible</span>
+                  <strong>{formatNm(freeModifications.possibleTorqueNm || stageOneTorque)}</strong>
+                </div>
+              </div>
+              <div className="free-build-parts">
+                {modificationParts.map((part) => (
+                  <article key={part.key} className="free-build-part">
+                    {part.visual ? <img src={part.visual.imageSrc} alt={part.name} /> : <IconBadge type="cart" />}
+                    <div>
+                      <strong>{part.name}</strong>
+                      <p>{part.reason || part.explanation}</p>
+                      <span>{formatPriceEuro(part.priceEuro)}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </article>
+
+          <article className="free-build-slide free-build-slide--warning">
+            <img className="free-build-slide__bg" src={freeBuildRiesgosBg} alt="" />
+            <div className="free-build-slide__shade" />
+            <div className="free-build-slide__content">
+              <span className="free-build-eyebrow">Riesgos</span>
+              <h2>Lo que puede salir caro</h2>
+              <p>
+                Estos fallos aparecen cuando se modifica sin orden, sin verificar piezas o sin
+                revisar la base. Son errores comunes que pueden acabar en averias o doble gasto.
+              </p>
+              <div className="free-build-error-list">
+                {freeRiskItemsLimited.map((item, index) => (
+                  <article key={item}>
+                    <WarningIcon />
+                    <p>{item}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </article>
+
+          <article className="free-build-slide free-build-slide--premium">
+            <img className="free-build-slide__bg" src={freeBuildPremiumBg} alt="" />
+            <div className="free-build-slide__shade" />
+            <div className="free-build-slide__content">
+              <span className="free-build-eyebrow">Plan optimizado</span>
+              <h2>Comienza tu proyecto con claridad</h2>
+              <p>
+                El plan optimizado te da el plan de ejecucion completo para comprar mejor,
+                instalar en orden y evitar errores especificos de tu motor.
+              </p>
+              <ul className="free-build-checks">
+                {premiumBenefits.map((benefit) => (
+                  <li key={benefit}>{benefit}</li>
+                ))}
+              </ul>
+              <div className="free-build-plan-price" aria-label="Oferta plan optimizado">
+                <span>Oferta</span>
+                <strong>3,99 €</strong>
+                <del>6,99 €</del>
+              </div>
+              <button type="button" onClick={onOpenOptimizedPlan}>
+                {freePremiumOffer.cta || salesBlock.cta || 'Obtener plan optimizado'}
+              </button>
+              <small>
+                {freePremiumOffer.finalReinforcement ||
+                  salesBlock.finalReinforcement ||
+                  'En esta build, el orden de instalacion marca la diferencia entre mejorar el coche o gastar dos veces.'}
+              </small>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {activeFreeSlide !== 4 && (
+        <div className="free-build-inline-cta">
+          <button
+            type="button"
+            onClick={onOpenOptimizedPlan}
+          >
+            Obtener plan optimizado
+          </button>
+        </div>
+      )}
+
+      <nav className="free-build-nav" aria-label="Secciones de la build free">
+        {freeSlides.map((slide, index) => (
+          <button
+            key={slide}
+            type="button"
+            className={index === activeFreeSlide ? 'free-build-nav__dot free-build-nav__dot--active' : 'free-build-nav__dot'}
+            onClick={() => goToFreeSlide(index)}
+            aria-label={`Ver ${slide}`}
+          />
+        ))}
+      </nav>
+    </section>
+  );
+
+  return (
+    <section className="build-dashboard">
+      <header className="build-dashboard-topbar">
+        <button type="button" className="build-dashboard-back" onClick={onBack}>
+          <span aria-hidden="true">&lt;</span>
+          Volver
+        </button>
+        <h1>
+          Build: <strong>{vehicleName || result.title}</strong>
+        </h1>
+        <button type="button" className="build-dashboard-change" onClick={onBack}>
+          <IconBadge type="car" />
+          Cambiar vehiculo
+        </button>
+      </header>
+
+      <section className="build-dashboard-hero-grid">
+        <article className="build-dashboard-photo-card">
+          <img src={heroImage} alt={vehicleName || 'Vehiculo'} />
         </article>
-        <article className="build-summary-chip">
-          <span>Fiabilidad</span>
-          <strong>{getReliabilityLabel(result.reliabilityIndex)}</strong>
+
+        <article className="build-dashboard-card build-dashboard-spec-card">
+          <InfoItem
+            icon="engine"
+            label="Motor"
+            value={technicalProfile.engineCode || identity.canonicalEngine || vehicle?.engine}
+          />
+          <InfoItem
+            icon="road"
+            label="Traccion"
+            value={identity.drivetrain || vehicle?.drivetrain}
+          />
+          <InfoItem
+            icon="gauge"
+            label="Potencia stock"
+            value={`${formatCv(basePower)} / ${formatNm(stageTorque ? Math.max(0, stageTorque - 80) : null)}`}
+          />
+          <InfoItem
+            icon="calendar"
+            label="Produccion"
+            value={identity.productionYears || vehicle?.generation}
+          />
+          <InfoItem
+            icon="fuel"
+            label="Combustible"
+            value={identity.powertrain || vehicle?.powertrain}
+          />
+          <InfoItem
+            icon="shield"
+            label="Plataforma"
+            value={technicalProfile.platform}
+          />
         </article>
-        <article className="build-summary-chip build-summary-chip--accent">
-          <span>Coste estimado total</span>
-          <strong>{formatPriceRange(result)}</strong>
+
+        <article className="build-dashboard-card build-dashboard-goal-card">
+          <span className="build-dashboard-card-label">Objetivo de la build</span>
+          <div className="build-dashboard-goal-title">
+            <IconBadge type="gauge" />
+            <strong>{result.ownerProfile || activeStage?.bestFor || 'Daily - Alto rendimiento'}</strong>
+          </div>
+          <ul>
+            <li>Potencia objetivo: {formatCv(reliableLimit)}</li>
+            <li>Par objetivo: {formatNm(stageTorque)}</li>
+            <li>Fiabilidad: {activeStage?.reliability || 'Alta'}</li>
+            <li>Uso: {vehicle?.usage || 'Diario'} / {vehicle?.goal || 'calle'}</li>
+            <li>
+              Presupuesto total estimado: <strong>{formatPriceEuro(result.estimatedBudget)}</strong>
+            </li>
+          </ul>
         </article>
       </section>
 
-      {buildParts.length ? (
-        <section className="build-parts-gallery">
-          <div className="build-section__heading">
-            <span className="section-heading__eyebrow">La build contiene</span>
-            <h2>Piezas clave</h2>
-          </div>
+      <section className="build-dashboard-tabs-row">
+        <div className="build-dashboard-tabs">
+          {stages.map((stage, index) => (
+            <button
+              key={stage.label || index}
+              type="button"
+              className={`build-dashboard-tab ${index === activeStageIndex ? 'build-dashboard-tab--active' : ''}`}
+              onClick={() => setActiveStageIndex(index)}
+            >
+              <IconBadge type={getStageIcon(stage.label)} />
+              <span>
+                <strong>{stage.label || `STAGE ${index}`}</strong>
+                <small>{getStageSubtitle(stage)}</small>
+              </span>
+            </button>
+          ))}
+        </div>
 
-          <div className="build-parts-gallery__grid">
-            {buildParts.map((part) => (
-              <article key={`gallery-${part.key}`} className="build-part-card">
-                {part.visual ? (
-                  <img
-                    src={part.visual.imageSrc}
-                    alt={part.visual.label || part.name}
-                    className="build-part-card__image"
-                  />
-                ) : (
-                  <div className="build-part-card__image build-part-card__image--placeholder" aria-hidden="true" />
-                )}
-                <div className="build-part-card__copy">
+        <button type="button" className="build-dashboard-compare">
+          <IconBadge type="road" />
+          <span>
+            <strong>Comparativa rapida</strong>
+            <small>Incluida en el plan optimizado</small>
+          </span>
+          <em>&gt;</em>
+        </button>
+      </section>
+
+      <section className="build-dashboard-stage-card">
+        <div className="build-dashboard-stage-main">
+          <h2>{getStageTitle(activeStage)}</h2>
+          <p>{activeStage?.note || activeStage?.objective || result.summary}</p>
+
+          {isPremiumLockedStage ? (
+            <article className="build-dashboard-locked-stage">
+              <IconBadge type="lock" />
+              <div>
+                <strong>Stage avanzado incluido en el plan optimizado</strong>
+                <p>
+                  Esta parte necesita orden, dependencias y compatibilidades para no gastar dinero
+                  en piezas que no trabajan bien juntas.
+                </p>
+              </div>
+            </article>
+          ) : (
+            <div className="build-dashboard-parts-table">
+              <div className="build-dashboard-parts-head">
+                <span>Pieza</span>
+                <span>Funcion</span>
+                <span>Tipo recomendado</span>
+                <span>Precio aprox.</span>
+              </div>
+
+              {stageParts.slice(0, 4).map((part) => (
+                <div className="build-dashboard-parts-row" key={part.key}>
                   <strong>{part.name}</strong>
-                  <span>{part.visual?.label || 'Pieza de la build'}</span>
+                  <span>{part.explanation}</span>
+                  <span>{part.visual?.label || 'Compatible probable'}</span>
+                  <em>{formatPriceEuro(part.priceEuro)}</em>
                 </div>
+              ))}
+
+              <div className="build-dashboard-parts-total">
+                <strong>Coste estimado</strong>
+                <em>{splitPriceRange(activeStage)}</em>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <aside className="build-dashboard-stage-side">
+          <article className="build-dashboard-card build-dashboard-gains-card">
+            <h3>Ganancias estimadas</h3>
+            <div className="build-dashboard-gain-grid">
+              <div>
+                <IconBadge type="gauge" />
+                <strong>{formatGain(activeStage?.gainCv, 'CV')}</strong>
+                <span>Potencia</span>
+              </div>
+              <div>
+                <IconBadge type="boost" />
+                <strong>{formatNm(stageTorque)}</strong>
+                <span>Par motor</span>
+              </div>
+            </div>
+          </article>
+
+          <article className="build-dashboard-card build-dashboard-result-mini">
+            <div>
+              <span>Potencia estimada</span>
+              <strong>{formatCv(stagePower)}</strong>
+            </div>
+            <div>
+              <span>Par estimado</span>
+              <strong>{formatNm(stageTorque)}</strong>
+            </div>
+          </article>
+
+          <article className="build-dashboard-card build-dashboard-quality-card">
+            <div>
+              <IconBadge type="shield" />
+              <span>Fiabilidad</span>
+              <strong>{activeStage?.reliability || 'Alta'}</strong>
+              <small>Con mantenimiento adecuado</small>
+            </div>
+            <div>
+              <IconBadge type="boost" />
+              <span>Dificultad de instalacion</span>
+              <strong>{activeStage?.difficulty || 'Media'}</strong>
+              <small>{activeStage?.difficulty === 'baja' ? 'Apto taller general' : 'Recomendado taller'}</small>
+            </div>
+          </article>
+        </aside>
+      </section>
+
+      <section className="build-dashboard-card build-dashboard-install-card build-dashboard-install-card--locked">
+        <IconBadge type="lock" />
+        <div>
+          <h3>Orden de instalacion recomendado</h3>
+          <p>
+            El orden exacto no se muestra en la build free. En este tipo de preparacion, montar
+            piezas en mal orden puede provocar perdida de rendimiento o gasto innecesario.
+          </p>
+        </div>
+      </section>
+
+      <section className="build-dashboard-three-cols">
+        <BulletList
+          title="Requisitos y consideraciones"
+          items={[
+            ...(activeStage?.dependencies || []),
+            ...(diagnosis.strengths || []),
+            activeStage?.legalImpact,
+          ].slice(0, 5)}
+          tone="ok"
+        />
+        <BulletList
+          title="Riesgo detectado"
+          items={[
+            result?.conversionTrigger,
+            ...(activeStage?.watchouts || []),
+            ...(diagnosis.mechanicalRisks || []),
+            ...(result?.warnings || []),
+          ].slice(0, 5)}
+          tone="warn"
+        />
+        <BulletList
+          title="Que desbloquea el plan"
+          items={[
+            'Orden exacto de instalacion paso a paso',
+            'Piezas compatibles entre si',
+            'Dependencias criticas antes de comprar',
+            'Evolucion por presupuesto',
+          ]}
+          tone="next"
+        />
+      </section>
+
+      <section className="build-dashboard-shop-row">
+        <article className="build-dashboard-card build-dashboard-products-card">
+          <h3>Piezas recomendadas para este stage</h3>
+          <div className="build-dashboard-products-grid">
+            {recommendedParts.map((part) => (
+              <article key={part.key} className="build-dashboard-product">
+                {part.visual ? <img src={part.visual.imageSrc} alt={part.name} /> : <IconBadge type="cart" />}
+                <strong>{part.name}</strong>
+                <span>{part.reason}</span>
+                <em>{formatPriceEuro(part.priceEuro)}</em>
+                <button type="button">Ver producto</button>
               </article>
             ))}
           </div>
-        </section>
-      ) : null}
+        </article>
 
-      <section className="build-stages-garage">
-        {stages.map((stage, index) => {
-          const isActive = index === activeStageIndex;
-          const stageTags = buildStageTags(stage, index);
-
-          return (
-            <article
-              key={stage.label}
-              className={`build-stage-garage build-stage-garage--${getStageTheme(index)} ${
-                isActive ? 'build-stage-garage--active' : ''
-              }`}
-            >
-              <button
-                type="button"
-                className="build-stage-garage__header"
-                onClick={() => setActiveStageIndex(index)}
-              >
-                <div className="build-stage-garage__title">
-                  <span className="build-stage-garage__label">{stage.label}</span>
-                  <strong>{stage.focus}</strong>
-                </div>
-                <div className="build-stage-garage__price">
-                  <strong>{getStagePriceRange(stage)}</strong>
-                  <span>Coste aprox.</span>
-                </div>
-              </button>
-
-              <p className="build-stage-garage__objective">{stage.note}</p>
-
-              <div className="build-stage-garage__parts">
-                {stage.parts.map((rawPart) => {
-                  const part = normalizeStagePart(rawPart);
-
-                  return (
-                    <article key={part.key} className="build-stage-part-row">
-                      {part.visual ? (
-                        <img
-                          src={part.visual.imageSrc}
-                          alt={part.visual.label || part.name}
-                          className="build-stage-part-row__thumb"
-                        />
-                      ) : (
-                        <div className="build-stage-part-row__thumb build-stage-part-row__thumb--placeholder" aria-hidden="true" />
-                      )}
-                      <div className="build-stage-part-row__copy">
-                        <strong>{part.name}</strong>
-                        <p>{part.explanation}</p>
-                      </div>
-                      <div className="build-stage-part-row__price">{formatPriceEuro(part.priceEuro)}</div>
-                    </article>
-                  );
-                })}
-              </div>
-
-              <div className="build-stage-garage__footer">
-                {stageTags.map((tag) => (
-                  <span key={tag} className="build-stage-garage__tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </article>
-          );
-        })}
+        <article className="build-dashboard-card build-dashboard-why-card">
+          <h3>Por que estas piezas?</h3>
+          <ul className="build-dashboard-bullets build-dashboard-bullets--next">
+            <li>Mejor relacion coste / impacto</li>
+            <li>Compatibles con la base indicada</li>
+            <li>Ordenadas para evitar gastos inutiles</li>
+            <li>Fiabilidad antes que cifras irreales</li>
+          </ul>
+          <button type="button" className="build-dashboard-outline-button">
+            <IconBadge type="cart" />
+            Ver todas las piezas
+          </button>
+        </article>
       </section>
 
-      {activeStage ? (
-        <article className="build-card build-card--closing build-card--garage-summary">
-          <div className="build-section__heading">
-            <span className="section-heading__eyebrow">Resumen de la etapa</span>
-            <h2>{activeStage.label}</h2>
-          </div>
-
-          <div className="build-stage-focus__stats">
-            <article className="build-highlight">
-              <span>CV de partida</span>
-              <strong>{formatCv(previousPowerCv)}</strong>
-            </article>
-            <article className="build-highlight">
-              <span>Ganas en esta etapa</span>
-              <strong>+{activeStage.gainCv ?? 0} CV</strong>
-            </article>
-            <article className="build-highlight">
-              <span>Terminas con</span>
-              <strong>{formatCv(activeStagePowerAfter)}</strong>
-            </article>
-          </div>
-
-          <CvProgress
-            basePowerCv={powerProfile.basePowerCv}
-            previousPowerCv={previousPowerCv}
-            currentPowerCv={activeStagePowerAfter}
-            finalPowerCv={powerProfile.finalPowerCv}
-            gainCv={activeStage.gainCv}
-            animationKey={activeStageIndex}
-          />
-
-          <div className="stage-story-cta">
-            {!isFirstStage ? (
-              <button
-                className="secondary-button secondary-button--dark"
-                type="button"
-                onClick={() => setActiveStageIndex((current) => Math.max(0, current - 1))}
-              >
-                Etapa anterior
-              </button>
-            ) : (
-              <span className="stage-story-cta__spacer" />
-            )}
-
-            {!isLastStage ? (
-              <button
-                className="primary-button"
-                type="button"
-                onClick={() => setActiveStageIndex((current) => Math.min(stages.length - 1, current + 1))}
-              >
-                Siguiente etapa
-              </button>
-            ) : (
-              <a className="primary-button stage-story-cta__link" href={whatsappUrl} target="_blank" rel="noreferrer">
-                Ver productos de esta build
-              </a>
-            )}
+      <section className="build-dashboard-bottom-row">
+        <article className="build-dashboard-final-card">
+          <IconBadge type="gauge" />
+          <div>
+            <span>Resultado final {activeStage?.label}</span>
+            <strong>
+              {formatCv(stagePower)}
+              <br />
+              {formatNm(stageTorque)}
+            </strong>
+            <p>{result?.conclusion?.why || activeStage?.bestFor || 'Mejora notable manteniendo una ruta coherente.'}</p>
           </div>
         </article>
-      ) : null}
 
-      <article className="build-card build-card--closing">
-        <div className="build-section__heading">
-          <span className="section-heading__eyebrow">Cierre</span>
-          <h2>Build preparada para arrancar</h2>
-        </div>
-        <p className="build-card__summary">
-          Ya tienes una ruta clara para tu coche, con fases progresivas, costes visibles y una idea realista del rendimiento final.
-        </p>
-        <div className="build-stage-focus__stats">
-          <article className="build-highlight">
-            <span>Potencia de partida</span>
-            <strong>{formatCv(powerProfile.basePowerCv)}</strong>
-          </article>
-          <article className="build-highlight">
-            <span>Ganancia total</span>
-            <strong>{result.expectedGain || 'Por definir'}</strong>
-          </article>
-          <article className="build-highlight">
-            <span>Coste total</span>
-            <strong>{formatPriceRange(result)}</strong>
-          </article>
-        </div>
-        <div className="build-actions build-actions--stack">
-          <a className="primary-button build-actions__primary" href={whatsappUrl} target="_blank" rel="noreferrer">
-            Quiero empezar este proyecto
-          </a>
-          <button className="secondary-button build-actions__secondary" type="button" onClick={() => setActiveStageIndex(0)}>
-            Volver a Stage 1
-          </button>
-        </div>
-      </article>
+        <article className="build-dashboard-card build-dashboard-premium-card">
+          <IconBadge type="lock" />
+          <div>
+            <span>{salesBlock.title || 'Como hacer esta build correctamente'}</span>
+            <p>
+              {salesBlock.intro ||
+                result?.premiumUpsell ||
+                'El plan optimizado incluye el orden exacto, compatibilidades y ajustes para evitar errores caros.'}
+            </p>
+            {Array.isArray(salesBlock.benefits) && salesBlock.benefits.length ? (
+              <ul className="build-dashboard-bullets build-dashboard-bullets--ok">
+                {salesBlock.benefits.map((benefit) => (
+                  <li key={benefit}>{benefit}</li>
+                ))}
+              </ul>
+            ) : null}
+            <strong className="build-dashboard-premium-price">
+              Acceso completo: <span>3,99 €</span> <del>6,99 €</del>
+            </strong>
+            <button type="button" onClick={onOpenOptimizedPlan}>
+              {salesBlock.cta || 'Obtener plan optimizado'}
+            </button>
+            <small>
+              {salesBlock.finalReinforcement ||
+                'En esta build, el orden de las modificaciones marca la diferencia entre ganar rendimiento o perder dinero.'}
+            </small>
+          </div>
+        </article>
+      </section>
     </section>
   );
 }

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1280" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#120c08"/>
+      <stop offset=".48" stop-color="#090c10"/>
+      <stop offset="1" stop-color="#030406"/>
+    </linearGradient>
+    <radialGradient id="orange" cx="22%" cy="28%" r="70%">
+      <stop offset="0" stop-color="#ff7a2b" stop-opacity=".32"/>
+      <stop offset=".58" stop-color="#ff7a2b" stop-opacity=".05"/>
+      <stop offset="1" stop-color="#ff7a2b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="720" height="1280" fill="url(#bg)"/>
+  <rect width="720" height="1280" fill="url(#orange)"/>
+  <g opacity=".1" stroke="#fff">
+    <path d="M80 0v1280M240 0v1280M400 0v1280M560 0v1280"/>
+    <path d="M0 220h720M0 440h720M0 660h720M0 880h720M0 1100h720"/>
+  </g>
+  <path d="M140 210c230 100 346 208 348 324 3 142-168 157-172 295-3 105 98 171 241 226" fill="none" stroke="#ff7a2b" stroke-width="12" stroke-linecap="round" opacity=".76"/>
+  <path d="M140 210c230 100 346 208 348 324 3 142-168 157-172 295-3 105 98 171 241 226" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="12 18" stroke-linecap="round" opacity=".42"/>
+  <g fill="#10151c" stroke="#ff7a2b" stroke-width="4">
+    <circle cx="140" cy="210" r="36"/><circle cx="363" cy="343" r="36"/><circle cx="488" cy="535" r="36"/>
+    <circle cx="318" cy="829" r="36"/><circle cx="557" cy="1055" r="36"/>
+  </g>
+  <g fill="#ff8d35" font-family="Arial, sans-serif" font-size="28" font-weight="900" text-anchor="middle">
+    <text x="140" y="220">1</text><text x="363" y="353">2</text><text x="488" y="545">3</text><text x="318" y="839">4</text><text x="557" y="1065">5</text>
+  </g>
+  <g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".28">
+    <path d="M90 1010h110l28 42H62zM118 1010l21-62h40l21 62"/>
+    <path d="M92 620h90v74H92zM112 620v-28h50v28"/>
+  </g>
+</svg>

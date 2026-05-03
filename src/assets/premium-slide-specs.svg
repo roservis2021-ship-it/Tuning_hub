@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 1280" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f1318"/>
+      <stop offset=".58" stop-color="#080a0d"/>
+      <stop offset="1" stop-color="#020304"/>
+    </linearGradient>
+    <radialGradient id="blueprint" cx="65%" cy="18%" r="64%">
+      <stop offset="0" stop-color="#ff8d35" stop-opacity=".18"/>
+      <stop offset=".54" stop-color="#ff8d35" stop-opacity=".04"/>
+      <stop offset="1" stop-color="#ff8d35" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="720" height="1280" fill="url(#bg)"/>
+  <rect width="720" height="1280" fill="url(#blueprint)"/>
+  <g stroke="#fff" opacity=".12">
+    <path d="M60 80h600v1120H60z"/>
+    <path d="M60 220h600M60 360h600M60 500h600M60 640h600M60 780h600M60 920h600M60 1060h600"/>
+    <path d="M250 80v1120M470 80v1120"/>
+  </g>
+  <g transform="translate(116 210)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 50h430v290H30z" stroke="#ff8d35" stroke-width="6" opacity=".54"/>
+    <path d="M72 112h160M72 172h300M72 232h245M72 292h140" stroke="#fff" stroke-width="6" opacity=".24"/>
+    <path d="M62 480h420M62 560h420M62 640h420M62 720h420" stroke="#ff8d35" stroke-width="4" opacity=".34"/>
+    <path d="M62 440v320M270 440v320M482 440v320" stroke="#fff" stroke-width="4" opacity=".2"/>
+  </g>
+  <g fill="none" stroke="#ff8d35" stroke-width="5" opacity=".38">
+    <circle cx="560" cy="235" r="72"/>
+    <path d="M560 188v94M513 235h94"/>
+  </g>
+</svg>

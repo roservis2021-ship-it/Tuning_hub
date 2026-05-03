@@ -44,6 +44,7 @@ const VEHICLE_PHOTOS = {
 
 function normalizeVehicleToken(value) {
   return String(value ?? '')
+    .replace(/\s*\([^)]*\)\s*/g, ' ')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
