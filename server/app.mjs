@@ -59,8 +59,31 @@ const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 const OPENAI_ENABLE_WEB_SEARCH = process.env.OPENAI_ENABLE_WEB_SEARCH !== 'false';
 const OPENAI_WEB_SEARCH_TOOL = process.env.OPENAI_WEB_SEARCH_TOOL || 'web_search_preview';
 const OPENAI_MAX_OUTPUT_TOKENS = Number(process.env.OPENAI_MAX_OUTPUT_TOKENS || 16000);
-const STRIPE_CHECKOUT_PRICE_EURO_CENTS = Number(process.env.STRIPE_CHECKOUT_PRICE_EURO_CENTS || 399);
+const STRIPE_CHECKOUT_PRICE_EURO_CENTS = resolveStripeCheckoutPriceCents(
+  process.env.STRIPE_CHECKOUT_PRICE_EURO_CENTS,
+);
 const STRIPE_CHECKOUT_PRODUCT_NAME = process.env.STRIPE_CHECKOUT_PRODUCT_NAME || 'Plan optimizado Tuning HUB';
+
+function resolveStripeCheckoutPriceCents(rawValue) {
+  const fallbackPriceCents = 399;
+
+  if (!rawValue) {
+    return fallbackPriceCents;
+  }
+
+  const normalizedValue = String(rawValue).trim().replace(',', '.');
+  const numericValue = Number(normalizedValue);
+
+  if (Number.isInteger(numericValue) && numericValue > 0) {
+    return numericValue;
+  }
+
+  if (Number.isFinite(numericValue) && numericValue > 0) {
+    return Math.round(numericValue * 100);
+  }
+
+  return fallbackPriceCents;
+}
 
 class BadRequestError extends Error {
   constructor(message) {
