@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { createEmbeddedCheckoutSession } from '../services/stripeCheckoutService';
+import {
+  createCheckoutSession,
+  createEmbeddedCheckoutSession,
+} from '../services/stripeCheckoutService';
 
 function waitForStripe() {
   return new Promise((resolve, reject) => {
@@ -27,6 +30,8 @@ function StripeCheckoutScreen({ result, vehicleName, onBack }) {
   const checkoutRef = useRef(null);
   const mountedCheckoutRef = useRef(null);
   const [error, setError] = useState('');
+  const [fallbackReady, setFallbackReady] = useState(false);
+  const [isOpeningHostedCheckout, setIsOpeningHostedCheckout] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -60,9 +65,15 @@ function StripeCheckoutScreen({ result, vehicleName, onBack }) {
 
         mountedCheckoutRef.current = checkout;
         checkout.mount(checkoutRef.current);
+        window.setTimeout(() => {
+          if (isMounted) {
+            setFallbackReady(true);
+          }
+        }, 4200);
       } catch (checkoutError) {
         if (isMounted) {
           setError(checkoutError.message || 'No se pudo cargar la pasarela de pago.');
+          setFallbackReady(true);
         }
       }
     }
@@ -75,6 +86,23 @@ function StripeCheckoutScreen({ result, vehicleName, onBack }) {
       mountedCheckoutRef.current = null;
     };
   }, [result?.id, vehicleName]);
+
+  async function handleOpenHostedCheckout() {
+    setIsOpeningHostedCheckout(true);
+    setError('');
+
+    try {
+      const session = await createCheckoutSession({
+        vehicleName,
+        buildId: result?.id,
+      });
+
+      window.location.href = session.url;
+    } catch (checkoutError) {
+      setError(checkoutError.message || 'No se pudo abrir el pago seguro de Stripe.');
+      setIsOpeningHostedCheckout(false);
+    }
+  }
 
   return (
     <section className="checkout-screen">
@@ -102,6 +130,14 @@ function StripeCheckoutScreen({ result, vehicleName, onBack }) {
           <div className="checkout-screen__loading">Cargando pasarela segura...</div>
         )}
         <div ref={checkoutRef} className="checkout-screen__stripe" />
+        {fallbackReady && (
+          <div className="checkout-screen__fallback">
+            <span>Si la pasarela no carga en este navegador, abre el pago seguro de Stripe.</span>
+            <button type="button" onClick={handleOpenHostedCheckout} disabled={isOpeningHostedCheckout}>
+              {isOpeningHostedCheckout ? 'Abriendo Stripe...' : 'Abrir pago seguro en Stripe'}
+            </button>
+          </div>
+        )}
       </article>
     </section>
   );
