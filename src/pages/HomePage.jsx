@@ -6,7 +6,10 @@ import StripeCheckoutScreen from '../components/StripeCheckoutScreen';
 import { generateBuildRecommendation } from '../services/buildRecommender';
 import { logUserSearch } from '../services/firebaseBuildLibraryService';
 import { generateAiBuild } from '../services/aiBuildService';
-import { getCheckoutSessionStatus } from '../services/stripeCheckoutService';
+import {
+  createCheckoutSession,
+  getCheckoutSessionStatus,
+} from '../services/stripeCheckoutService';
 import {
   initAnalytics,
   trackBuildError,
@@ -243,7 +246,7 @@ function HomePage() {
     setCurrentScreen('form');
   }
 
-  function handleOpenOptimizedPlan() {
+  async function handleOpenOptimizedPlan() {
     if (!result) {
       return;
     }
@@ -266,7 +269,16 @@ function HomePage() {
       }),
     );
 
-    setCurrentScreen('checkout');
+    try {
+      const checkoutSession = await createCheckoutSession({
+        vehicleName,
+        buildId: result.id,
+      });
+
+      window.location.href = checkoutSession.url;
+    } catch (error) {
+      alert(error.message || 'No se pudo abrir el pago seguro de Stripe.');
+    }
   }
 
   return (
