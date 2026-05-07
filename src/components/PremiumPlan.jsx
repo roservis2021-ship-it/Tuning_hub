@@ -75,32 +75,92 @@ function pdfEscape(value) {
 
 function buildPdf(lines) {
   const pageHeight = 842;
+  const pageWidth = 595;
+  const marginX = 50;
+  const bottomY = 54;
+  const lineHeight = 16;
+  const maxLineLength = 92;
+  const pageStreams = [];
   let y = 800;
-  const content = ['BT', '/F1 18 Tf', `1 0 0 1 50 ${y} Tm`, `(PLAN OPTIMIZADO) Tj`];
+  let content = [];
 
-  y -= 34;
-  content.push('/F1 12 Tf');
-  for (const line of lines) {
+  function startPage(isFirstPage = false) {
+    y = 800;
+    content = ['BT'];
+
+    if (isFirstPage) {
+      content.push('/F1 18 Tf', `1 0 0 1 ${marginX} ${y} Tm`, '(PLAN OPTIMIZADO) Tj');
+      y -= 34;
+    }
+
+    content.push('/F1 12 Tf');
+  }
+
+  function finishPage() {
+    content.push('ET');
+    pageStreams.push(content.join('\n'));
+  }
+
+  function wrapLine(line) {
+    const words = normalizeText(line).split(' ').filter(Boolean);
+    const chunks = [];
+    let currentLine = '';
+
+    for (const word of words) {
+      const nextLine = currentLine ? `${currentLine} ${word}` : word;
+
+      if (nextLine.length > maxLineLength && currentLine) {
+        chunks.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = nextLine;
+      }
+    }
+
+    if (currentLine) {
+      chunks.push(currentLine);
+    }
+
+    return chunks.length ? chunks : [''];
+  }
+
+  function addLine(line) {
     if (!line) {
       y -= 12;
-      continue;
+      return;
     }
-    if (y < 54) {
-      break;
-    }
-    content.push(`1 0 0 1 50 ${y} Tm (${pdfEscape(line).slice(0, 92)}) Tj`);
-    y -= 16;
-  }
-  content.push('ET');
 
-  const stream = content.join('\n');
+    for (const chunk of wrapLine(line)) {
+      if (y < bottomY) {
+        finishPage();
+        startPage(false);
+      }
+
+      content.push(`1 0 0 1 ${marginX} ${y} Tm (${pdfEscape(chunk)}) Tj`);
+      y -= lineHeight;
+    }
+  }
+
+  startPage(true);
+  lines.forEach(addLine);
+  finishPage();
+
+  const fontObjectId = 3 + pageStreams.length * 2;
+  const pageObjectIds = pageStreams.map((_, index) => 3 + index * 2);
+  const contentObjectIds = pageStreams.map((_, index) => 4 + index * 2);
   const objects = [
-    '<< /Type /Catalog /Pages 2 0 R >>',
-    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
-    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 ${pageHeight}] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>`,
-    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
-    `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`,
+    `<< /Type /Catalog /Pages 2 0 R >>`,
+    `<< /Type /Pages /Kids [${pageObjectIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pageStreams.length} >>`,
   ];
+
+  pageStreams.forEach((stream, index) => {
+    objects.push(
+      `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} ${pageHeight}] /Resources << /Font << /F1 ${fontObjectId} 0 R >> >> /Contents ${contentObjectIds[index]} 0 R >>`,
+    );
+    objects.push(`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`);
+  });
+
+  objects.push('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>');
 
   let pdf = '%PDF-1.4\n';
   const offsets = [0];

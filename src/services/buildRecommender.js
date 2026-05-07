@@ -195,7 +195,77 @@ function createRecommendedPart(part, priority = 'media', impact = 'fiabilidad') 
   };
 }
 
-function createStages(goal, priority, powertrain, usageNote, basePowerCv, vehicle) {
+function extractPowerFromEngine(engine) {
+  const matches = Array.from(
+    String(engine || '').matchAll(/(\d{2,3})(?:\s*[-–]\s*(\d{2,3}))?\s*(?:cv|hp|ps)\b/gi),
+  );
+
+  if (!matches.length) {
+    return null;
+  }
+
+  const [, firstPower, secondPower] = matches[matches.length - 1];
+  const lowPower = Number(firstPower);
+  const highPower = Number(secondPower);
+
+  if (Number.isFinite(lowPower) && Number.isFinite(highPower)) {
+    return Math.round((lowPower + highPower) / 2);
+  }
+
+  return Number.isFinite(lowPower) ? lowPower : null;
+}
+
+function estimateBasePowerCv(vehicle) {
+  const enginePower = extractPowerFromEngine(vehicle.engine);
+
+  if (enginePower) {
+    return enginePower;
+  }
+
+  if (vehicle.powertrain === 'diesel') {
+    return 105;
+  }
+
+  if (vehicle.powertrain === 'hibrido') {
+    return 140;
+  }
+
+  if (vehicle.powertrain === 'electrico') {
+    return 160;
+  }
+
+  return vehicle.aspiration === 'turbo' ? 150 : 125;
+}
+
+function estimateBaseTorqueNm(vehicle, basePowerCv) {
+  const torqueFactor =
+    vehicle.powertrain === 'diesel'
+      ? 2.35
+      : vehicle.powertrain === 'electrico'
+        ? 4.2
+        : vehicle.powertrain === 'hibrido'
+          ? 1.9
+          : vehicle.aspiration === 'turbo'
+            ? 1.68
+            : 1.25;
+
+  return Math.max(120, Math.round(basePowerCv * torqueFactor));
+}
+
+function estimateTorqueGain(gainCv, vehicle) {
+  const torqueFactor =
+    vehicle.powertrain === 'diesel'
+      ? 2.4
+      : vehicle.powertrain === 'electrico'
+        ? 3
+        : vehicle.aspiration === 'turbo'
+          ? 1.65
+          : 1.2;
+
+  return Math.round(gainCv * torqueFactor);
+}
+
+function createStages(goal, priority, powertrain, usageNote, basePowerCv, baseTorqueNm, vehicle) {
   const aggression = priority.aggression ?? 1;
   const turboAggressive = vehicle.aspiration === 'turbo' && aggression >= 1.2;
   const mileageContext = getMileageContext(vehicle.mileageKm);
@@ -207,6 +277,9 @@ function createStages(goal, priority, powertrain, usageNote, basePowerCv, vehicl
   const stageOnePower = basePowerCv + stageGains[0];
   const stageTwoPower = stageOnePower + stageGains[1];
   const stageThreePower = stageTwoPower + stageGains[2];
+  const stageOneTorque = baseTorqueNm + estimateTorqueGain(stageGains[0], vehicle);
+  const stageTwoTorque = stageOneTorque + estimateTorqueGain(stageGains[1], vehicle);
+  const stageThreeTorque = stageTwoTorque + estimateTorqueGain(stageGains[2], vehicle);
 
   return [
     {
@@ -227,7 +300,7 @@ function createStages(goal, priority, powertrain, usageNote, basePowerCv, vehicl
       ],
       gainCv: 0,
       powerAfterCv: basePowerCv,
-      estimatedTorqueNm: 0,
+      estimatedTorqueNm: baseTorqueNm,
       costRangeEuro: '300-600 €',
       reliability: 'alta',
       difficulty: 'baja',
@@ -268,7 +341,7 @@ function createStages(goal, priority, powertrain, usageNote, basePowerCv, vehicl
       ],
       gainCv: stageGains[0],
       powerAfterCv: stageOnePower,
-      estimatedTorqueNm: Math.round(stageGains[0] * (vehicle.powertrain === 'diesel' ? 2.3 : 1.6)),
+      estimatedTorqueNm: stageOneTorque,
       costRangeEuro: '700-1.500 €',
       reliability: 'alta',
       difficulty: 'media',
@@ -312,7 +385,7 @@ function createStages(goal, priority, powertrain, usageNote, basePowerCv, vehicl
       ],
       gainCv: stageGains[1],
       powerAfterCv: stageTwoPower,
-      estimatedTorqueNm: Math.round(stageGains[1] * (vehicle.powertrain === 'diesel' ? 2.5 : 1.7)),
+      estimatedTorqueNm: stageTwoTorque,
       costRangeEuro: '1.200-2.800 €',
       reliability: priority.aggression > 1.2 ? 'media' : 'alta',
       difficulty: 'media',
@@ -358,7 +431,7 @@ function createStages(goal, priority, powertrain, usageNote, basePowerCv, vehicl
       ],
       gainCv: stageGains[2],
       powerAfterCv: stageThreePower,
-      estimatedTorqueNm: Math.round(stageGains[2] * (vehicle.powertrain === 'diesel' ? 2.6 : 1.8)),
+      estimatedTorqueNm: stageThreeTorque,
       costRangeEuro: '1.800-4.500 €',
       reliability: priority.aggression > 1.2 ? 'exigente' : 'media',
       difficulty: 'alta',
@@ -399,13 +472,9 @@ export function generateBuildRecommendation(vehicle) {
   const vehicleDescriptor = [vehicle.model, vehicle.generation, vehicle.engine]
     .filter(Boolean)
     .join(' ');
-  const basePowerCv =
-    vehicle.powertrain === 'diesel'
-      ? 105
-      : vehicle.aspiration === 'turbo'
-        ? 150
-        : 125;
-  const stages = createStages(goal, priority, powertrain, usageNote, basePowerCv, vehicle);
+  const basePowerCv = estimateBasePowerCv(vehicle);
+  const baseTorqueNm = estimateBaseTorqueNm(vehicle, basePowerCv);
+  const stages = createStages(goal, priority, powertrain, usageNote, basePowerCv, baseTorqueNm, vehicle);
   const finalPowerCv = stages[stages.length - 1]?.powerAfterCv ?? basePowerCv;
   const recommendedParts = [
     createRecommendedPart(stages[0].parts[0], 'alta', 'fiabilidad'),
@@ -442,7 +511,7 @@ export function generateBuildRecommendation(vehicle) {
       vehicleSheet: {
         engineCode: 'No confirmado',
         powerCv: basePowerCv,
-        torqueNm: 0,
+        torqueNm: baseTorqueNm,
         engine: vehicle.engine || 'Motor por confirmar',
         infoText:
           'Esta build es orientativa porque no se ha podido confirmar el codigo motor exacto. Antes de comprar piezas, verifica la referencia OEM o el VIN.',
@@ -503,6 +572,7 @@ export function generateBuildRecommendation(vehicle) {
       reliablePowerLimit: `${finalPowerCv} CV orientativos con soporte adecuado.`,
     },
     basePowerCv,
+    baseTorqueNm,
     finalPowerCv,
     expectedGain:
       priority.aggression > 1.2

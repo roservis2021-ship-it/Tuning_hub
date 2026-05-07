@@ -352,10 +352,6 @@ function CarForm({ onSubmit }) {
 
   return (
     <section className="panel panel--form">
-      <div className="section-heading">
-        <h2>Tu vehiculo</h2>
-      </div>
-
       <form className="car-form" onSubmit={handleSubmit}>
         <div className="form-row">
           <label className="form-field">

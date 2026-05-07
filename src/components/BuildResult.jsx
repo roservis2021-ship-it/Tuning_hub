@@ -409,10 +409,10 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
       lower.includes('turbo')
     );
   };
-  const freeRiskItemsLimited = [
+  const freeRiskItemsLimited = Array.from(new Set([
     ...(freeBuild.risks || []).filter(isUsefulRisk).map(cleanRiskItem),
     ...defaultRiskItems,
-  ].slice(0, 3);
+  ])).slice(0, 3);
   const premiumBenefits = (freePremiumOffer.benefits?.length ? freePremiumOffer.benefits : salesBlock.benefits || [
     'Orden exacto antes de comprar piezas',
     'Compatibilidades filtradas para tu motor',
@@ -545,7 +545,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
                 correcta en el momento equivocado.
               </p>
               <div className="free-build-error-list">
-                {freeRiskItemsLimited.map((item, index) => (
+                {freeRiskItemsLimited.map((item) => (
                   <article key={item}>
                     <WarningIcon />
                     <p>{item}</p>

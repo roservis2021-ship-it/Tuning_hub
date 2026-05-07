@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import CarForm from '../components/CarForm';
 import BuildResult from '../components/BuildResult';
 import PremiumPlan from '../components/PremiumPlan';
-import StripeCheckoutScreen from '../components/StripeCheckoutScreen';
 import { generateBuildRecommendation } from '../services/buildRecommender';
 import { logUserSearch } from '../services/firebaseBuildLibraryService';
 import { generateAiBuild } from '../services/aiBuildService';
@@ -117,8 +116,10 @@ function HomePage() {
     }
 
     async function restoreCheckout() {
+      let storedCheckout = {};
+
       try {
-        const storedCheckout = JSON.parse(
+        storedCheckout = JSON.parse(
           window.sessionStorage.getItem(PENDING_CHECKOUT_STORAGE_KEY) || '{}',
         );
 
@@ -129,6 +130,15 @@ function HomePage() {
 
         if (checkoutStatus === 'success') {
           const sessionId = searchParams.get('session_id');
+
+          if (!sessionId) {
+            setResult(storedCheckout.result);
+            setVehicle(storedCheckout.vehicle);
+            setBuildMeta(storedCheckout.buildMeta || null);
+            setCurrentScreen('build');
+            return;
+          }
+
           const sessionStatus = await getCheckoutSessionStatus(sessionId);
 
           if (!sessionStatus.paid) {
@@ -151,6 +161,14 @@ function HomePage() {
           setCurrentScreen('build');
         }
       } catch (error) {
+        if (storedCheckout.result && storedCheckout.vehicle) {
+          setResult(storedCheckout.result);
+          setVehicle(storedCheckout.vehicle);
+          setBuildMeta(storedCheckout.buildMeta || null);
+          setCurrentScreen('build');
+          return;
+        }
+
         setCurrentScreen('landing');
       }
     }
@@ -328,21 +346,6 @@ function HomePage() {
           <PremiumPlan
             result={result}
             vehicle={vehicle}
-            onBack={() => setCurrentScreen('build')}
-          />
-        </section>
-      ) : currentScreen === 'checkout' ? (
-        <section className="screen-shell">
-          <StripeCheckoutScreen
-            result={result}
-            vehicleName={[
-              result?.vehicleIdentity?.canonicalBrand || vehicle?.brand,
-              result?.vehicleIdentity?.canonicalModel || vehicle?.model,
-              result?.vehicleIdentity?.canonicalGeneration || vehicle?.generation,
-              result?.vehicleIdentity?.canonicalEngine || vehicle?.engine,
-            ]
-              .filter(Boolean)
-              .join(' ')}
             onBack={() => setCurrentScreen('build')}
           />
         </section>
