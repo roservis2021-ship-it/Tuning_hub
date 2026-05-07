@@ -474,16 +474,16 @@ export function generateBuildRecommendation(vehicle) {
       premiumOffer: {
         title: 'Plan optimizado con codigo motor verificado',
         intro:
-          'El plan optimizado parte de la variante exacta para ordenar piezas, evitar incompatibilidades y no gastar dos veces.',
+          'El plan optimizado parte de la variante exacta para decidir que comprar, en que orden montarlo y que evitar antes de gastar dinero.',
         benefits: [
-          'Plan completo de instalaciones',
-          'Orden exacto de instalacion',
-          'Piezas recomendadas para tu motor',
-          'Errores especificos de tu motor',
+          'Orden exacto antes de comprar piezas',
+          'Compatibilidades filtradas para tu motor',
+          'Errores criticos que debes evitar',
+          'Ruta por presupuesto para no gastar dos veces',
         ],
-        cta: 'Obtener plan optimizado',
+        cta: 'Ver plan antes de comprar piezas',
         finalReinforcement:
-          'Sin confirmar el codigo motor, cualquier build debe tratarse como orientativa.',
+          'Sin confirmar el codigo motor, comprar piezas es apostar con tu presupuesto.',
       },
     },
     vehicleDiagnosis: {
@@ -537,9 +537,9 @@ export function generateBuildRecommendation(vehicle) {
     stages,
     recommendedParts,
     conversionTrigger:
-      'El error mas caro suele ser comprar una pieza de potencia antes de confirmar mantenimiento, referencias y limites de transmision.',
+      'El error mas caro suele ser comprar piezas antes de confirmar codigo motor, orden y limites reales de transmision.',
     premiumUpsell:
-      'Desbloquea el plan optimizado para ver el orden exacto de instalacion, dependencias entre piezas y como repartir el presupuesto sin comprar dos veces.',
+      'Usa el plan optimizado para saber que comprar primero, que dejar para despues y que piezas pueden hacerte gastar dos veces.',
     conclusion: {
       recommendedStage: 'STAGE 1',
       why: 'Es el mejor equilibrio entre coste, sensacion real y fiabilidad para empezar.',

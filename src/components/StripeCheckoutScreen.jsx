@@ -118,8 +118,8 @@ function StripeCheckoutScreen({ result, vehicleName, onBack }) {
         <span>Plan optimizado</span>
         <h1>Completa el pago</h1>
         <p>
-          Pago unico de 3,99 €. Al finalizar, desbloquearemos el plan de ejecucion completo
-          para tu coche.
+          Pago unico de 3,99 €. Al finalizar, tendras el plan de ejecucion completo para
+          comprar con orden y evitar errores caros en tu coche.
         </p>
         {error ? (
           <div className="checkout-screen__error">

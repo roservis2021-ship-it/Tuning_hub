@@ -369,9 +369,9 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
   const freeModificationParts = (freeModifications.parts || []).map(normalizeRecommendedPart);
   const modificationParts = (freeModificationParts.length ? freeModificationParts : recommendedParts.length ? recommendedParts : stageOneParts).slice(0, 4);
   const defaultRiskItems = [
-    'Montar piezas sin orden puede forzar turbo y mezcla.',
-    'Subir par sin revisar embrague puede salir caro.',
-    'Comprar piezas sin referencias puede generar doble gasto.',
+    'Reprogramar sin logs puede disparar temperatura y romper turbo.',
+    'Subir par sin revisar embrague puede acabar patinando al acelerar.',
+    'Comprar piezas sin codigo motor puede obligarte a pagar dos veces.',
   ];
   const cleanRiskItem = (item) => {
     const text = String(item);
@@ -402,6 +402,8 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
       lower.includes('forzar') ||
       lower.includes('salir caro') ||
       lower.includes('doble gasto') ||
+      lower.includes('pagar dos veces') ||
+      lower.includes('patinando') ||
       lower.includes('temperatura') ||
       lower.includes('embrague') ||
       lower.includes('turbo')
@@ -412,10 +414,10 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
     ...defaultRiskItems,
   ].slice(0, 3);
   const premiumBenefits = (freePremiumOffer.benefits?.length ? freePremiumOffer.benefits : salesBlock.benefits || [
-    'Plan completo de instalaciones',
-    'Orden exacto de instalacion',
-    'Piezas recomendadas para tu configuracion',
-    'Errores especificos de tu motor',
+    'Orden exacto antes de comprar piezas',
+    'Compatibilidades filtradas para tu motor',
+    'Errores criticos que debes evitar',
+    'Ruta por presupuesto para no gastar dos veces',
   ]).filter(Boolean).slice(0, 4);
   const freeSlides = [
     'Ficha',
@@ -537,10 +539,10 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
             <div className="free-build-slide__shade" />
             <div className="free-build-slide__content">
               <span className="free-build-eyebrow">Riesgos</span>
-              <h2>Lo que puede salir caro</h2>
+              <h2>Donde se pierde dinero</h2>
               <p>
-                Estos fallos aparecen cuando se modifica sin orden, sin verificar piezas o sin
-                revisar la base. Son errores comunes que pueden acabar en averias o doble gasto.
+                La mayoria de fallos no vienen de querer mas potencia, sino de montar la pieza
+                correcta en el momento equivocado.
               </p>
               <div className="free-build-error-list">
                 {freeRiskItemsLimited.map((item, index) => (
@@ -558,10 +560,10 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
             <div className="free-build-slide__shade" />
             <div className="free-build-slide__content">
               <span className="free-build-eyebrow">Plan optimizado</span>
-              <h2>Comienza tu proyecto con claridad</h2>
+              <h2>Compra con menos dudas</h2>
               <p>
-                El plan optimizado te da el plan de ejecucion completo para comprar mejor,
-                instalar en orden y evitar errores especificos de tu motor.
+                Antes de gastar en piezas, revisa el orden correcto, que montar primero y que
+                evitar en tu motor para no pagar dos veces.
               </p>
               <ul className="free-build-checks">
                 {premiumBenefits.map((benefit) => (
@@ -574,12 +576,12 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
                 <del>6,99 €</del>
               </div>
               <button type="button" onClick={onOpenOptimizedPlan}>
-                {freePremiumOffer.cta || salesBlock.cta || 'Obtener plan optimizado'}
+                {freePremiumOffer.cta || salesBlock.cta || 'Ver plan antes de comprar piezas'}
               </button>
               <small>
                 {freePremiumOffer.finalReinforcement ||
                   salesBlock.finalReinforcement ||
-                  'En esta build, el orden de instalacion marca la diferencia entre mejorar el coche o gastar dos veces.'}
+                  'Una sola pieza mal elegida suele costar mas que revisar el plan completo antes de empezar.'}
               </small>
             </div>
           </article>
@@ -592,7 +594,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
             type="button"
             onClick={onOpenOptimizedPlan}
           >
-            Obtener plan optimizado
+            Ver plan antes de comprar piezas
           </button>
         </div>
       )}
