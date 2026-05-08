@@ -26,12 +26,30 @@ function waitForStripe() {
   });
 }
 
-function StripeCheckoutScreen({ result, vehicleName, onBack }) {
+const CHECKOUT_COPY = {
+  plan_action: {
+    label: 'Plan de Accion',
+    title: 'Completa el pago',
+    price: '4,99 EUR',
+    copy:
+      'Pago unico de 4,99 EUR. Al finalizar, tendras el plan de ejecucion completo para comprar mejor, instalar en orden y evitar errores caros.',
+  },
+  extra_build: {
+    label: 'Build extra',
+    title: 'Genera otra build',
+    price: '0,89 EUR',
+    copy:
+      'Pago unico de 0,89 EUR. Al finalizar, generaremos una build adicional sin esperar al reinicio del limite gratuito.',
+  },
+};
+
+function StripeCheckoutScreen({ checkoutType = 'plan_action', buildId, vehicleName, onBack }) {
   const checkoutRef = useRef(null);
   const mountedCheckoutRef = useRef(null);
   const [error, setError] = useState('');
   const [fallbackReady, setFallbackReady] = useState(false);
   const [isOpeningHostedCheckout, setIsOpeningHostedCheckout] = useState(false);
+  const checkoutCopy = CHECKOUT_COPY[checkoutType] || CHECKOUT_COPY.plan_action;
 
   useEffect(() => {
     let isMounted = true;
@@ -51,7 +69,8 @@ function StripeCheckoutScreen({ result, vehicleName, onBack }) {
           fetchClientSecret: async () => {
             const session = await createEmbeddedCheckoutSession({
               vehicleName,
-              buildId: result?.id,
+              buildId,
+              checkoutType,
             });
 
             return session.clientSecret;
@@ -85,7 +104,7 @@ function StripeCheckoutScreen({ result, vehicleName, onBack }) {
       mountedCheckoutRef.current?.destroy();
       mountedCheckoutRef.current = null;
     };
-  }, [result?.id, vehicleName]);
+  }, [buildId, checkoutType, vehicleName]);
 
   async function handleOpenHostedCheckout() {
     setIsOpeningHostedCheckout(true);
@@ -94,7 +113,8 @@ function StripeCheckoutScreen({ result, vehicleName, onBack }) {
     try {
       const session = await createCheckoutSession({
         vehicleName,
-        buildId: result?.id,
+        buildId,
+        checkoutType,
       });
 
       window.location.href = session.url;
@@ -115,12 +135,10 @@ function StripeCheckoutScreen({ result, vehicleName, onBack }) {
       </header>
 
       <article className="checkout-screen__card">
-        <span>Plan optimizado</span>
-        <h1>Completa el pago</h1>
-        <p>
-          Pago unico de 3,99 €. Al finalizar, tendras el plan de ejecucion completo para
-          comprar con orden y evitar errores caros en tu coche.
-        </p>
+        <span>{checkoutCopy.label}</span>
+        <h1>{checkoutCopy.title}</h1>
+        <p>{checkoutCopy.copy}</p>
+        <strong className="checkout-screen__price">{checkoutCopy.price}</strong>
         {error ? (
           <div className="checkout-screen__error">
             <strong>No se pudo cargar Stripe</strong>

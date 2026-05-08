@@ -59,14 +59,16 @@ const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 const OPENAI_ENABLE_WEB_SEARCH = process.env.OPENAI_ENABLE_WEB_SEARCH !== 'false';
 const OPENAI_WEB_SEARCH_TOOL = process.env.OPENAI_WEB_SEARCH_TOOL || 'web_search_preview';
 const OPENAI_MAX_OUTPUT_TOKENS = Number(process.env.OPENAI_MAX_OUTPUT_TOKENS || 16000);
-const STRIPE_CHECKOUT_PRICE_EURO_CENTS = resolveStripeCheckoutPriceCents(
-  process.env.STRIPE_CHECKOUT_PRICE_EURO_CENTS,
+const STRIPE_ACTION_PLAN_PRICE_EURO_CENTS = resolveStripeCheckoutPriceCents(
+  process.env.STRIPE_ACTION_PLAN_PRICE_EURO_CENTS,
+  499,
 );
-const STRIPE_CHECKOUT_PRODUCT_NAME = process.env.STRIPE_CHECKOUT_PRODUCT_NAME || 'Plan optimizado Tuning HUB';
+const STRIPE_EXTRA_BUILD_PRICE_EURO_CENTS = resolveStripeCheckoutPriceCents(
+  process.env.STRIPE_EXTRA_BUILD_PRICE_EURO_CENTS,
+  89,
+);
 
-function resolveStripeCheckoutPriceCents(rawValue) {
-  const fallbackPriceCents = 399;
-
+function resolveStripeCheckoutPriceCents(rawValue, fallbackPriceCents = 499) {
   if (!rawValue) {
     return fallbackPriceCents;
   }
@@ -467,7 +469,30 @@ function createStripeFormBody(params) {
   return body;
 }
 
-async function createStripeCheckoutSession({ origin, vehicleName, buildId }) {
+function getStripeCheckoutProduct(checkoutType, vehicleName) {
+  const normalizedType = checkoutType === 'extra_build' ? 'extra_build' : 'plan_action';
+  const vehicleSuffix = vehicleName ? ` - ${String(vehicleName).slice(0, 80)}` : '';
+
+  if (normalizedType === 'extra_build') {
+    return {
+      checkoutType: normalizedType,
+      priceId: process.env.STRIPE_EXTRA_BUILD_PRICE_ID,
+      unitAmount: STRIPE_EXTRA_BUILD_PRICE_EURO_CENTS,
+      name: `Generacion extra Tuning HUB${vehicleSuffix}`,
+      description: 'Generacion adicional de build free sin esperar al reinicio del limite gratuito.',
+    };
+  }
+
+  return {
+    checkoutType: normalizedType,
+    priceId: process.env.STRIPE_ACTION_PLAN_PRICE_ID,
+    unitAmount: STRIPE_ACTION_PLAN_PRICE_EURO_CENTS,
+    name: `Plan de Accion Tuning HUB${vehicleSuffix}`,
+    description: 'Guia especifica con orden de instalacion, compatibilidad de piezas y ficha tecnica descargable.',
+  };
+}
+
+async function createStripeCheckoutSession({ origin, vehicleName, buildId, checkoutType }) {
   if (!process.env.STRIPE_SECRET_KEY) {
     throw new Error('Falta STRIPE_SECRET_KEY en el entorno del backend.');
   }
@@ -475,28 +500,26 @@ async function createStripeCheckoutSession({ origin, vehicleName, buildId }) {
   const normalizedOrigin = String(origin || '').replace(/\/$/, '');
   const successUrl = `${normalizedOrigin}/?checkout=success&session_id={CHECKOUT_SESSION_ID}`;
   const cancelUrl = `${normalizedOrigin}/?checkout=cancel`;
-  const productName = vehicleName
-    ? `${STRIPE_CHECKOUT_PRODUCT_NAME} - ${String(vehicleName).slice(0, 80)}`
-    : STRIPE_CHECKOUT_PRODUCT_NAME;
+  const product = getStripeCheckoutProduct(checkoutType, vehicleName);
 
   const params = {
     mode: 'payment',
     success_url: successUrl,
     cancel_url: cancelUrl,
     client_reference_id: buildId || undefined,
+    'metadata[checkoutType]': product.checkoutType,
     'metadata[buildId]': buildId || undefined,
     'metadata[vehicle]': vehicleName ? String(vehicleName).slice(0, 450) : undefined,
     'line_items[0][quantity]': 1,
   };
 
-  if (process.env.STRIPE_PRICE_ID) {
-    params['line_items[0][price]'] = process.env.STRIPE_PRICE_ID;
+  if (product.priceId) {
+    params['line_items[0][price]'] = product.priceId;
   } else {
     params['line_items[0][price_data][currency]'] = 'eur';
-    params['line_items[0][price_data][unit_amount]'] = STRIPE_CHECKOUT_PRICE_EURO_CENTS;
-    params['line_items[0][price_data][product_data][name]'] = productName;
-    params['line_items[0][price_data][product_data][description]'] =
-      'Plan de ejecucion completo, orden de instalacion y ficha tecnica descargable.';
+    params['line_items[0][price_data][unit_amount]'] = product.unitAmount;
+    params['line_items[0][price_data][product_data][name]'] = product.name;
+    params['line_items[0][price_data][product_data][description]'] = product.description;
   }
 
   const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
@@ -531,35 +554,33 @@ async function createStripeCheckoutSession({ origin, vehicleName, buildId }) {
   };
 }
 
-async function createStripeEmbeddedCheckoutSession({ origin, vehicleName, buildId }) {
+async function createStripeEmbeddedCheckoutSession({ origin, vehicleName, buildId, checkoutType }) {
   if (!process.env.STRIPE_SECRET_KEY) {
     throw new Error('Falta STRIPE_SECRET_KEY en el entorno del backend.');
   }
 
   const normalizedOrigin = String(origin || '').replace(/\/$/, '');
   const returnUrl = `${normalizedOrigin}/?checkout=success&session_id={CHECKOUT_SESSION_ID}`;
-  const productName = vehicleName
-    ? `${STRIPE_CHECKOUT_PRODUCT_NAME} - ${String(vehicleName).slice(0, 80)}`
-    : STRIPE_CHECKOUT_PRODUCT_NAME;
+  const product = getStripeCheckoutProduct(checkoutType, vehicleName);
 
   const params = {
     mode: 'payment',
     ui_mode: 'embedded',
     return_url: returnUrl,
     client_reference_id: buildId || undefined,
+    'metadata[checkoutType]': product.checkoutType,
     'metadata[buildId]': buildId || undefined,
     'metadata[vehicle]': vehicleName ? String(vehicleName).slice(0, 450) : undefined,
     'line_items[0][quantity]': 1,
   };
 
-  if (process.env.STRIPE_PRICE_ID) {
-    params['line_items[0][price]'] = process.env.STRIPE_PRICE_ID;
+  if (product.priceId) {
+    params['line_items[0][price]'] = product.priceId;
   } else {
     params['line_items[0][price_data][currency]'] = 'eur';
-    params['line_items[0][price_data][unit_amount]'] = STRIPE_CHECKOUT_PRICE_EURO_CENTS;
-    params['line_items[0][price_data][product_data][name]'] = productName;
-    params['line_items[0][price_data][product_data][description]'] =
-      'Plan de ejecucion completo, orden de instalacion y ficha tecnica descargable.';
+    params['line_items[0][price_data][unit_amount]'] = product.unitAmount;
+    params['line_items[0][price_data][product_data][name]'] = product.name;
+    params['line_items[0][price_data][product_data][description]'] = product.description;
   }
 
   const stripeResponse = await fetch('https://api.stripe.com/v1/checkout/sessions', {
@@ -631,6 +652,7 @@ async function retrieveStripeCheckoutSession(sessionId) {
     status: payload.status,
     paymentStatus: payload.payment_status,
     paid: payload.payment_status === 'paid',
+    checkoutType: payload.metadata?.checkoutType || 'plan_action',
     buildId: payload.metadata?.buildId || payload.client_reference_id || '',
   };
 }
@@ -770,8 +792,8 @@ function buildPrompt(vehicle) {
       ? 'Usa busqueda web antes de fijar CV de serie y caracteristicas. No basta con memoria general.'
       : 'Antes de estimar la potencia, usa tu conocimiento tecnico y se prudente si no tienes confirmacion exacta.',
     'Modo FREE visible obligatorio:',
-    '1. La build FREE visible NO va por stages. Debe ser una recomendacion generalizada presentada en 5 bloques tipo slide.',
-    '2. Genera el objeto freeBuild obligatorio con estos 5 bloques: vehicleSheet, preInstallation, modifications, risks y premiumOffer.',
+    '1. La build FREE visible NO va por stages. Debe ser una recomendacion generalizada presentada en 4 slides visibles.',
+    '2. Genera el objeto freeBuild obligatorio con vehicleSheet, preInstallation, modifications, risks y premiumOffer. risks se usara como avisos breves dentro del slide de modificaciones, no como slide propio.',
     '3. vehicleSheet debe incluir engineCode, powerCv, torqueNm, engine y infoText. engineCode debe ser el codigo motor exacto o "No confirmado".',
     '4. preInstallation debe dar recomendaciones previas utiles: mantenimiento al dia, diagnosis, fluidos, bujias/filtros/correas/embrague/turbo/refrigeracion segun aplique.',
     '5. modifications debe explicar potencial segun marca/modelo/motor/generacion/aspiracion/traccion/kilometraje, proponer maximo 4 piezas y estimar potencia/par posibles.',
@@ -779,35 +801,35 @@ function buildPrompt(vehicle) {
     '7. Cada riesgo debe ser MUY CORTO: maximo 18 palabras. Una sola frase. Nada de parrafos.',
     '8. X debe ser un error real que comete el usuario al modificar: instalar piezas sin orden, comprar piezas incompatibles, reprogramar sin diagnosis/logs, subir par sin revisar embrague/transmision, mejorar flujo sin controlar temperatura o montar escape/admisión sin calibracion.',
     '9. Y debe ser una consecuencia concreta: rotura de turbo, embrague patinando, mezcla pobre/rica, temperaturas de admision altas, fallo de inyeccion, perdida de rendimiento, averia de motor o gasto doble en piezas.',
-    '10. No menciones soluciones completas ni el plan optimizado dentro de risks. Solo el error y la consecuencia.',
-    '11. El bloque de plan optimizado posterior sera el que conecte esos miedos con la venta.',
+    '10. No menciones soluciones completas ni el Plan de Accion dentro de risks. Solo el error y la consecuencia.',
+    '11. El bloque de Plan de Accion posterior sera el que conecte esos miedos con la venta.',
     '12. Prohibido escribir consejos genericos en risks: no uses "se recomienda", "es esencial", "piezas de calidad", "talleres especializados" ni "mantenimiento periodico".',
     '13. Ejemplo de tono: "Montar piezas sin orden puede forzar turbo y mezcla."',
     '14. Otro ejemplo: "Comprar piezas sin codigo motor puede salir caro."',
     '14B. Para aumentar conversion, los riesgos deben sonar como perdida evitable: turbo, embrague, temperatura, mezcla, inyeccion, rendimiento o pagar dos veces.',
     '14C. Mejor tono: "Reprogramar sin logs puede disparar temperatura y romper turbo." o "Comprar piezas sin codigo motor puede obligarte a pagar dos veces."',
     '14D. Evita riesgos blandos tipo "usar piezas malas"; usa causa concreta + consecuencia concreta en maximo 16 palabras.',
-    '15. premiumOffer debe explicar que ofrece el Plan optimizado: plan completo de instalaciones, orden exacto, piezas recomendadas y errores especificos del motor.',
+    '15. premiumOffer debe explicar que ofrece el Plan de Accion: plan completo de instalaciones, orden exacto, piezas recomendadas y errores especificos del motor.',
     '15B. premiumOffer debe vender decision antes de gasto: saber que comprar primero, que evitar y como no tirar dinero en piezas incompatibles.',
-    '15C. CTA preferido: "Ver plan antes de comprar piezas". Refuerzo final: una pieza mal elegida suele costar mas que revisar el plan.',
+    '15C. CTA preferido: "Descubrir plan de accion". Refuerzo final: una pieza mal elegida suele costar mas que revisar el plan.',
     '16. No revelar el orden completo de instalacion ni dependencias criticas en la parte FREE.',
     '17. No mostrar mas de 3-4 piezas recomendadas.',
     '18. Mantener lenguaje claro, profesional, directo y creible.',
     '19. El usuario debe entender el potencial del coche, ver una mejora clara, detectar problemas y sentir que necesita el plan completo.',
     '',
-    'Bloque de venta Plan optimizado obligatorio:',
-    '1. Genera premiumSalesBlock como un bloque de conversion tecnico y no agresivo. En texto visible llamalo siempre "Plan optimizado", no "premium".',
+    'Bloque de venta Plan de Accion obligatorio:',
+    '1. Genera premiumSalesBlock como un bloque de conversion tecnico y no agresivo. En texto visible llamalo siempre "Plan de Accion", no "premium".',
     '2. Conecta directamente con conversionTrigger, que debe ser el riesgo detectado especifico para ese motor.',
     '3. Explica que sin el plan puede haber problemas, que el orden es clave y que no todas las piezas funcionan igual.',
     '4. Incluye bullets sobre gastar dinero innecesario, perder rendimiento y provocar fallos mecanicos.',
     '5. Incluye beneficios reales: orden exacto, piezas compatibles, evitar errores comunes y optimizacion por presupuesto.',
-    '6. Precio de oferta 3.99, precio anterior 6.99 tachado y CTA claro como "Obtener plan optimizado" o "Ver como hacerlo correctamente".',
-    '7. El bloque de Plan optimizado debe recoger los miedos de risks y presentarse como la forma segura de evitar esos errores antes de comprar o instalar piezas.',
+    '6. Precio de oferta 4.99, precio anterior 6.99 tachado y CTA claro: "Descubrir plan de accion".',
+    '7. El bloque de Plan de Accion debe recoger los miedos de risks y presentarse como la forma segura de evitar esos errores antes de comprar o instalar piezas.',
     '8. El bloque de venta debe ser sutil: no asustar con drama, sino hacer evidente que decidir sin orden puede costar mas que el plan.',
-    '9. Presenta el Plan optimizado como una compra de claridad antes de comprar piezas, no como contenido extra generico.',
+    '9. Presenta el Plan de Accion como una compra de claridad antes de comprar piezas, no como contenido extra generico.',
     '',
     'Build PREMIUM generada pero NO visible completa:',
-    '1. Genera premiumPlan como Plan optimizado para una experiencia por slides despues del pago.',
+    '1. Genera premiumPlan como Plan de Accion para una experiencia por slides despues del pago.',
     '2. installOrder debe ser el orden exacto de instalacion, con pasos claros y accionables como en una ficha tecnica.',
     '3. dependencies debe explicar que revisar o montar antes de cada paso para no romper ni gastar dos veces.',
     '4. specificWarnings debe contener errores criticos a evitar, especificos del motor/plataforma, no consejos genericos.',
@@ -847,7 +869,7 @@ function buildPrompt(vehicle) {
     'Cada stage debe incluir focus, note, whyThisStage, bestFor, watchouts, parts, gainCv, powerAfterCv, objective, estimatedTorqueNm, costRangeEuro, reliability, difficulty, legalImpact, detailLevel, premiumLocked, installOrder y dependencies.',
     'En STAGE 0 y STAGE 1: detailLevel "full", premiumLocked false. En STAGE 1 no incluyas orden completo de instalacion; installOrder debe estar vacio o tener solo una indicacion general no secuencial.',
     'En STAGE 2 y STAGE 3: detailLevel "summary", premiumLocked true, installOrder y dependencies vacios.',
-    'premiumUpsell debe resumir el beneficio real del Plan optimizado sin sonar agresivo.',
+    'premiumUpsell debe resumir el beneficio real del Plan de Accion sin sonar agresivo.',
     'conclusion debe incluir recommendedStage, why y whatToAvoid.',
     'accessTier debe ser "free".',
     'La respuesta debe ser estrictamente JSON siguiendo el schema. No incluyas texto fuera del JSON.',
@@ -1687,6 +1709,7 @@ const server = createServer(async (request, response) => {
         origin: payload.origin || getRequestOrigin(request),
         vehicleName: payload.vehicleName,
         buildId: payload.buildId,
+        checkoutType: payload.checkoutType,
       });
 
       sendJson(response, 200, session);
@@ -1706,6 +1729,7 @@ const server = createServer(async (request, response) => {
         origin: payload.origin || getRequestOrigin(request),
         vehicleName: payload.vehicleName,
         buildId: payload.buildId,
+        checkoutType: payload.checkoutType,
       });
 
       sendJson(response, 200, session);

@@ -1,9 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import freeBuildFichaBg from '../assets/free-build-ficha.png';
 import freeBuildModificacionesBg from '../assets/free-build-modificaciones.png';
 import freeBuildPreinstalacionBg from '../assets/free-build-preinstalacion.png';
 import freeBuildPremiumBg from '../assets/free-build-premium.png';
-import freeBuildRiesgosBg from '../assets/free-build-riesgos.png';
 import { getPartVisual } from '../services/partVisuals';
 import { getVehicleImage } from '../services/vehicleVisuals';
 
@@ -201,6 +200,79 @@ function WarningIcon() {
   );
 }
 
+function playSoftNoticeFeedback() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  if (navigator.vibrate) {
+    navigator.vibrate(18);
+  }
+
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) {
+      return;
+    }
+
+    const audioContext = new AudioContext();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.value = 520;
+    gainNode.gain.value = 0.018;
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.08);
+  } catch (error) {
+    // El aviso visual sigue funcionando aunque el navegador bloquee el audio.
+  }
+}
+
+function ModificationRiskNotice({ active, items }) {
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const noticeItems = items.filter(Boolean).slice(0, 3);
+
+  useEffect(() => {
+    if (!active || !noticeItems.length) {
+      setActiveIndex(-1);
+      return undefined;
+    }
+
+    let currentIndex = 0;
+    let hideTimerId = null;
+
+    function showNotice() {
+      setActiveIndex(currentIndex % noticeItems.length);
+      playSoftNoticeFeedback();
+      currentIndex += 1;
+      hideTimerId = window.setTimeout(() => setActiveIndex(-1), 3200);
+    }
+
+    showNotice();
+    const intervalId = window.setInterval(showNotice, 10500);
+
+    return () => {
+      window.clearInterval(intervalId);
+      if (hideTimerId) {
+        window.clearTimeout(hideTimerId);
+      }
+    };
+  }, [active, noticeItems.join('|')]);
+
+  if (!active || activeIndex < 0 || !noticeItems[activeIndex]) {
+    return null;
+  }
+
+  return (
+    <div className="free-build-risk-toast" role="status" aria-live="polite">
+      <WarningIcon />
+      <span>{noticeItems[activeIndex]}</span>
+    </div>
+  );
+}
+
 function getStagePriceRange(stage) {
   if (stage?.costRangeEuro) {
     return stage.costRangeEuro;
@@ -310,7 +382,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
   const reliableLimit = technicalProfile.reliablePowerLimitCv || result?.finalPowerCv;
 
   function goToFreeSlide(index) {
-    setActiveFreeSlide(Math.min(Math.max(index, 0), 4));
+    setActiveFreeSlide(Math.min(Math.max(index, 0), 3));
   }
 
   function handleFreeTouchEnd(event) {
@@ -368,6 +440,20 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
   );
   const freeModificationParts = (freeModifications.parts || []).map(normalizeRecommendedPart);
   const modificationParts = (freeModificationParts.length ? freeModificationParts : recommendedParts.length ? recommendedParts : stageOneParts).slice(0, 4);
+  const possiblePowerValue = Number(freeModifications.possiblePowerCv);
+  const possibleTorqueValue = Number(freeModifications.possibleTorqueNm);
+  const freePossiblePowerCv =
+    Number.isFinite(possiblePowerValue) && possiblePowerValue > 0
+      ? possiblePowerValue < Number(basePower || 0)
+        ? Number(basePower || 0) + possiblePowerValue
+        : possiblePowerValue
+      : stageOnePower;
+  const freePossibleTorqueNm =
+    Number.isFinite(possibleTorqueValue) && possibleTorqueValue > 0
+      ? possibleTorqueValue < Number(stockTorque || 0)
+        ? Number(stockTorque || 0) + possibleTorqueValue
+        : possibleTorqueValue
+      : stageOneTorque;
   const defaultRiskItems = [
     'Reprogramar sin logs puede disparar temperatura y romper turbo.',
     'Subir par sin revisar embrague puede acabar patinando al acelerar.',
@@ -413,18 +499,19 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
     ...(freeBuild.risks || []).filter(isUsefulRisk).map(cleanRiskItem),
     ...defaultRiskItems,
   ])).slice(0, 3);
-  const premiumBenefits = (freePremiumOffer.benefits?.length ? freePremiumOffer.benefits : salesBlock.benefits || [
-    'Orden exacto antes de comprar piezas',
-    'Compatibilidades filtradas para tu motor',
-    'Errores criticos que debes evitar',
-    'Ruta por presupuesto para no gastar dos veces',
-  ]).filter(Boolean).slice(0, 4);
+  const premiumBenefits = [
+    'Puntos Fuertes / Puntos debiles de tu vehiculo',
+    'Organizacion del proyecto',
+    'Orden exacto de la instalacion',
+    'Compatibilidad de piezas',
+    'Errores tipicos que se pueden evitar',
+    'Adaptabilidad en el presupuesto',
+  ];
   const freeSlides = [
     'Ficha',
     'Preinstalacion',
     'Modificaciones',
-    'Riesgos',
-    'Plan optimizado',
+    'Plan de Accion',
   ];
 
   return (
@@ -511,12 +598,12 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
                 <div>
                   <IconBadge type="gauge" />
                   <span>Potencia posible</span>
-                  <strong>{formatCv(freeModifications.possiblePowerCv || stageOnePower)}</strong>
+                  <strong>{formatCv(freePossiblePowerCv)}</strong>
                 </div>
                 <div>
                   <IconBadge type="boost" />
                   <span>Torque posible</span>
-                  <strong>{formatNm(freeModifications.possibleTorqueNm || stageOneTorque)}</strong>
+                  <strong>{formatNm(freePossibleTorqueNm)}</strong>
                 </div>
               </div>
               <div className="free-build-parts">
@@ -531,27 +618,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
                   </article>
                 ))}
               </div>
-            </div>
-          </article>
-
-          <article className="free-build-slide free-build-slide--warning">
-            <img className="free-build-slide__bg" src={freeBuildRiesgosBg} alt="" />
-            <div className="free-build-slide__shade" />
-            <div className="free-build-slide__content">
-              <span className="free-build-eyebrow">Riesgos</span>
-              <h2>Donde se pierde dinero</h2>
-              <p>
-                La mayoria de fallos no vienen de querer mas potencia, sino de montar la pieza
-                correcta en el momento equivocado.
-              </p>
-              <div className="free-build-error-list">
-                {freeRiskItemsLimited.map((item) => (
-                  <article key={item}>
-                    <WarningIcon />
-                    <p>{item}</p>
-                  </article>
-                ))}
-              </div>
+              <ModificationRiskNotice active={activeFreeSlide === 2} items={freeRiskItemsLimited} />
             </div>
           </article>
 
@@ -559,24 +626,24 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
             <img className="free-build-slide__bg" src={freeBuildPremiumBg} alt="" />
             <div className="free-build-slide__shade" />
             <div className="free-build-slide__content">
-              <span className="free-build-eyebrow">Plan optimizado</span>
-              <h2>Compra con menos dudas</h2>
+              <span className="free-build-eyebrow">Plan de Accion</span>
+              <h2>OBTEN UNA GUIA ESPECIFICA PARA EMPEZAR TU PROYECTO</h2>
               <p>
-                Antes de gastar en piezas, revisa el orden correcto, que montar primero y que
-                evitar en tu motor para no pagar dos veces.
+                Antes de realizar cualquier modificacion en tu coche es necesario saber ciertos
+                detalles importantes, para evitar problemas futuros y gastos innecesarios.
               </p>
               <ul className="free-build-checks">
                 {premiumBenefits.map((benefit) => (
                   <li key={benefit}>{benefit}</li>
                 ))}
               </ul>
-              <div className="free-build-plan-price" aria-label="Oferta plan optimizado">
+              <div className="free-build-plan-price" aria-label="Oferta plan de accion">
                 <span>Oferta</span>
-                <strong>3,99 €</strong>
+                <strong>4,99 €</strong>
                 <del>6,99 €</del>
               </div>
               <button type="button" onClick={onOpenOptimizedPlan}>
-                {freePremiumOffer.cta || salesBlock.cta || 'Ver plan antes de comprar piezas'}
+                Descubrir plan de accion
               </button>
               <small>
                 {freePremiumOffer.finalReinforcement ||
@@ -588,13 +655,13 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
         </div>
       </section>
 
-      {activeFreeSlide !== 4 && (
+      {activeFreeSlide !== 3 && (
         <div className="free-build-inline-cta">
           <button
             type="button"
             onClick={onOpenOptimizedPlan}
           >
-            Ver plan antes de comprar piezas
+            Descubrir plan de accion
           </button>
         </div>
       )}
@@ -707,7 +774,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
           <IconBadge type="road" />
           <span>
             <strong>Comparativa rapida</strong>
-            <small>Incluida en el plan optimizado</small>
+            <small>Incluida en el Plan de Accion</small>
           </span>
           <em>&gt;</em>
         </button>
@@ -722,7 +789,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
             <article className="build-dashboard-locked-stage">
               <IconBadge type="lock" />
               <div>
-                <strong>Stage avanzado incluido en el plan optimizado</strong>
+                <strong>Stage avanzado incluido en el Plan de Accion</strong>
                 <p>
                   Esta parte necesita orden, dependencias y compatibilidades para no gastar dinero
                   en piezas que no trabajan bien juntas.
@@ -895,7 +962,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
             <p>
               {salesBlock.intro ||
                 result?.premiumUpsell ||
-                'El plan optimizado incluye el orden exacto, compatibilidades y ajustes para evitar errores caros.'}
+            'El Plan de Accion incluye el orden exacto, compatibilidades y ajustes para evitar errores caros.'}
             </p>
             {Array.isArray(salesBlock.benefits) && salesBlock.benefits.length ? (
               <ul className="build-dashboard-bullets build-dashboard-bullets--ok">
@@ -905,10 +972,10 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
               </ul>
             ) : null}
             <strong className="build-dashboard-premium-price">
-              Acceso completo: <span>3,99 €</span> <del>6,99 €</del>
+              Acceso completo: <span>4,99 €</span> <del>6,99 €</del>
             </strong>
             <button type="button" onClick={onOpenOptimizedPlan}>
-              {salesBlock.cta || 'Obtener plan optimizado'}
+              Descubrir plan de accion
             </button>
             <small>
               {salesBlock.finalReinforcement ||

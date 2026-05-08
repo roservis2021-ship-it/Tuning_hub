@@ -18,7 +18,7 @@ function resolveApiBaseUrl() {
 
 const API_BASE_URL = resolveApiBaseUrl();
 
-export async function createCheckoutSession({ vehicleName, buildId }) {
+export async function createCheckoutSession({ vehicleName, buildId, checkoutType = 'plan_action' }) {
   const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
     method: 'POST',
     headers: {
@@ -28,6 +28,7 @@ export async function createCheckoutSession({ vehicleName, buildId }) {
       origin: window.location.origin,
       vehicleName,
       buildId,
+      checkoutType,
     }),
   });
 
@@ -53,7 +54,7 @@ export async function createCheckoutSession({ vehicleName, buildId }) {
   return payload;
 }
 
-export async function createEmbeddedCheckoutSession({ vehicleName, buildId }) {
+export async function createEmbeddedCheckoutSession({ vehicleName, buildId, checkoutType = 'plan_action' }) {
   const response = await fetch(`${API_BASE_URL}/api/create-embedded-checkout-session`, {
     method: 'POST',
     headers: {
@@ -63,6 +64,7 @@ export async function createEmbeddedCheckoutSession({ vehicleName, buildId }) {
       origin: window.location.origin,
       vehicleName,
       buildId,
+      checkoutType,
     }),
   });
 

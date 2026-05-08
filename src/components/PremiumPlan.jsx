@@ -180,7 +180,7 @@ function buildPdf(lines) {
 }
 
 function buildPdfFileName(vehicleName) {
-  return `plan-optimizado-${normalizeText(vehicleName).replace(/\s+/g, '-').toLowerCase() || 'vehiculo'}.pdf`;
+  return `plan-accion-${normalizeText(vehicleName).replace(/\s+/g, '-').toLowerCase() || 'vehiculo'}.pdf`;
 }
 
 function getVehicleName(vehicle, result) {
@@ -250,7 +250,7 @@ function getPremiumPlanData(result, vehicle) {
 
   return {
     vehicleName: displayText(getVehicleName(vehicle, result), 'Vehiculo seleccionado'),
-    title: displayText(premiumPlan.title, `Plan optimizado ${getVehicleName(vehicle, result)}`),
+    title: displayText(premiumPlan.title, `Plan de Accion ${getVehicleName(vehicle, result)}`),
     summary:
       displayText(
         premiumPlan.summary,
@@ -458,7 +458,7 @@ function PremiumPlan({ result, vehicle, onBack }) {
           <span aria-hidden="true">&lt;</span>
           Volver
         </button>
-        <span>Plan optimizado</span>
+        <span>Plan de Accion</span>
       </header>
 
       <section
@@ -471,7 +471,7 @@ function PremiumPlan({ result, vehicle, onBack }) {
             <img src={premiumSlideSummaryBg} alt="" />
             <div className="premium-plan-shade" />
             <div className="premium-plan-content">
-              <span>Plan optimizado</span>
+              <span>Plan de Accion</span>
               <h1>{plan.vehicleName}</h1>
               <p>{plan.summary}</p>
               <div className="premium-plan-meta">
@@ -621,7 +621,7 @@ function PremiumPlan({ result, vehicle, onBack }) {
         </div>
       </section>
 
-      <nav className="premium-plan-nav" aria-label="Secciones del plan optimizado">
+      <nav className="premium-plan-nav" aria-label="Secciones del Plan de Accion">
         {slides.map((slide, index) => (
           <button
             key={slide}

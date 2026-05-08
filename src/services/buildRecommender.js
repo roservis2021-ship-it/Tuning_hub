@@ -541,16 +541,16 @@ export function generateBuildRecommendation(vehicle) {
       },
       risks: fallbackRisks,
       premiumOffer: {
-        title: 'Plan optimizado con codigo motor verificado',
+        title: 'Plan de Accion con codigo motor verificado',
         intro:
-          'El plan optimizado parte de la variante exacta para decidir que comprar, en que orden montarlo y que evitar antes de gastar dinero.',
+          'El Plan de Accion parte de la variante exacta para decidir que comprar, en que orden montarlo y que evitar antes de gastar dinero.',
         benefits: [
           'Orden exacto antes de comprar piezas',
           'Compatibilidades filtradas para tu motor',
           'Errores criticos que debes evitar',
           'Ruta por presupuesto para no gastar dos veces',
         ],
-        cta: 'Ver plan antes de comprar piezas',
+        cta: 'Descubrir plan de accion',
         finalReinforcement:
           'Sin confirmar el codigo motor, comprar piezas es apostar con tu presupuesto.',
       },
@@ -609,7 +609,7 @@ export function generateBuildRecommendation(vehicle) {
     conversionTrigger:
       'El error mas caro suele ser comprar piezas antes de confirmar codigo motor, orden y limites reales de transmision.',
     premiumUpsell:
-      'Usa el plan optimizado para saber que comprar primero, que dejar para despues y que piezas pueden hacerte gastar dos veces.',
+      'Usa el Plan de Accion para saber que comprar primero, que dejar para despues y que piezas pueden hacerte gastar dos veces.',
     conclusion: {
       recommendedStage: 'STAGE 1',
       why: 'Es el mejor equilibrio entre coste, sensacion real y fiabilidad para empezar.',

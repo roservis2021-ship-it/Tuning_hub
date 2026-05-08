@@ -21,6 +21,55 @@ const GENERIC_ENGINE_META = {
   'Híbrido - versión exacta por confirmar': { powertrain: 'hibrido', aspiration: 'turbo' },
   'Eléctrico - versión exacta por confirmar': { powertrain: 'electrico', aspiration: 'atmosferico' },
 };
+const COMMON_BRANDS = [
+  'Audi',
+  'BMW',
+  'Citroen',
+  'SEAT',
+  'Volkswagen',
+  'Skoda',
+  'Renault',
+  'Ford',
+  'Opel',
+  'Toyota',
+  'Peugeot',
+  'Honda',
+  'Hyundai',
+  'Mercedes-Benz',
+  'Nissan',
+  'Mazda',
+  'Subaru',
+  'Mitsubishi',
+  'MINI',
+  'Alfa Romeo',
+  'Fiat',
+  'Cupra',
+  'Abarth',
+  'Dacia',
+  'Kia',
+  'Suzuki',
+  'Volvo',
+  'Lexus',
+  'Jeep',
+];
+const EXOTIC_MODEL_PATTERNS = [
+  /^R8$/i,
+  /^RS[4567]$/i,
+  /^S[5678]$/i,
+  /^M[23568]$/i,
+  /^i8$/i,
+  /^AMG/i,
+  /Ferrari|Lamborghini|McLaren|Maserati|Bentley|Aston|Porsche|Pagani/i,
+  /e-tron GT|GT-R|Supra/i,
+];
+
+function isCommonBrand(brand) {
+  return COMMON_BRANDS.includes(brand);
+}
+
+function isCommonModel(model) {
+  return !EXOTIC_MODEL_PATTERNS.some((pattern) => pattern.test(model));
+}
 
 function FieldIcon({ type }) {
   const icons = {
@@ -221,7 +270,10 @@ function CarForm({ onSubmit }) {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const availableModels = formData.brand ? EUROPEAN_CAR_MODELS[formData.brand] ?? [] : [];
+  const visibleBrands = EUROPEAN_CAR_BRANDS.filter(isCommonBrand);
+  const availableModels = formData.brand
+    ? (EUROPEAN_CAR_MODELS[formData.brand] ?? []).filter(isCommonModel)
+    : [];
   const selectedModelKey =
     formData.model && formData.model !== CUSTOM_VALUE ? formData.model : null;
   const selectedVariantData =
@@ -358,7 +410,7 @@ function CarForm({ onSubmit }) {
             <FieldLabel icon="brand">Marca</FieldLabel>
             <select name="brand" value={formData.brand} onChange={handleChange}>
               <option value="">Elige tu marca</option>
-              {EUROPEAN_CAR_BRANDS.map((brand) => (
+              {visibleBrands.map((brand) => (
                 <option key={brand} value={brand}>
                   {brand}
                 </option>

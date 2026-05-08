@@ -1,14 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import CarForm from '../components/CarForm';
 import BuildResult from '../components/BuildResult';
 import PremiumPlan from '../components/PremiumPlan';
+import StripeCheckoutScreen from '../components/StripeCheckoutScreen';
 import { generateBuildRecommendation } from '../services/buildRecommender';
 import { logUserSearch } from '../services/firebaseBuildLibraryService';
 import { generateAiBuild } from '../services/aiBuildService';
-import {
-  createCheckoutSession,
-  getCheckoutSessionStatus,
-} from '../services/stripeCheckoutService';
+import { getCheckoutSessionStatus } from '../services/stripeCheckoutService';
 import {
   initAnalytics,
   trackBuildError,
@@ -37,6 +35,97 @@ const LOADING_STEPS = [
 ];
 
 const PENDING_CHECKOUT_STORAGE_KEY = 'tuningHubPendingCheckout';
+const PENDING_EXTRA_BUILD_STORAGE_KEY = 'tuningHubPendingExtraBuild';
+const BUILD_QUOTA_STORAGE_KEY = 'tuningHubBuildQuota';
+const BUILD_QUOTA_WINDOW_MS = 60 * 60 * 1000;
+const FREE_BUILD_LIMIT = 2;
+
+function getStoredJson(key, fallback = {}) {
+  if (typeof window === 'undefined') {
+    return fallback;
+  }
+
+  try {
+    return JSON.parse(window.localStorage.getItem(key) || JSON.stringify(fallback));
+  } catch (error) {
+    return fallback;
+  }
+}
+
+function getBuildQuota(now = Date.now()) {
+  const storedQuota = getStoredJson(BUILD_QUOTA_STORAGE_KEY, null);
+
+  if (
+    !storedQuota ||
+    !Number.isFinite(Number(storedQuota.windowStartedAt)) ||
+    now - Number(storedQuota.windowStartedAt) >= BUILD_QUOTA_WINDOW_MS
+  ) {
+    return {
+      windowStartedAt: now,
+      used: 0,
+    };
+  }
+
+  return {
+    windowStartedAt: Number(storedQuota.windowStartedAt),
+    used: Math.max(0, Number(storedQuota.used) || 0),
+  };
+}
+
+function saveBuildQuota(quota) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  window.localStorage.setItem(BUILD_QUOTA_STORAGE_KEY, JSON.stringify(quota));
+}
+
+function getQuotaSnapshot(now = Date.now()) {
+  const quota = getBuildQuota(now);
+  const resetAt = quota.windowStartedAt + BUILD_QUOTA_WINDOW_MS;
+
+  return {
+    ...quota,
+    resetAt,
+    remaining: Math.max(0, FREE_BUILD_LIMIT - quota.used),
+  };
+}
+
+function consumeFreeBuildSlot() {
+  const quota = getBuildQuota();
+
+  if (quota.used >= FREE_BUILD_LIMIT) {
+    saveBuildQuota(quota);
+    return {
+      allowed: false,
+      ...getQuotaSnapshot(),
+    };
+  }
+
+  const nextQuota = {
+    ...quota,
+    used: quota.used + 1,
+  };
+  saveBuildQuota(nextQuota);
+
+  return {
+    allowed: true,
+    ...getQuotaSnapshot(),
+  };
+}
+
+function getVehicleNameFromData(vehicleData, result = null) {
+  const identity = result?.vehicleIdentity || {};
+
+  return [
+    identity.canonicalBrand || vehicleData?.brand,
+    identity.canonicalModel || vehicleData?.model,
+    identity.canonicalGeneration || vehicleData?.generation,
+    identity.canonicalEngine || vehicleData?.engine,
+  ]
+    .filter(Boolean)
+    .join(' ');
+}
 
 function LoadingScreen({ vehicle, stepIndex, progress }) {
   const activeStep = LOADING_STEPS[Math.min(stepIndex, LOADING_STEPS.length - 1)];
@@ -93,6 +182,57 @@ function LoadingScreen({ vehicle, stepIndex, progress }) {
   );
 }
 
+function formatCooldownTime(milliseconds) {
+  const safeMilliseconds = Math.max(0, milliseconds);
+  const totalSeconds = Math.ceil(safeMilliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+function BuildLimitScreen({ vehicle, quotaInfo, onBack, onPayExtraBuild }) {
+  const [now, setNow] = useState(Date.now());
+  const resetAt = quotaInfo?.resetAt || now;
+  const remainingTime = useMemo(() => formatCooldownTime(resetAt - now), [now, resetAt]);
+
+  useEffect(() => {
+    const timerId = window.setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+
+    return () => window.clearInterval(timerId);
+  }, []);
+
+  return (
+    <section className="build-limit-screen">
+      <article className="build-limit-card">
+        <span className="section-heading__eyebrow">Limite de builds free</span>
+        <h2>Has usado tus 2 builds gratuitas</h2>
+        <p>
+          Para evitar generaciones sin control, puedes crear otra build ahora por 0,89 € o esperar
+          a que se reinicie tu limite.
+        </p>
+        {vehicle ? (
+          <strong className="build-limit-card__vehicle">
+            {getVehicleNameFromData(vehicle)}
+          </strong>
+        ) : null}
+        <div className="build-limit-card__timer">
+          <span>Vuelves a tener 2 builds gratis en</span>
+          <strong>{remainingTime}</strong>
+        </div>
+        <button type="button" onClick={onPayExtraBuild}>
+          Generar build extra por 0,89 €
+        </button>
+        <button type="button" className="build-limit-card__secondary" onClick={onBack}>
+          Volver al inicio
+        </button>
+      </article>
+    </section>
+  );
+}
+
 function HomePage() {
   const [result, setResult] = useState(null);
   const [vehicle, setVehicle] = useState(null);
@@ -100,6 +240,8 @@ function HomePage() {
   const [loadingStepIndex, setLoadingStepIndex] = useState(0);
   const [loadingProgress, setLoadingProgress] = useState(8);
   const [buildMeta, setBuildMeta] = useState(null);
+  const [quotaInfo, setQuotaInfo] = useState(() => getQuotaSnapshot());
+  const [checkoutContext, setCheckoutContext] = useState(null);
 
   useEffect(() => {
     initAnalytics().catch(() => {
@@ -123,42 +265,71 @@ function HomePage() {
           window.sessionStorage.getItem(PENDING_CHECKOUT_STORAGE_KEY) || '{}',
         );
 
-        if (!storedCheckout.result || !storedCheckout.vehicle) {
-          setCurrentScreen('landing');
-          return;
-        }
-
         if (checkoutStatus === 'success') {
           const sessionId = searchParams.get('session_id');
 
           if (!sessionId) {
-            setResult(storedCheckout.result);
-            setVehicle(storedCheckout.vehicle);
-            setBuildMeta(storedCheckout.buildMeta || null);
-            setCurrentScreen('build');
+            if (storedCheckout.result && storedCheckout.vehicle) {
+              setResult(storedCheckout.result);
+              setVehicle(storedCheckout.vehicle);
+              setBuildMeta(storedCheckout.buildMeta || null);
+              setCurrentScreen('build');
+            } else {
+              setCurrentScreen('landing');
+            }
             return;
           }
 
           const sessionStatus = await getCheckoutSessionStatus(sessionId);
+          const checkoutType = sessionStatus.checkoutType || storedCheckout.checkoutType || 'plan_action';
 
           if (!sessionStatus.paid) {
+            if (storedCheckout.result && storedCheckout.vehicle) {
+              setResult(storedCheckout.result);
+              setVehicle(storedCheckout.vehicle);
+              setBuildMeta(storedCheckout.buildMeta || null);
+              setCurrentScreen('build');
+            } else {
+              setCurrentScreen('landing');
+            }
+            return;
+          }
+
+          if (checkoutType === 'extra_build') {
+            const storedExtraBuild = JSON.parse(
+              window.sessionStorage.getItem(PENDING_EXTRA_BUILD_STORAGE_KEY) || '{}',
+            );
+
+            window.sessionStorage.removeItem(PENDING_CHECKOUT_STORAGE_KEY);
+            window.sessionStorage.removeItem(PENDING_EXTRA_BUILD_STORAGE_KEY);
+
+            if (storedExtraBuild.vehicle) {
+              await runBuildGeneration(storedExtraBuild.vehicle);
+              return;
+            }
+
+            setCurrentScreen('landing');
+            return;
+          }
+
+          if (storedCheckout.result && storedCheckout.vehicle) {
+            window.sessionStorage.removeItem(PENDING_CHECKOUT_STORAGE_KEY);
+            setResult(storedCheckout.result);
+            setVehicle(storedCheckout.vehicle);
+            setBuildMeta(storedCheckout.buildMeta || null);
+            setCurrentScreen('premium');
+          } else {
+            setCurrentScreen('landing');
+          }
+        } else {
+          if (storedCheckout.result && storedCheckout.vehicle) {
             setResult(storedCheckout.result);
             setVehicle(storedCheckout.vehicle);
             setBuildMeta(storedCheckout.buildMeta || null);
             setCurrentScreen('build');
-            return;
+          } else {
+            setCurrentScreen('form');
           }
-
-          window.sessionStorage.removeItem(PENDING_CHECKOUT_STORAGE_KEY);
-          setResult(storedCheckout.result);
-          setVehicle(storedCheckout.vehicle);
-          setBuildMeta(storedCheckout.buildMeta || null);
-          setCurrentScreen('premium');
-        } else {
-          setResult(storedCheckout.result);
-          setVehicle(storedCheckout.vehicle);
-          setBuildMeta(storedCheckout.buildMeta || null);
-          setCurrentScreen('build');
         }
       } catch (error) {
         if (storedCheckout.result && storedCheckout.vehicle) {
@@ -197,7 +368,7 @@ function HomePage() {
     return () => window.clearInterval(intervalId);
   }, [currentScreen]);
 
-  async function handleBuildSearch(vehicleData) {
+  async function runBuildGeneration(vehicleData) {
     let nextResult = null;
     let aiErrorMessage = '';
     let strictVerificationFailed = false;
@@ -256,6 +427,23 @@ function HomePage() {
     }
   }
 
+  async function handleBuildSearch(vehicleData) {
+    const quotaResult = consumeFreeBuildSlot();
+    setQuotaInfo(getQuotaSnapshot());
+
+    if (!quotaResult.allowed) {
+      setVehicle(vehicleData);
+      setCurrentScreen('buildLimit');
+      window.sessionStorage.setItem(
+        PENDING_EXTRA_BUILD_STORAGE_KEY,
+        JSON.stringify({ vehicle: vehicleData }),
+      );
+      return;
+    }
+
+    await runBuildGeneration(vehicleData);
+  }
+
   function handleBackToForm() {
     setCurrentScreen('form');
   }
@@ -264,39 +452,53 @@ function HomePage() {
     setCurrentScreen('form');
   }
 
-  async function handleOpenOptimizedPlan() {
+  function handleOpenOptimizedPlan() {
     if (!result) {
       return;
     }
 
-    const vehicleName = [
-      result?.vehicleIdentity?.canonicalBrand || vehicle?.brand,
-      result?.vehicleIdentity?.canonicalModel || vehicle?.model,
-      result?.vehicleIdentity?.canonicalGeneration || vehicle?.generation,
-      result?.vehicleIdentity?.canonicalEngine || vehicle?.engine,
-    ]
-      .filter(Boolean)
-      .join(' ');
+    const vehicleName = getVehicleNameFromData(vehicle, result);
 
     window.sessionStorage.setItem(
       PENDING_CHECKOUT_STORAGE_KEY,
       JSON.stringify({
+        checkoutType: 'plan_action',
         result,
         vehicle,
         buildMeta,
       }),
     );
 
-    try {
-      const checkoutSession = await createCheckoutSession({
-        vehicleName,
-        buildId: result.id,
-      });
+    setCheckoutContext({
+      checkoutType: 'plan_action',
+      vehicleName,
+      buildId: result.id,
+    });
+    setCurrentScreen('checkout');
+  }
 
-      window.location.href = checkoutSession.url;
-    } catch (error) {
-      alert(error.message || 'No se pudo abrir el pago seguro de Stripe.');
+  function handleOpenExtraBuildCheckout() {
+    if (!vehicle) {
+      return;
     }
+
+    window.sessionStorage.setItem(
+      PENDING_CHECKOUT_STORAGE_KEY,
+      JSON.stringify({
+        checkoutType: 'extra_build',
+      }),
+    );
+    window.sessionStorage.setItem(
+      PENDING_EXTRA_BUILD_STORAGE_KEY,
+      JSON.stringify({ vehicle }),
+    );
+
+    setCheckoutContext({
+      checkoutType: 'extra_build',
+      vehicleName: getVehicleNameFromData(vehicle),
+      buildId: null,
+    });
+    setCurrentScreen('checkout');
   }
 
   return (
@@ -347,6 +549,24 @@ function HomePage() {
             result={result}
             vehicle={vehicle}
             onBack={() => setCurrentScreen('build')}
+          />
+        </section>
+      ) : currentScreen === 'checkout' ? (
+        <section className="screen-shell">
+          <StripeCheckoutScreen
+            checkoutType={checkoutContext?.checkoutType || 'plan_action'}
+            buildId={checkoutContext?.buildId || result?.id}
+            vehicleName={checkoutContext?.vehicleName || getVehicleNameFromData(vehicle, result)}
+            onBack={() => setCurrentScreen(result ? 'build' : 'buildLimit')}
+          />
+        </section>
+      ) : currentScreen === 'buildLimit' ? (
+        <section className="screen-shell">
+          <BuildLimitScreen
+            vehicle={vehicle}
+            quotaInfo={quotaInfo}
+            onBack={() => setCurrentScreen('landing')}
+            onPayExtraBuild={handleOpenExtraBuildCheckout}
           />
         </section>
       ) : (
