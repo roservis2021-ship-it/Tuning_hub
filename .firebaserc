@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "tuning-hub-2"
-  }
+  },
+  "targets": {
+    "tuning-hub-2": {
+      "hosting": {
+        "dashboard": [
+          "tuning-hub-thkb"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

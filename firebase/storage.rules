@@ -1,0 +1,18 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isDashboardUser() {
+      return request.auth != null
+        && request.auth.uid == 'mc50F556jwfCpK8cpajxiTwZ43g2';
+    }
+
+    match /vehicle-images/{allPaths=**} {
+      allow read: if true;
+      allow create, update: if isDashboardUser()
+        && request.resource.size < 12 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if isDashboardUser();
+    }
+  }
+}

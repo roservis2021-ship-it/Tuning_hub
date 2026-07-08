@@ -2,14 +2,72 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isDashboardUser() {
+      return request.auth != null
+        && request.auth.uid == 'mc50F556jwfCpK8cpajxiTwZ43g2';
+    }
+
     match /vehicles/{vehicleId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if isDashboardUser();
     }
 
     match /builds/{buildId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if isDashboardUser();
+    }
+
+    match /vehicleResearch/{researchId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /brands/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /models/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /generations/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /engines/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /images/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /maintenance/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /knownIssues/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /modifications/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /rules/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /compatibilities/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /sources/{documentId} {
+      allow read, write: if isDashboardUser();
+    }
+
+    match /auditLog/{documentId} {
+      allow read, create: if isDashboardUser();
+      allow update, delete: if false;
     }
 
     match /searches/{searchId} {
