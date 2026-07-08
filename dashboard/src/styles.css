@@ -134,6 +134,10 @@ button:disabled { opacity:.55; cursor:wait; }
 .editor-section > header > span { color:#ff5b51; font-size:10px; font-weight:800; }
 .editor-section h3 { margin:0; font-size:13px; }
 .editor-section header p { margin:4px 0 0; color:#6f7580; font-size:9px; }
+.editor-section-nav { position:sticky; z-index:4; top:-24px; display:flex; gap:7px; margin:0 -25px 18px; padding:10px 25px; overflow-x:auto; border-bottom:1px solid #25282f; background:#0f1115f2; backdrop-filter:blur(14px); scrollbar-width:none; }
+.editor-section-nav::-webkit-scrollbar { display:none; }
+.editor-section-nav button { min-width:max-content; display:flex; align-items:center; gap:7px; padding:9px 11px; color:#9da2ac; font-size:9px; background:#171a20; }
+.editor-section-nav button span { color:#ff6259; font-weight:800; }
 .image-upload { display:grid; gap:10px; padding:12px; border:1px dashed #343840; border-radius:12px; background:#0c0e12; }
 .hidden-file-input { display:none; }
 .image-placeholder,.image-preview { min-height:86px; display:flex; align-items:center; gap:14px; }
@@ -163,10 +167,24 @@ button:disabled { opacity:.55; cursor:wait; }
   .mobile-close { display:block; }
   .sidebar-backdrop { position:fixed; z-index:15; inset:0; display:block; border:0; border-radius:0; background:#0009; }
   .main-content { grid-column:1; }
-  .mobile-bar { position:sticky; z-index:10; top:0; display:grid; grid-template-columns:40px auto 1fr; align-items:center; gap:12px; height:58px; padding:0 18px; border-bottom:1px solid var(--border); background:#0d0f13eF; backdrop-filter:blur(12px); }
-  .mobile-bar button { padding:8px; border:0; background:transparent; }
+  input,textarea,select { min-height:48px; font-size:16px; }
+  textarea { min-height:130px; }
+  button { min-height:44px; }
+  .sidebar { width:min(360px,86vw); padding-top:max(18px,env(safe-area-inset-top)); padding-bottom:max(18px,env(safe-area-inset-bottom)); }
+  .nav-item { min-height:46px; font-size:14px; }
+  .mobile-close { min-width:44px; min-height:44px; }
+  .mobile-bar { position:sticky; z-index:10; top:0; display:grid; grid-template-columns:44px auto 1fr; align-items:center; gap:12px; height:calc(62px + env(safe-area-inset-top)); padding:env(safe-area-inset-top) max(18px,env(safe-area-inset-right)) 0 max(18px,env(safe-area-inset-left)); border-bottom:1px solid var(--border); background:#0d0f13eF; backdrop-filter:blur(12px); }
+  .mobile-bar button { min-width:44px; min-height:44px; padding:8px; border:0; background:transparent; font-size:18px; }
   .mobile-bar strong { font-size:12px; }.mobile-bar span { justify-self:end; color:#747a84; font-size:10px; }
-  .page { padding:32px 25px 60px; }
+  .page { padding:32px max(25px,env(safe-area-inset-right)) calc(60px + env(safe-area-inset-bottom)) max(25px,env(safe-area-inset-left)); }
+  .editor { width:100vw; max-width:none; }
+  .editor-header { padding-top:max(22px,env(safe-area-inset-top)); }
+  .editor-actions > button { width:44px; height:44px; }
+  .editor-footer { padding-bottom:max(15px,env(safe-area-inset-bottom)); }
+  .editor-footer button { min-width:150px; min-height:48px; }
+  .toolbar button,.toolbar select { min-height:48px; }
+  .row-actions button { width:44px; height:44px; }
+  .image-upload-actions button { min-height:44px; font-size:12px; }
 }
 @media (max-width:760px) {
   .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
@@ -179,6 +197,13 @@ button:disabled { opacity:.55; cursor:wait; }
   .data-row { grid-template-columns:minmax(0,1fr) auto; gap:10px; }
   .data-row > .muted { display:none; }
   .row-actions { grid-column:1/-1; justify-content:flex-start; }
+}
+@media (min-width:761px) and (max-width:1050px) {
+  .stats-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .dashboard-columns { grid-template-columns:1.35fr .8fr; }
+  .editor-body { padding-left:32px; padding-right:32px; }
+  .editor-section-nav { margin-left:-32px; margin-right:-32px; padding-left:32px; padding-right:32px; }
+  .editor-section { padding:24px; scroll-margin-top:64px; }
 }
 @media (max-width:540px) {
   .page { padding:26px 14px 50px; }

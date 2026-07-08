@@ -104,6 +104,14 @@ function RecordEditor({ resourceKey, initialRecord, user, onClose, onSaved }) {
     return groups;
   }, {});
 
+  function sectionId(name) {
+    return `editor-section-${name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-')}`;
+  }
+
+  function goToSection(name) {
+    document.getElementById(sectionId(name))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   return (
     <div className="editor-overlay">
       <div className="editor">
@@ -116,8 +124,17 @@ function RecordEditor({ resourceKey, initialRecord, user, onClose, onSaved }) {
             <label>Estado<select value={record.status} onChange={(e) => change('status', e.target.value)}>{recordStatuses.map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>
             <span>ID: {record.id || 'Se asignará al guardar'}</span>
           </div>
+          {resourceKey === 'vehicles' ? (
+            <nav className="editor-section-nav" aria-label="Secciones de la ficha">
+              {Object.keys(sections).map((sectionName, index) => (
+                <button type="button" key={sectionName} onClick={() => goToSection(sectionName)}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>{sectionName}
+                </button>
+              ))}
+            </nav>
+          ) : null}
           {Object.entries(sections).map(([sectionName, fields], sectionIndex) => (
-            <section className="editor-section" key={sectionName}>
+            <section className="editor-section" id={sectionId(sectionName)} key={sectionName}>
               <header>
                 <span>{String(sectionIndex + 1).padStart(2, '0')}</span>
                 <div><h3>{sectionName}</h3><p>{resourceKey === 'vehicles' ? 'Toda esta información pertenece a la misma ficha del vehículo.' : `Datos de ${config.singular}.`}</p></div>
