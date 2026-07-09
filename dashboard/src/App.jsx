@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  browserLocalPersistence,
+  onAuthStateChanged,
+  setPersistence,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
 import { auth, firebaseReady } from './firebase';
 import DashboardPage from './components/DashboardPage';
 import ResourcePage from './components/ResourcePage';
@@ -41,10 +47,27 @@ export default function App() {
   const [createOnOpen, setCreateOnOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  useEffect(() => onAuthStateChanged(auth, (nextUser) => {
-    setUser(nextUser);
-    setAuthLoading(false);
-  }), []);
+  useEffect(() => {
+    let unsubscribe = () => {};
+    let isMounted = true;
+
+    setPersistence(auth, browserLocalPersistence)
+      .catch(() => {
+        // Si el navegador limita el almacenamiento, seguimos con la persistencia por defecto.
+      })
+      .finally(() => {
+        if (!isMounted) return;
+        unsubscribe = onAuthStateChanged(auth, (nextUser) => {
+          setUser(nextUser);
+          setAuthLoading(false);
+        });
+      });
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
 
   async function handleLogin(event, email, password) {
     event.preventDefault();
