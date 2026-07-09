@@ -174,6 +174,6 @@ export function emptyRecord(resourceKey) {
   const config = resources[resourceKey];
   return Object.fromEntries([
     ...config.fields.map((field) => [field.key, '']),
-    ['status', 'draft'],
+    ['status', resourceKey === 'vehicles' ? 'published' : 'draft'],
   ]);
 }

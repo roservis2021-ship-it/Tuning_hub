@@ -1,75 +1,22 @@
-import { useState } from 'react';
-import {
-  EUROPEAN_CAR_BRANDS,
-  EUROPEAN_CAR_MODELS,
-  EUROPEAN_CAR_VARIANTS,
-} from '../data/europeanCars';
+import { useEffect, useMemo, useState } from 'react';
+import { fetchPublicVehicleCatalog } from '../services/publicVehicleCatalogService';
 
-const CUSTOM_VALUE = '__custom__';
-const UNKNOWN_GENERATION_LABEL = 'Generación por confirmar';
-const UNKNOWN_YEAR_TEXT = 'años no confirmados';
-const UNKNOWN_ENGINE_MARKERS = ['exacto por confirmar', 'versión exacta por confirmar'];
-const GENERIC_ENGINES = [
-  'Gasolina - motor exacto por confirmar',
-  'Diésel - motor exacto por confirmar',
-  'Híbrido - versión exacta por confirmar',
-  'Eléctrico - versión exacta por confirmar',
-];
-const GENERIC_ENGINE_META = {
-  'Gasolina - motor exacto por confirmar': { powertrain: 'gasolina', aspiration: 'turbo' },
-  'Diésel - motor exacto por confirmar': { powertrain: 'diesel', aspiration: 'turbo' },
-  'Híbrido - versión exacta por confirmar': { powertrain: 'hibrido', aspiration: 'turbo' },
-  'Eléctrico - versión exacta por confirmar': { powertrain: 'electrico', aspiration: 'atmosferico' },
+const UNKNOWN_ENGINE_MARKERS = ['exacto por confirmar', 'version exacta por confirmar'];
+
+const initialForm = {
+  publicVehicleId: '',
+  brand: '',
+  model: '',
+  generation: '',
+  engine: '',
+  mileageKm: '',
+  powertrain: 'gasolina',
+  aspiration: 'turbo',
+  transmission: 'manual',
+  drivetrain: 'fwd',
+  usage: 'diario',
+  priority: 'equilibrio',
 };
-const COMMON_BRANDS = [
-  'Audi',
-  'BMW',
-  'Citroen',
-  'SEAT',
-  'Volkswagen',
-  'Skoda',
-  'Renault',
-  'Ford',
-  'Opel',
-  'Toyota',
-  'Peugeot',
-  'Honda',
-  'Hyundai',
-  'Mercedes-Benz',
-  'Nissan',
-  'Mazda',
-  'Subaru',
-  'Mitsubishi',
-  'MINI',
-  'Alfa Romeo',
-  'Fiat',
-  'Cupra',
-  'Abarth',
-  'Dacia',
-  'Kia',
-  'Suzuki',
-  'Volvo',
-  'Lexus',
-  'Jeep',
-];
-const EXOTIC_MODEL_PATTERNS = [
-  /^R8$/i,
-  /^RS[4567]$/i,
-  /^S[5678]$/i,
-  /^M[23568]$/i,
-  /^i8$/i,
-  /^AMG/i,
-  /Ferrari|Lamborghini|McLaren|Maserati|Bentley|Aston|Porsche|Pagani/i,
-  /e-tron GT|GT-R|Supra/i,
-];
-
-function isCommonBrand(brand) {
-  return COMMON_BRANDS.includes(brand);
-}
-
-function isCommonModel(model) {
-  return !EXOTIC_MODEL_PATTERNS.some((pattern) => pattern.test(model));
-}
 
 function FieldIcon({ type }) {
   const icons = {
@@ -189,36 +136,10 @@ function FieldLabel({ icon, children }) {
   );
 }
 
-const initialForm = {
-  brand: '',
-  model: '',
-  customModel: '',
-  generation: '',
-  customGeneration: '',
-  engine: '',
-  customEngine: '',
-  mileageKm: '',
-  powertrain: 'gasolina',
-  aspiration: 'turbo',
-  transmission: 'manual',
-  drivetrain: 'fwd',
-  usage: 'diario',
-  priority: 'equilibrio',
-};
-
 function resolveGoalFromForm({ priority, usage }) {
-  if (priority === 'estetica') {
-    return 'stance';
-  }
-
-  if (priority === 'radical') {
-    return usage === 'proyecto' ? 'radical' : usage === 'finde' ? 'tandas' : 'calle';
-  }
-
-  if (priority === 'potencia') {
-    return usage === 'diario' ? 'calle' : 'tandas';
-  }
-
+  if (priority === 'estetica') return 'stance';
+  if (priority === 'radical') return usage === 'proyecto' ? 'radical' : usage === 'finde' ? 'tandas' : 'calle';
+  if (priority === 'potencia') return usage === 'diario' ? 'calle' : 'tandas';
   return 'calle';
 }
 
@@ -230,77 +151,90 @@ function normalizeForMatch(value) {
     .trim();
 }
 
-function isUnknownGeneration(generation) {
-  return normalizeForMatch(generation).includes('generacion por confirmar');
-}
-
 function isUnknownEngine(engine) {
   const normalizedEngine = normalizeForMatch(engine);
   return UNKNOWN_ENGINE_MARKERS.some((marker) => normalizedEngine.includes(normalizeForMatch(marker)));
 }
 
-function getGenerationLabel(generation) {
-  if (!generation || generation.includes('(') || isUnknownGeneration(generation)) {
-    return generation;
-  }
-
-  return `${generation} (${UNKNOWN_YEAR_TEXT})`;
-}
-
-function getSubmissionGeneration(generation) {
-  return isUnknownGeneration(generation) ? UNKNOWN_GENERATION_LABEL : getGenerationLabel(generation);
-}
-
 function parseMileageKm(value) {
   const mileageKm = Number(value);
-
   return Number.isFinite(mileageKm) && mileageKm >= 0 ? Math.round(mileageKm) : null;
 }
 
-function getEngineMeta(variantData, generation, engine) {
-  if (variantData?.genericVehicle) {
-    return GENERIC_ENGINE_META[engine] ?? null;
-  }
-
-  return variantData?.generationEngineMeta?.[generation]?.[engine] ?? null;
+function uniqueSorted(values) {
+  return Array.from(new Set(values.filter(Boolean))).sort((a, b) => a.localeCompare(b, 'es'));
 }
 
 function CarForm({ onSubmit }) {
   const [formData, setFormData] = useState(initialForm);
+  const [publicVehicles, setPublicVehicles] = useState([]);
+  const [isLoadingVehicles, setIsLoadingVehicles] = useState(true);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const visibleBrands = EUROPEAN_CAR_BRANDS.filter(isCommonBrand);
-  const availableModels = formData.brand
-    ? (EUROPEAN_CAR_MODELS[formData.brand] ?? []).filter(isCommonModel)
-    : [];
-  const selectedModelKey =
-    formData.model && formData.model !== CUSTOM_VALUE ? formData.model : null;
-  const selectedVariantData =
-    formData.brand && selectedModelKey
-      ? EUROPEAN_CAR_VARIANTS[formData.brand]?.[selectedModelKey] ?? null
-      : null;
-  const availableGenerations = selectedVariantData?.genericVehicle
-    ? [UNKNOWN_GENERATION_LABEL]
-    : selectedVariantData?.generations ?? [];
-  const isCustomModel = formData.model === CUSTOM_VALUE;
-  const isCustomGeneration = formData.generation === CUSTOM_VALUE;
-  const isCustomEngine = formData.engine === CUSTOM_VALUE;
-  const canChooseVehicleDetails = Boolean(formData.brand && (selectedModelKey || isCustomModel));
-  const availableEngines =
-    selectedVariantData?.genericVehicle
-      ? GENERIC_ENGINES
-      : selectedVariantData?.generationEngines?.[formData.generation] ??
-        selectedVariantData?.engines ??
-    [];
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadVehicles() {
+      try {
+        const vehicles = await fetchPublicVehicleCatalog();
+        if (isMounted) setPublicVehicles(vehicles);
+      } catch (loadError) {
+        if (isMounted) setError('No hemos podido cargar los vehiculos disponibles. Intentalo de nuevo.');
+      } finally {
+        if (isMounted) setIsLoadingVehicles(false);
+      }
+    }
+
+    loadVehicles();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const visibleBrands = useMemo(
+    () => uniqueSorted(publicVehicles.map((vehicle) => vehicle.brand)),
+    [publicVehicles],
+  );
+  const availableModels = useMemo(
+    () =>
+      uniqueSorted(
+        publicVehicles
+          .filter((vehicle) => vehicle.brand === formData.brand)
+          .map((vehicle) => vehicle.model),
+      ),
+    [formData.brand, publicVehicles],
+  );
+  const availableGenerations = useMemo(
+    () =>
+      uniqueSorted(
+        publicVehicles
+          .filter((vehicle) => vehicle.brand === formData.brand && vehicle.model === formData.model)
+          .map((vehicle) => vehicle.generation),
+      ),
+    [formData.brand, formData.model, publicVehicles],
+  );
+  const availableVehicleOptions = useMemo(
+    () =>
+      publicVehicles.filter(
+        (vehicle) =>
+          vehicle.brand === formData.brand &&
+          vehicle.model === formData.model &&
+          vehicle.generation === formData.generation,
+      ),
+    [formData.brand, formData.generation, formData.model, publicVehicles],
+  );
+  const selectedPublicVehicle = publicVehicles.find((vehicle) => vehicle.id === formData.publicVehicleId);
+  const canChooseVehicleDetails = Boolean(formData.brand && formData.model);
 
   function handleChange(event) {
     const { name, value } = event.target;
 
     setFormData((currentData) => {
-      const engineMeta =
-        name === 'engine' && value !== CUSTOM_VALUE && currentData.generation
-          ? getEngineMeta(selectedVariantData, currentData.generation, value)
+      const selectedVehicle =
+        name === 'publicVehicleId'
+          ? publicVehicles.find((vehicle) => vehicle.id === value)
           : null;
 
       return {
@@ -309,34 +243,31 @@ function CarForm({ onSubmit }) {
           ? {
               brand: value,
               model: '',
-              customModel: '',
               generation: '',
-              customGeneration: '',
               engine: '',
-              customEngine: '',
+              publicVehicleId: '',
             }
           : name === 'model'
             ? {
                 model: value,
-                customModel: value === CUSTOM_VALUE ? currentData.customModel : '',
                 generation: '',
-                customGeneration: '',
                 engine: '',
-                customEngine: '',
+                publicVehicleId: '',
               }
             : name === 'generation'
               ? {
                   generation: value,
-                  customGeneration: value === CUSTOM_VALUE ? currentData.customGeneration : '',
                   engine: '',
-                  customEngine: '',
+                  publicVehicleId: '',
                 }
-              : name === 'engine'
+              : name === 'publicVehicleId' && selectedVehicle
                 ? {
-                    engine: value,
-                    customEngine: value === CUSTOM_VALUE ? currentData.customEngine : '',
-                    powertrain: engineMeta?.powertrain ?? currentData.powertrain,
-                    aspiration: engineMeta?.aspiration ?? currentData.aspiration,
+                    publicVehicleId: value,
+                    engine: selectedVehicle.engine,
+                    powertrain: selectedVehicle.powertrain,
+                    aspiration: selectedVehicle.aspiration,
+                    transmission: selectedVehicle.transmission,
+                    drivetrain: selectedVehicle.drivetrain,
                   }
                 : {}),
         [name]: value,
@@ -348,23 +279,11 @@ function CarForm({ onSubmit }) {
     event.preventDefault();
     setError('');
 
-    const selectedModel = isCustomModel ? formData.customModel.trim() : formData.model.trim();
-    const selectedGeneration = isCustomGeneration
-      ? formData.customGeneration.trim()
-      : formData.generation.trim();
-    const selectedGenerationWithYears = isCustomGeneration
-      ? selectedGeneration
-      : getSubmissionGeneration(selectedGeneration);
-    const selectedEngine = isCustomEngine ? formData.customEngine.trim() : formData.engine.trim();
+    const selectedVehicle = selectedPublicVehicle;
     const mileageKm = formData.mileageKm ? parseMileageKm(formData.mileageKm) : null;
 
-    if (!formData.brand.trim() || !selectedModel) {
-      setError('Selecciona al menos la marca y el modelo para continuar.');
-      return;
-    }
-
-    if (!selectedGeneration || !selectedEngine) {
-      setError('Indica la generacion y el motor para que la build sea precisa.');
+    if (!selectedVehicle) {
+      setError('Selecciona un vehiculo creado en Tuning Hub para continuar.');
       return;
     }
 
@@ -383,14 +302,14 @@ function CarForm({ onSubmit }) {
         }),
         budget: 'medio',
         accessTier: 'free',
-        brand: formData.brand.trim(),
-        model: selectedModel,
-        generation: selectedGenerationWithYears,
-        year: '',
-        engine: selectedEngine,
+        publicVehicleId: selectedVehicle.id,
+        brand: selectedVehicle.brand,
+        model: selectedVehicle.model,
+        generation: selectedVehicle.generation,
+        year: selectedVehicle.yearStart || '',
+        engine: selectedVehicle.engine,
         mileageKm,
-        needsVehicleConfirmation:
-          isUnknownGeneration(selectedGenerationWithYears) || isUnknownEngine(selectedEngine),
+        needsVehicleConfirmation: isUnknownEngine(selectedVehicle.engine),
       });
     } catch (submitError) {
       setError(
@@ -408,8 +327,8 @@ function CarForm({ onSubmit }) {
         <div className="form-row">
           <label className="form-field">
             <FieldLabel icon="brand">Marca</FieldLabel>
-            <select name="brand" value={formData.brand} onChange={handleChange}>
-              <option value="">Elige tu marca</option>
+            <select name="brand" value={formData.brand} onChange={handleChange} disabled={isLoadingVehicles}>
+              <option value="">{isLoadingVehicles ? 'Cargando coches...' : 'Elige tu marca'}</option>
               {visibleBrands.map((brand) => (
                 <option key={brand} value={brand}>
                   {brand}
@@ -426,30 +345,15 @@ function CarForm({ onSubmit }) {
               onChange={handleChange}
               disabled={!formData.brand}
             >
-              <option value="">
-                {formData.brand ? 'Modelo' : 'Selecciona primero una marca'}
-              </option>
+              <option value="">{formData.brand ? 'Modelo' : 'Selecciona primero una marca'}</option>
               {availableModels.map((model) => (
                 <option key={model} value={model}>
                   {model}
                 </option>
               ))}
-              <option value={CUSTOM_VALUE}>Otro modelo / escribir manualmente</option>
             </select>
           </label>
         </div>
-
-        {isCustomModel && (
-          <label className="form-field">
-            <input
-              name="customModel"
-              type="text"
-              placeholder="Escribe el modelo exacto"
-              value={formData.customModel}
-              onChange={handleChange}
-            />
-          </label>
-        )}
 
         <div className="form-row">
           <label className="form-field">
@@ -461,62 +365,40 @@ function CarForm({ onSubmit }) {
               disabled={!canChooseVehicleDetails}
             >
               <option value="">
-                {canChooseVehicleDetails
-                  ? 'Generacion / fase'
-                  : 'Selecciona primero una marca y un modelo'}
+                {canChooseVehicleDetails ? 'Generacion / fase' : 'Selecciona primero una marca y un modelo'}
               </option>
               {availableGenerations.map((generation) => (
                 <option key={generation} value={generation}>
-                  {getGenerationLabel(generation)}
+                  {generation}
                 </option>
               ))}
-              <option value={CUSTOM_VALUE}>Otra generacion / escribir manualmente</option>
             </select>
           </label>
 
           <label className="form-field">
             <FieldLabel icon="engine">Motor</FieldLabel>
             <select
-              name="engine"
-              value={formData.engine}
+              name="publicVehicleId"
+              value={formData.publicVehicleId}
               onChange={handleChange}
-              disabled={!canChooseVehicleDetails}
+              disabled={!formData.generation}
             >
               <option value="">
-                {canChooseVehicleDetails ? 'Motor' : 'Selecciona primero una marca y un modelo'}
+                {formData.generation ? 'Motor / version creada' : 'Selecciona primero generacion'}
               </option>
-              {availableEngines.map((engine) => (
-                <option key={engine} value={engine}>
-                  {engine}
+              {availableVehicleOptions.map((vehicle) => (
+                <option key={vehicle.id} value={vehicle.id}>
+                  {vehicle.engine}
                 </option>
               ))}
-              <option value={CUSTOM_VALUE}>Otro motor / escribir manualmente</option>
             </select>
           </label>
         </div>
 
-        {isCustomGeneration && (
-          <label className="form-field">
-            <input
-              name="customGeneration"
-              type="text"
-              placeholder="Ejemplo: Golf MK4 (1998-2002)"
-              value={formData.customGeneration}
-              onChange={handleChange}
-            />
-          </label>
-        )}
-
-        {isCustomEngine && (
-          <label className="form-field">
-            <input
-              name="customEngine"
-              type="text"
-              placeholder="Ejemplo: 2.0 TFSI o 1.9 TDI"
-              value={formData.customEngine}
-              onChange={handleChange}
-            />
-          </label>
+        {!isLoadingVehicles && publicVehicles.length === 0 && (
+          <p className="form-error">
+            Aun no hay vehiculos publicados en THKB. Crea o publica uno desde el dashboard para que aparezca aqui.
+          </p>
         )}
 
         <div className="form-row form-row--quad">
@@ -596,7 +478,11 @@ function CarForm({ onSubmit }) {
         {error && <p className="form-error">{error}</p>}
 
         <div className="form-submit-bar">
-          <button className="primary-button primary-button--block" type="submit" disabled={isSubmitting}>
+          <button
+            className="primary-button primary-button--block"
+            type="submit"
+            disabled={isSubmitting || isLoadingVehicles || !publicVehicles.length}
+          >
             {isSubmitting ? 'Preparando tu build...' : 'Ver modificaciones'}
           </button>
         </div>

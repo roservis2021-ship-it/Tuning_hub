@@ -4,7 +4,7 @@ import BuildResult from '../components/BuildResult';
 import PremiumPlan from '../components/PremiumPlan';
 import StripeCheckoutScreen from '../components/StripeCheckoutScreen';
 import { generateBuildRecommendation } from '../services/buildRecommender';
-import { logUserSearch } from '../services/firebaseBuildLibraryService';
+import { findVehicleKnowledgeResult, logUserSearch } from '../services/firebaseBuildLibraryService';
 import { generateAiBuild } from '../services/aiBuildService';
 import { getCheckoutSessionStatus } from '../services/stripeCheckoutService';
 import {
@@ -381,7 +381,11 @@ function HomePage() {
     });
 
     try {
-      nextResult = await generateAiBuild(vehicleData);
+      nextResult = await findVehicleKnowledgeResult(vehicleData);
+
+      if (!nextResult) {
+        nextResult = await generateAiBuild(vehicleData);
+      }
     } catch (error) {
       if (error?.code === 'VEHICLE_VERIFICATION_FAILED') {
         strictVerificationFailed = true;
@@ -419,8 +423,8 @@ function HomePage() {
     try {
       await logUserSearch(
         vehicleData,
-        nextResult.source === 'database' ? nextResult.id : null,
-        nextResult.source === 'database',
+        nextResult.source === 'database' || nextResult.source === 'thkb' ? nextResult.id : null,
+        nextResult.source === 'database' || nextResult.source === 'thkb',
       );
     } catch (error) {
       // El log no debe bloquear la experiencia principal del usuario.

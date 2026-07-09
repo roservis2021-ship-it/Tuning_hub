@@ -1,5 +1,7 @@
-import { addDoc, collection, getDocs, limit, query, serverTimestamp, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, limit, query, serverTimestamp, where } from 'firebase/firestore';
 import { db, isFirebaseConfigured } from '../firebase/config';
+
+const PUBLIC_VEHICLE_STATUSES = ['published', 'verified'];
 
 function normalize(value) {
   return String(value)
@@ -61,6 +63,169 @@ function formatBudget(amount) {
     currency: 'EUR',
     maximumFractionDigits: 0,
   }).format(amount);
+}
+
+function toNumber(value) {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) && numericValue > 0 ? numericValue : null;
+}
+
+function splitLines(value) {
+  return String(value ?? '')
+    .split(/\r?\n|;/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function joinTruthy(parts, separator = ' ') {
+  return parts.filter(Boolean).join(separator);
+}
+
+function mapPartName(name) {
+  return {
+    name,
+    reason: 'Recomendado desde la ficha tecnica THKB.',
+    estimatedPriceEuro: null,
+  };
+}
+
+function createStage({ label, text, basePowerCv, fallbackGain, premiumLocked = false }) {
+  const parts = splitLines(text);
+  const gainCv = parts.length ? fallbackGain : null;
+  const powerAfterCv = basePowerCv && gainCv ? basePowerCv + gainCv : null;
+
+  return {
+    label,
+    focus: label === 'STAGE 0' ? 'Base sana' : 'Preparacion recomendada',
+    objective: text || 'Pendiente de completar en THKB.',
+    gainCv,
+    powerAfterCv,
+    estimatedTorqueNm: null,
+    reliability: label === 'STAGE 3' ? 'Media' : 'Alta',
+    priceRange: 'Por confirmar',
+    parts: parts.length ? parts.map(mapPartName) : [],
+    premiumLocked,
+  };
+}
+
+function toVehicleKnowledgeResult(vehicleDoc, requestedVehicle) {
+  const vehicle = vehicleDoc.data();
+  const basePowerCv = toNumber(vehicle.powerCv);
+  const baseTorqueNm = toNumber(vehicle.torqueNm);
+  const reliableLimitCv = toNumber(vehicle.reliableLimitCv);
+  const vehicleName = joinTruthy([vehicle.brand, vehicle.model, vehicle.generation, vehicle.version]);
+  const recommendedParts = splitLines(vehicle.recommendedMods).map(mapPartName);
+  const maintenanceItems = splitLines(vehicle.maintenanceItems);
+  const knownIssues = splitLines(vehicle.knownIssues);
+  const stage0Text = splitLines(vehicle.preStageRequirements).length
+    ? vehicle.preStageRequirements
+    : vehicle.maintenanceItems;
+  const stages = [
+    createStage({ label: 'STAGE 0', text: stage0Text, basePowerCv, fallbackGain: 0 }),
+    createStage({ label: 'STAGE 1', text: vehicle.stage1Plan || vehicle.recommendedMods, basePowerCv, fallbackGain: 25 }),
+    createStage({ label: 'STAGE 2', text: vehicle.stage2Plan, basePowerCv, fallbackGain: 55 }),
+    createStage({ label: 'STAGE 3', text: vehicle.stage3Plan, basePowerCv, fallbackGain: 90, premiumLocked: true }),
+  ];
+
+  return {
+    id: vehicleDoc.id,
+    title: `${vehicleName}: preparacion THKB`,
+    summary:
+      vehicle.description ||
+      vehicle.premiumSummary ||
+      `${vehicleName} tiene una ficha creada en THKB con informacion tecnica, mantenimiento, fallos y modificaciones recomendadas.`,
+    fitScore: 98,
+    source: 'thkb',
+    basePowerCv,
+    baseTorqueNm,
+    finalPowerCv: reliableLimitCv || stages.find((stage) => stage.label === 'STAGE 1')?.powerAfterCv || basePowerCv,
+    factoryPowerSourceTitle: 'THKB',
+    factoryPowerSourceUrl: splitLines(vehicle.researchSources)[0] || '',
+    ownerProfile: requestedVehicle?.usage || 'Uso real',
+    drivability: vehicle.engineTechnicalNotes || vehicle.description || '',
+    maintenanceLevel: vehicle.maintenanceIntervals || 'Revisar mantenimiento antes de modificar.',
+    legalNote: vehicle.tuningRequirements || 'Confirma normativa, homologacion y emisiones antes de instalar piezas.',
+    vehicleDiagnosis: {
+      mechanicalRisks: knownIssues,
+      weakPoints: knownIssues,
+      maintenanceBeforeTuning: maintenanceItems,
+    },
+    technicalProfile: {
+      platform: vehicle.generation || vehicle.body || '',
+      engineCode: vehicle.engineCode || vehicle.version || requestedVehicle?.engine || '',
+      engineFamily: vehicle.engineFamily || '',
+      reliablePowerLimitCv: reliableLimitCv,
+      realLimitations: [
+        ...splitLines(vehicle.issueSeverityAndCosts),
+        ...splitLines(vehicle.incompatibilities),
+      ],
+    },
+    vehicleIdentity: {
+      canonicalBrand: vehicle.brand || requestedVehicle?.brand,
+      canonicalModel: vehicle.model || requestedVehicle?.model,
+      canonicalGeneration: vehicle.generation || requestedVehicle?.generation,
+      canonicalEngine: vehicle.engineCode || vehicle.version || requestedVehicle?.engine,
+      productionYears: joinTruthy([vehicle.yearStart, vehicle.yearEnd], '-'),
+      factoryPowerCv: basePowerCv,
+      factoryTorqueNm: baseTorqueNm,
+      drivetrain: vehicle.drivetrain || requestedVehicle?.drivetrain,
+      powertrain: vehicle.fuel || requestedVehicle?.powertrain,
+    },
+    freeBuild: {
+      vehicleSheet: {
+        infoText: vehicle.description || vehicle.engineTechnicalNotes,
+        engineCode: vehicle.engineCode,
+        engine: vehicle.version || vehicle.engineFamily,
+        powerCv: basePowerCv,
+        torqueNm: baseTorqueNm,
+      },
+      preInstallation: {
+        title: 'Antes de modificar',
+        intro: vehicle.preStageRequirements || vehicle.maintenanceIntervals,
+        items: maintenanceItems,
+      },
+      modifications: {
+        potentialText: vehicle.modCostsAndGains || vehicle.recommendedMods,
+        possiblePowerCv: reliableLimitCv,
+        possibleTorqueNm: null,
+        parts: recommendedParts,
+      },
+      premiumOffer: {
+        finalReinforcement:
+          vehicle.premiumSummary ||
+          'El plan de accion organiza esta ficha en pasos concretos para evitar compras incompatibles.',
+      },
+      risks: [
+        ...knownIssues,
+        ...splitLines(vehicle.issueSymptoms),
+        ...splitLines(vehicle.issueSolutions),
+      ],
+    },
+    recommendedParts,
+    conversionTrigger: vehicle.premiumSummary || '',
+    premiumUpsell: vehicle.premiumEvolution || vehicle.premiumSummary || '',
+    conclusion: {
+      recommendedStage: 'STAGE 1',
+      summary: vehicle.premiumEvolution || vehicle.verificationNotes || vehicle.description || '',
+    },
+    accessTier: 'free',
+    estimatedBudget: null,
+    expectedGain: reliableLimitCv && basePowerCv ? `+${reliableLimitCv - basePowerCv} CV` : 'Por confirmar',
+    reliabilityIndex: 82,
+    executionTime: 'Por confirmar',
+    stats: [
+      { label: 'Potencia de serie', value: basePowerCv ? `${basePowerCv} CV` : 'Por confirmar', helper: 'Dato de THKB' },
+      { label: 'Limite fiable', value: reliableLimitCv ? `${reliableLimitCv} CV` : 'Por confirmar', helper: 'Dato de THKB' },
+      { label: 'Fallos conocidos', value: String(knownIssues.length), helper: 'Registrados en la ficha' },
+      { label: 'Nivel de confianza', value: vehicle.confidenceLevel || 'Por confirmar', helper: 'Validacion THKB' },
+    ],
+    stages,
+    reasons: splitLines(vehicle.sourceNotes),
+    warnings: [
+      ...splitLines(vehicle.incompatibilities),
+      ...knownIssues,
+    ].slice(0, 5),
+  };
 }
 
 function hasCompletePowerProfile(build) {
@@ -245,6 +410,26 @@ export async function findMatchingBuild(vehicle) {
   }
 
   return toResultShape(goalBuild, vehicle);
+}
+
+export async function findVehicleKnowledgeResult(vehicle) {
+  if (!isFirebaseConfigured || !vehicle?.publicVehicleId) {
+    return null;
+  }
+
+  const vehicleSnapshot = await getDoc(doc(db, 'vehicles', vehicle.publicVehicleId));
+
+  if (!vehicleSnapshot.exists()) {
+    return null;
+  }
+
+  const status = vehicleSnapshot.data()?.status;
+
+  if (!PUBLIC_VEHICLE_STATUSES.includes(status)) {
+    return null;
+  }
+
+  return toVehicleKnowledgeResult(vehicleSnapshot, vehicle);
 }
 
 export async function logUserSearch(vehicle, matchedBuildId, matchedFromDatabase) {

@@ -8,7 +8,8 @@ service cloud.firestore {
     }
 
     match /vehicles/{vehicleId} {
-      allow read: if true;
+      allow read: if isDashboardUser()
+        || resource.data.status in ['published', 'verified'];
       allow write: if isDashboardUser();
     }
 
