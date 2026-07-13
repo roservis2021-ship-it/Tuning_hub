@@ -3,6 +3,15 @@ import { emptyRecord, recordStatuses, resources } from '../config/resources';
 import { listRecords, removeRecord, saveRecord } from '../services/repository';
 import { uploadVehicleImage } from '../services/imageStorage';
 
+const ESSENTIAL_VEHICLE_FIELDS = new Set([
+  'brand', 'model', 'generation', 'version', 'yearStart', 'yearEnd',
+  'engineCode', 'fuel', 'displacementCc', 'induction', 'powerCv', 'torqueNm',
+  'drivetrain', 'gearbox', 'reliableLimitCv',
+  'maintenanceItems', 'knownIssues', 'recommendedMods',
+  'stage1Plan', 'stage2Plan', 'stage3Plan',
+  'premiumSummary', 'researchSources', 'confidenceLevel',
+]);
+
 function ImageUploadField({ field, value, vehicleId, onChange }) {
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
@@ -59,11 +68,13 @@ function RecordEditor({ resourceKey, initialRecord, user, onClose, onSaved }) {
   const [record, setRecord] = useState(initialRecord || emptyRecord(resourceKey));
   const [saveState, setSaveState] = useState('Sin cambios');
   const [started, setStarted] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const timer = useRef(null);
 
   useEffect(() => {
     setRecord(initialRecord || emptyRecord(resourceKey));
     setStarted(false);
+    setShowAdvanced(false);
     setSaveState('Sin cambios');
   }, [initialRecord, resourceKey]);
 
@@ -97,7 +108,14 @@ function RecordEditor({ resourceKey, initialRecord, user, onClose, onSaved }) {
     onSaved(saved, true);
   }
 
-  const sections = config.fields.reduce((groups, field) => {
+  const availableFields = resourceKey === 'vehicles'
+    ? config.fields.filter((field) => field.section !== 'Imágenes')
+    : config.fields;
+  const visibleFields = resourceKey === 'vehicles' && !showAdvanced
+    ? availableFields.filter((field) => ESSENTIAL_VEHICLE_FIELDS.has(field.key))
+    : availableFields;
+
+  const sections = visibleFields.reduce((groups, field) => {
     const section = field.section || 'Información';
     if (!groups[section]) groups[section] = [];
     groups[section].push(field);
@@ -125,13 +143,21 @@ function RecordEditor({ resourceKey, initialRecord, user, onClose, onSaved }) {
             <span>ID: {record.id || 'Se asignará al guardar'}</span>
           </div>
           {resourceKey === 'vehicles' ? (
-            <nav className="editor-section-nav" aria-label="Secciones de la ficha">
-              {Object.keys(sections).map((sectionName, index) => (
-                <button type="button" key={sectionName} onClick={() => goToSection(sectionName)}>
-                  <span>{String(index + 1).padStart(2, '0')}</span>{sectionName}
+            <>
+              <div className="editor-view-switch">
+                <div><strong>{showAdvanced ? 'Ficha completa' : 'Vista esencial'}</strong><span>{showAdvanced ? 'Todos los campos disponibles.' : 'Solo los datos que más valor aportan.'}</span></div>
+                <button type="button" onClick={() => setShowAdvanced((current) => !current)}>
+                  {showAdvanced ? 'Ver menos campos' : 'Completar ficha avanzada'}
                 </button>
-              ))}
-            </nav>
+              </div>
+              <nav className="editor-section-nav" aria-label="Secciones de la ficha">
+                {Object.keys(sections).map((sectionName, index) => (
+                  <button type="button" key={sectionName} onClick={() => goToSection(sectionName)}>
+                    <span>{String(index + 1).padStart(2, '0')}</span>{sectionName}
+                  </button>
+                ))}
+              </nav>
+            </>
           ) : null}
           {Object.entries(sections).map(([sectionName, fields], sectionIndex) => (
             <section className="editor-section" id={sectionId(sectionName)} key={sectionName}>
@@ -160,7 +186,7 @@ function RecordEditor({ resourceKey, initialRecord, user, onClose, onSaved }) {
   );
 }
 
-export default function ResourcePage({ resourceKey, user, openNew, onNewHandled }) {
+export default function ResourcePage({ resourceKey, user, canEdit, openNew, onNewHandled }) {
   const config = resources[resourceKey];
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -174,7 +200,7 @@ export default function ResourcePage({ resourceKey, user, openNew, onNewHandled 
   }
 
   useEffect(() => { refresh(); }, [resourceKey]);
-  useEffect(() => { if (openNew) { setEditing(emptyRecord(resourceKey)); onNewHandled(); } }, [openNew, resourceKey]);
+  useEffect(() => { if (openNew && canEdit) { setEditing(emptyRecord(resourceKey)); onNewHandled(); } }, [openNew, resourceKey, canEdit]);
 
   const filtered = useMemo(() => records.filter((record) => {
     const matchesText = !query || (record.searchText || Object.values(record).join(' ')).toLowerCase().includes(query.toLowerCase());
@@ -199,7 +225,7 @@ export default function ResourcePage({ resourceKey, user, openNew, onNewHandled 
     <div className="page resource-page">
       <div className="page-heading">
         <div><p className="eyebrow">Base de conocimiento</p><h1>{config.label}</h1><p>{records.length} registros en esta colección.</p></div>
-        <button className="primary" onClick={() => setEditing(emptyRecord(resourceKey))}>+ Crear {config.singular}</button>
+        {canEdit ? <button className="primary" onClick={() => setEditing(emptyRecord(resourceKey))}>+ Crear {config.singular}</button> : null}
       </div>
       <div className="toolbar">
         <div className="search-box"><span>⌕</span><input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder={`Buscar en ${config.label.toLowerCase()}…`} /></div>
@@ -212,10 +238,10 @@ export default function ResourcePage({ resourceKey, user, openNew, onNewHandled 
           <div className="empty-state"><div className="empty-icon">{config.icon}</div><h3>No hay registros todavía</h3><p>Crea el primer registro de {config.label.toLowerCase()}.</p><button className="primary" onClick={()=>setEditing(emptyRecord(resourceKey))}>Crear registro</button></div>
         ) : filtered.map((record) => (
           <div className="data-row" key={record.id}>
-            <button className="record-title" onClick={()=>setEditing(record)}><span>{config.icon}</span><div><strong>{record[config.titleField] || 'Sin nombre'}</strong><small>{record.code || record.version || record.id}</small></div></button>
+            <button className="record-title" onClick={()=>canEdit && setEditing(record)}><span>{config.icon}</span><div><strong>{record[config.titleField] || 'Sin nombre'}</strong><small>{record.code || record.version || record.id}</small></div></button>
             <span className={`status-pill ${record.status}`}>{recordStatuses.find(([value])=>value===record.status)?.[1] || 'Borrador'}</span>
             <span className="muted">{record.updatedBy || '—'}</span>
-            <div className="row-actions"><button onClick={()=>setEditing(record)} title="Editar">✎</button><button onClick={()=>duplicate(record)} title="Duplicar">⧉</button><button className="danger" onClick={()=>deleteItem(record)} title="Eliminar">×</button></div>
+            <div className="row-actions">{canEdit ? <><button onClick={()=>setEditing(record)} title="Editar">✎</button><button onClick={()=>duplicate(record)} title="Duplicar">⧉</button><button className="danger" onClick={()=>deleteItem(record)} title="Eliminar">×</button></> : <span className="readonly-label">Solo lectura</span>}</div>
           </div>
         ))}
       </div>

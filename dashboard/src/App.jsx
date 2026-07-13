@@ -10,6 +10,8 @@ import { auth, firebaseReady } from './firebase';
 import DashboardPage from './components/DashboardPage';
 import ResourcePage from './components/ResourcePage';
 import Sidebar from './components/Sidebar';
+import AdminDataPage from './components/AdminDataPage';
+import ResearchReviewPage from './components/ResearchReviewPage';
 import { resources } from './config/resources';
 
 function Login({ onSubmit, error, busy }) {
@@ -40,8 +42,10 @@ function PlaceholderPage({ type }) {
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [roles, setRoles] = useState([]);
   const [authLoading, setAuthLoading] = useState(true);
   const [authError, setAuthError] = useState('');
+  const [accessDenied, setAccessDenied] = useState(false);
   const [busy, setBusy] = useState(false);
   const [activePage, setActivePage] = useState('dashboard');
   const [createOnOpen, setCreateOnOpen] = useState(false);
@@ -57,9 +61,30 @@ export default function App() {
       })
       .finally(() => {
         if (!isMounted) return;
-        unsubscribe = onAuthStateChanged(auth, (nextUser) => {
-          setUser(nextUser);
-          setAuthLoading(false);
+        unsubscribe = onAuthStateChanged(auth, async (nextUser) => {
+          if (!nextUser) {
+            setUser(null);
+            setAccessDenied(false);
+            setAuthLoading(false);
+            return;
+          }
+          try {
+            const token = await nextUser.getIdTokenResult();
+            const claimedRoles = new Set(Array.isArray(token.claims.roles) ? token.claims.roles : []);
+            if (token.claims.admin === true) claimedRoles.add('admin');
+            if (['admin', 'editor', 'reviewer'].includes(token.claims.role)) claimedRoles.add(token.claims.role);
+            const resolvedRoles = [...claimedRoles].filter((role) => ['admin', 'editor', 'reviewer'].includes(role));
+            const authorized = resolvedRoles.length > 0;
+            setUser(authorized ? nextUser : null);
+            setRoles(authorized ? resolvedRoles : []);
+            if (authorized && resolvedRoles.includes('reviewer') && !resolvedRoles.some((role) => ['admin', 'editor'].includes(role))) setActivePage('research');
+            setAccessDenied(!authorized);
+          } catch {
+            setUser(null);
+            setAccessDenied(true);
+          } finally {
+            setAuthLoading(false);
+          }
         });
       });
 
@@ -91,16 +116,18 @@ export default function App() {
 
   if (authLoading) return <main className="center-message"><div className="loader"></div>Conectando con THKB…</main>;
   if (!firebaseReady) return <main className="center-message">Faltan las variables de Firebase.</main>;
+  if (accessDenied) return <main className="center-message">Esta cuenta no tiene el rol de administrador o editor necesario.<button className="primary" onClick={() => signOut(auth)}>Cerrar sesión</button></main>;
   if (!user) return <Login onSubmit={handleLogin} error={authError} busy={busy} />;
 
   return (
     <div className="app-shell">
-      <Sidebar activePage={activePage} onNavigate={navigate} user={user} onSignOut={() => signOut(auth)} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar activePage={activePage} onNavigate={navigate} user={user} roles={roles} onSignOut={() => signOut(auth)} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       {sidebarOpen ? <button className="sidebar-backdrop" onClick={() => setSidebarOpen(false)} aria-label="Cerrar menú" /> : null}
       <main className="main-content">
         <div className="mobile-bar"><button onClick={() => setSidebarOpen(true)}>☰</button><strong>THKB</strong><span>{resources[activePage]?.label || 'Dashboard'}</span></div>
-        {activePage === 'dashboard' ? <DashboardPage onNavigate={navigate} /> :
-          resources[activePage] ? <ResourcePage resourceKey={activePage} user={user} openNew={createOnOpen} onNewHandled={() => setCreateOnOpen(false)} /> :
+        {activePage === 'dashboard' ? <DashboardPage onNavigate={navigate} /> : activePage === 'research' ? <ResearchReviewPage roles={roles} /> :
+          ['users', 'subscriptions', 'diagnostics', 'aiUsage'].includes(activePage) ? <AdminDataPage resource={activePage} /> :
+          resources[activePage] ? <ResourcePage resourceKey={activePage} user={user} canEdit={roles.includes('admin') || roles.includes('editor')} openNew={createOnOpen} onNewHandled={() => setCreateOnOpen(false)} /> :
             <PlaceholderPage type={activePage} />}
       </main>
     </div>

@@ -3,6 +3,16 @@ services:
     name: tuning-hub-api
     runtime: node
     plan: starter
-    buildCommand: npm install
+    buildCommand: npm ci --omit=dev
     startCommand: npm run server
-    autoDeploy: true
+    healthCheckPath: /api/health
+    autoDeploy: false
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PUBLIC_APP_URL
+        value: https://tuning-hub-2.web.app
+      - key: API_ALLOWED_ORIGINS
+        value: https://tuning-hub-2.web.app,https://tuning-hub-thkb.web.app
+      - key: NOTIFICATION_SCHEDULER_SECRET
+        generateValue: true

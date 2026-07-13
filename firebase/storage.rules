@@ -2,17 +2,47 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    function isDashboardUser() {
+    function hasRole(role) {
       return request.auth != null
-        && request.auth.uid == 'mc50F556jwfCpK8cpajxiTwZ43g2';
+        && (request.auth.token.role == role
+          || (request.auth.token.roles is list && role in request.auth.token.roles));
+    }
+
+    function isKnowledgeEditor() {
+      return request.auth != null
+        && (request.auth.token.admin == true || hasRole('admin') || hasRole('editor'));
     }
 
     match /vehicle-images/{allPaths=**} {
       allow read: if true;
-      allow create, update: if isDashboardUser()
+      allow create, update: if isKnowledgeEditor()
         && request.resource.size < 12 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
-      allow delete: if isDashboardUser();
+        && (request.resource.contentType == 'image/jpeg'
+          || request.resource.contentType == 'image/png'
+          || request.resource.contentType == 'image/webp');
+      allow delete: if isKnowledgeEditor();
+    }
+
+    match /users/{uid}/vehicles/{vehicleId}/diagnostics/{sessionId}/{fileName} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && fileName.size() <= 180
+        && fileName.matches('[A-Za-z0-9._-]+')
+        && request.resource.metadata.ownerId == uid
+        && request.resource.metadata.userVehicleId == vehicleId
+        && request.resource.metadata.diagnosticSessionId == sessionId
+        && (((request.resource.contentType == 'image/jpeg'
+              || request.resource.contentType == 'image/png'
+              || request.resource.contentType == 'image/webp')
+            && request.resource.size < 10 * 1024 * 1024)
+          || ((request.resource.contentType == 'audio/webm'
+              || request.resource.contentType == 'audio/mpeg'
+              || request.resource.contentType == 'audio/mp4'
+              || request.resource.contentType == 'audio/wav'
+              || request.resource.contentType == 'audio/ogg')
+            && request.resource.size < 20 * 1024 * 1024));
+      allow update: if false;
     }
   }
 }

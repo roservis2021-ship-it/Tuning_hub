@@ -1,5 +1,10 @@
 export const recordStatuses = [
   ['draft', 'Borrador'],
+  ['researching', 'Investigando'],
+  ['needs_review', 'Revisión necesaria'],
+  ['approved', 'Aprobado'],
+  ['rejected', 'Rechazado'],
+  ['obsolete', 'Obsoleto'],
   ['needs_verification', 'Necesita verificación'],
   ['verified', 'Verificado'],
   ['published', 'Publicado'],
@@ -35,6 +40,10 @@ export const resources = {
       number('reliableLimitCv', 'Límite fiable (CV)'), area('commonProblems', 'Problemas comunes'),
       area('maintenance', 'Mantenimiento'), area('stage1', 'Stage 1'), area('stage2', 'Stage 2'), area('stage3', 'Stage 3'),
     ],
+  },
+  transmissions: {
+    label: 'Transmisiones', singular: 'transmisión', icon: 'T', titleField: 'code',
+    fields: [text('code', 'Código', { required: true }), text('manufacturer', 'Fabricante'), text('type', 'Tipo'), number('gearCount', 'Velocidades'), text('drivetrain', 'Tracción'), area('notes', 'Notas técnicas')],
   },
   vehicles: {
     label: 'Vehículos', singular: 'vehículo', icon: 'V', titleField: 'version',
@@ -162,12 +171,19 @@ export const resources = {
       select('verification', 'Verificación', ['Pendiente', 'Verificada', 'Descartada']), area('notes', 'Notas'),
     ],
   },
+  research: { label: 'Investigaciones', singular: 'investigación', icon: 'R', titleField: 'id', fields: [], reviewerAccess: true },
+  users: { label: 'Usuarios', singular: 'usuario', icon: 'U', titleField: 'email', fields: [], adminOnly: true },
+  subscriptions: { label: 'Suscripciones', singular: 'suscripción', icon: 'S', titleField: 'status', fields: [], adminOnly: true },
+  diagnostics: { label: 'Diagnósticos', singular: 'diagnóstico', icon: 'D', titleField: 'summary', fields: [], reviewerAccess: true },
+  aiUsage: { label: 'Consumo IA', singular: 'registro', icon: 'AI', titleField: 'feature', fields: [], adminOnly: true },
 };
 
 export const sidebarGroups = [
-  { label: 'Base de conocimiento', items: ['vehicles', 'engines', 'generations', 'models', 'brands'] },
+  { label: 'Base de conocimiento', items: ['vehicles', 'engines', 'transmissions', 'generations', 'models', 'brands'] },
   { label: 'Contenido técnico', items: ['images', 'maintenance', 'knownIssues', 'modifications'] },
-  { label: 'Inteligencia', items: ['rules', 'compatibilities', 'sources'] },
+  { label: 'Investigación', items: ['research', 'sources'] },
+  { label: 'Inteligencia', items: ['rules', 'compatibilities', 'diagnostics', 'aiUsage'] },
+  { label: 'Operaciones', items: ['users', 'subscriptions'] },
 ];
 
 export function emptyRecord(resourceKey) {

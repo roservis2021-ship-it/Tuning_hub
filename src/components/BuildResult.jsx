@@ -537,7 +537,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
           style={{ transform: `translateX(-${activeFreeSlide * 100}%)` }}
         >
           <article className="free-build-slide free-build-slide--hero">
-            <img className="free-build-slide__bg" src={freeBuildFichaBg} alt="" />
+            <img className="free-build-slide__bg" src={freeBuildFichaBg} alt="" loading="lazy" decoding="async" />
             <div className="free-build-slide__shade" />
             <div className="free-build-slide__content">
               <span className="free-build-eyebrow">Ficha del vehiculo</span>
@@ -570,7 +570,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
           </article>
 
           <article className="free-build-slide">
-            <img className="free-build-slide__bg" src={freeBuildPreinstalacionBg} alt="" />
+            <img className="free-build-slide__bg" src={freeBuildPreinstalacionBg} alt="" loading="lazy" decoding="async" />
             <div className="free-build-slide__shade" />
             <div className="free-build-slide__content">
               <span className="free-build-eyebrow">Preinstalacion</span>
@@ -588,7 +588,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
           </article>
 
           <article className="free-build-slide">
-            <img className="free-build-slide__bg" src={freeBuildModificacionesBg} alt="" />
+            <img className="free-build-slide__bg" src={freeBuildModificacionesBg} alt="" loading="lazy" decoding="async" />
             <div className="free-build-slide__shade" />
             <div className="free-build-slide__content">
               <span className="free-build-eyebrow">Modificaciones recomendadas</span>
@@ -609,7 +609,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
               <div className="free-build-parts">
                 {modificationParts.map((part) => (
                   <article key={part.key} className="free-build-part">
-                    {part.visual ? <img src={part.visual.imageSrc} alt={part.name} /> : <IconBadge type="cart" />}
+                    {part.visual ? <img src={part.visual.imageSrc} alt={part.name} loading="lazy" decoding="async" /> : <IconBadge type="cart" />}
                     <div>
                       <strong>{part.name}</strong>
                       <p>{part.reason || part.explanation}</p>
@@ -623,7 +623,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
           </article>
 
           <article className="free-build-slide free-build-slide--premium">
-            <img className="free-build-slide__bg" src={freeBuildPremiumBg} alt="" />
+            <img className="free-build-slide__bg" src={freeBuildPremiumBg} alt="" loading="lazy" decoding="async" />
             <div className="free-build-slide__shade" />
             <div className="free-build-slide__content">
               <span className="free-build-eyebrow">Plan de Accion</span>
@@ -916,7 +916,7 @@ function BuildResult({ result, vehicle, buildMeta, onBack, onOpenOptimizedPlan }
           <div className="build-dashboard-products-grid">
             {recommendedParts.map((part) => (
               <article key={part.key} className="build-dashboard-product">
-                {part.visual ? <img src={part.visual.imageSrc} alt={part.name} /> : <IconBadge type="cart" />}
+                {part.visual ? <img src={part.visual.imageSrc} alt={part.name} loading="lazy" decoding="async" /> : <IconBadge type="cart" />}
                 <strong>{part.name}</strong>
                 <span>{part.reason}</span>
                 <em>{formatPriceEuro(part.priceEuro)}</em>

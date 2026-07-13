@@ -1,19 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
-import CarForm from '../components/CarForm';
-import BuildResult from '../components/BuildResult';
-import PremiumPlan from '../components/PremiumPlan';
-import StripeCheckoutScreen from '../components/StripeCheckoutScreen';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { generateBuildRecommendation } from '../services/buildRecommender';
-import { findVehicleKnowledgeResult, logUserSearch } from '../services/firebaseBuildLibraryService';
 import { generateAiBuild } from '../services/aiBuildService';
-import { getCheckoutSessionStatus } from '../services/stripeCheckoutService';
-import {
-  initAnalytics,
-  trackBuildError,
-  trackBuildResult,
-  trackBuildSearch,
-} from '../services/analyticsService';
 import heroBanner from '../assets/hero-banner.jpeg';
+
+const CarForm = lazy(() => import('../components/CarForm'));
+const BuildResult = lazy(() => import('../components/BuildResult'));
+const StripeCheckoutScreen = lazy(() => import('../components/StripeCheckoutScreen'));
+const PaymentActivationScreen = lazy(() => import('../components/PaymentActivationScreen'));
+const AccountPanel = lazy(() => import('../features/premium/auth/AccountPanel').then((module) => ({ default: module.AccountPanel })));
+const ProtectedRoute = lazy(() => import('../features/premium/auth/ProtectedRoute').then((module) => ({ default: module.ProtectedRoute })));
+const PremiumOnboardingGate = lazy(() => import('../features/premium/onboarding/PremiumOnboardingGate').then((module) => ({ default: module.PremiumOnboardingGate })));
+const PremiumGarage = lazy(() => import('../features/premium/garage/PremiumGarage').then((module) => ({ default: module.PremiumGarage })));
+const PremiumAuthBoundary = lazy(() => import('../features/premium/auth/PremiumAuthBoundary').then((module) => ({ default: module.PremiumAuthBoundary })));
 
 const LOADING_STEPS = [
   {
@@ -39,6 +37,32 @@ const PENDING_EXTRA_BUILD_STORAGE_KEY = 'tuningHubPendingExtraBuild';
 const BUILD_QUOTA_STORAGE_KEY = 'tuningHubBuildQuota';
 const BUILD_QUOTA_WINDOW_MS = 60 * 60 * 1000;
 const FREE_BUILD_LIMIT = 2;
+const PREMIUM_TEST_PREVIEW = '330ci-qa-20260711';
+
+const BMW_330CI_TEST_VEHICLE = {
+  brand: 'BMW',
+  model: '330Ci',
+  generation: 'E46',
+  engine: 'M54B30 3.0 231 CV',
+  powertrain: 'gasolina',
+  aspiration: 'atmosferico',
+  transmission: 'manual',
+  drivetrain: 'rwd',
+  accessTier: 'premium',
+};
+
+const BMW_330CI_TEST_RESULT = {
+  id: 'premium-preview-bmw-330ci-e46',
+  source: 'premium_test',
+  basePowerCv: 231,
+  vehicleIdentity: {
+    canonicalBrand: 'BMW',
+    canonicalModel: '330Ci',
+    canonicalGeneration: 'E46',
+    canonicalEngine: 'M54B30 3.0 231 CV',
+    factoryTorqueNm: 300,
+  },
+};
 
 function getStoredJson(key, fallback = {}) {
   if (typeof window === 'undefined') {
@@ -125,6 +149,11 @@ function getVehicleNameFromData(vehicleData, result = null) {
   ]
     .filter(Boolean)
     .join(' ');
+}
+
+function isBmw330Ci(vehicleData, buildResult = null) {
+  const name = getVehicleNameFromData(vehicleData, buildResult).toLowerCase();
+  return name.includes('bmw') && (name.includes('330ci') || name.includes('330 ci'));
 }
 
 function LoadingScreen({ vehicle, stepIndex, progress }) {
@@ -242,22 +271,41 @@ function HomePage() {
   const [buildMeta, setBuildMeta] = useState(null);
   const [quotaInfo, setQuotaInfo] = useState(() => getQuotaSnapshot());
   const [checkoutContext, setCheckoutContext] = useState(null);
+  const [paymentSessionId, setPaymentSessionId] = useState('');
+  const [paymentPurchaseId, setPaymentPurchaseId] = useState('');
+  const [paymentClaimToken, setPaymentClaimToken] = useState('');
+  const [paymentCancelled, setPaymentCancelled] = useState(false);
 
   useEffect(() => {
-    initAnalytics().catch(() => {
+    const initializeAnalytics = async () => {
+      const { initAnalytics } = await import('../services/analyticsService');
+      await initAnalytics();
+    };
+
+    initializeAnalytics().catch(() => {
       // Analytics no debe interrumpir la app.
     });
   }, []);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
+    const premiumPreview = searchParams.get('premium_preview');
+
+    if (premiumPreview === PREMIUM_TEST_PREVIEW) {
+      setVehicle(BMW_330CI_TEST_VEHICLE);
+      setResult(BMW_330CI_TEST_RESULT);
+      setBuildMeta({ source: 'premium_test', simulatedPayment: true });
+      setCurrentScreen('premium');
+      return;
+    }
+
     const checkoutStatus = searchParams.get('checkout');
 
     if (!checkoutStatus) {
       return;
     }
 
-    async function restoreCheckout() {
+    function restoreCheckout() {
       let storedCheckout = {};
 
       try {
@@ -265,72 +313,15 @@ function HomePage() {
           window.sessionStorage.getItem(PENDING_CHECKOUT_STORAGE_KEY) || '{}',
         );
 
-        if (checkoutStatus === 'success') {
-          const sessionId = searchParams.get('session_id');
-
-          if (!sessionId) {
-            if (storedCheckout.result && storedCheckout.vehicle) {
-              setResult(storedCheckout.result);
-              setVehicle(storedCheckout.vehicle);
-              setBuildMeta(storedCheckout.buildMeta || null);
-              setCurrentScreen('build');
-            } else {
-              setCurrentScreen('landing');
-            }
-            return;
-          }
-
-          const sessionStatus = await getCheckoutSessionStatus(sessionId);
-          const checkoutType = sessionStatus.checkoutType || storedCheckout.checkoutType || 'plan_action';
-
-          if (!sessionStatus.paid) {
-            if (storedCheckout.result && storedCheckout.vehicle) {
-              setResult(storedCheckout.result);
-              setVehicle(storedCheckout.vehicle);
-              setBuildMeta(storedCheckout.buildMeta || null);
-              setCurrentScreen('build');
-            } else {
-              setCurrentScreen('landing');
-            }
-            return;
-          }
-
-          if (checkoutType === 'extra_build') {
-            const storedExtraBuild = JSON.parse(
-              window.sessionStorage.getItem(PENDING_EXTRA_BUILD_STORAGE_KEY) || '{}',
-            );
-
-            window.sessionStorage.removeItem(PENDING_CHECKOUT_STORAGE_KEY);
-            window.sessionStorage.removeItem(PENDING_EXTRA_BUILD_STORAGE_KEY);
-
-            if (storedExtraBuild.vehicle) {
-              await runBuildGeneration(storedExtraBuild.vehicle);
-              return;
-            }
-
-            setCurrentScreen('landing');
-            return;
-          }
-
-          if (storedCheckout.result && storedCheckout.vehicle) {
-            window.sessionStorage.removeItem(PENDING_CHECKOUT_STORAGE_KEY);
-            setResult(storedCheckout.result);
-            setVehicle(storedCheckout.vehicle);
-            setBuildMeta(storedCheckout.buildMeta || null);
-            setCurrentScreen('premium');
-          } else {
-            setCurrentScreen('landing');
-          }
-        } else {
-          if (storedCheckout.result && storedCheckout.vehicle) {
-            setResult(storedCheckout.result);
-            setVehicle(storedCheckout.vehicle);
-            setBuildMeta(storedCheckout.buildMeta || null);
-            setCurrentScreen('build');
-          } else {
-            setCurrentScreen('form');
-          }
+        if (storedCheckout.result && storedCheckout.vehicle) {
+          setResult(storedCheckout.result); setVehicle(storedCheckout.vehicle); setBuildMeta(storedCheckout.buildMeta || null);
         }
+        setCheckoutContext({ checkoutType: storedCheckout.checkoutType || 'plan_action' });
+        setPaymentSessionId(searchParams.get('session_id') || '');
+        setPaymentPurchaseId(searchParams.get('purchase_id') || '');
+        setPaymentClaimToken(searchParams.get('claim_token') || '');
+        setPaymentCancelled(checkoutStatus !== 'success');
+        setCurrentScreen('paymentResult');
       } catch (error) {
         if (storedCheckout.result && storedCheckout.vehicle) {
           setResult(storedCheckout.result);
@@ -376,11 +367,13 @@ function HomePage() {
     setCurrentScreen('loading');
     setBuildMeta(null);
 
-    trackBuildSearch(vehicleData).catch(() => {
+    const analytics = import('../services/analyticsService');
+    analytics.then(({ trackBuildSearch }) => trackBuildSearch(vehicleData)).catch(() => {
       // Analytics no debe bloquear el flujo principal.
     });
 
     try {
+      const { findVehicleKnowledgeResult } = await import('../services/firebaseBuildLibraryService');
       nextResult = await findVehicleKnowledgeResult(vehicleData);
 
       if (!nextResult) {
@@ -392,10 +385,10 @@ function HomePage() {
         aiErrorMessage =
           error.message ||
           'No se pudo verificar al 100% la variante exacta, asi que hemos mostrado una build orientativa.';
-        trackBuildError(error.message, error.code).catch(() => {});
+        analytics.then(({ trackBuildError }) => trackBuildError(error.message, error.code)).catch(() => {});
       } else {
         aiErrorMessage = error?.message || 'La IA no estuvo disponible en este intento.';
-        trackBuildError(aiErrorMessage, error?.code || 'AI_BUILD_FAILED').catch(() => {});
+        analytics.then(({ trackBuildError }) => trackBuildError(aiErrorMessage, error?.code || 'AI_BUILD_FAILED')).catch(() => {});
       }
     }
 
@@ -416,11 +409,12 @@ function HomePage() {
     });
     setCurrentScreen('build');
 
-    trackBuildResult(nextResult, vehicleData).catch(() => {
+    analytics.then(({ trackBuildResult }) => trackBuildResult(nextResult, vehicleData)).catch(() => {
       // Analytics no debe bloquear la experiencia principal.
     });
 
     try {
+      const { logUserSearch } = await import('../services/firebaseBuildLibraryService');
       await logUserSearch(
         vehicleData,
         nextResult.source === 'database' || nextResult.source === 'thkb' ? nextResult.id : null,
@@ -505,7 +499,26 @@ function HomePage() {
     setCurrentScreen('checkout');
   }
 
+  async function handlePaymentActivated(sessionStatus) {
+    const checkoutType = sessionStatus.checkoutType || checkoutContext?.checkoutType || 'plan_action';
+    if (checkoutType === 'extra_build') {
+      let storedExtraBuild = {};
+      try { storedExtraBuild = JSON.parse(window.sessionStorage.getItem(PENDING_EXTRA_BUILD_STORAGE_KEY) || '{}'); } catch { storedExtraBuild = {}; }
+      window.sessionStorage.removeItem(PENDING_CHECKOUT_STORAGE_KEY);
+      window.sessionStorage.removeItem(PENDING_EXTRA_BUILD_STORAGE_KEY);
+      if (storedExtraBuild.vehicle) {
+        await runBuildGeneration(storedExtraBuild.vehicle);
+        return;
+      }
+      setCurrentScreen('landing');
+      return;
+    }
+    window.sessionStorage.removeItem(PENDING_CHECKOUT_STORAGE_KEY);
+    setCurrentScreen(result && vehicle ? 'premium' : 'account');
+  }
+
   return (
+    <Suspense fallback={<section className="screen-shell"><div className="route-loading" role="status">Cargando Tuning Hub…</div></section>}>
     <main className="layout">
       {currentScreen === 'landing' ? (
         <section
@@ -531,6 +544,9 @@ function HomePage() {
             <button className="hero__cta" type="button" onClick={handleStartBuild}>
               Modifica tu coche
             </button>
+            <button className="hero__account" type="button" onClick={() => setCurrentScreen('account')}>
+              Mi cuenta
+            </button>
           </div>
         </section>
       ) : currentScreen === 'form' ? (
@@ -549,12 +565,16 @@ function HomePage() {
         </section>
       ) : currentScreen === 'premium' ? (
         <section className="screen-shell">
-          <PremiumPlan
-            result={result}
-            vehicle={vehicle}
-            onBack={() => setCurrentScreen('build')}
-          />
+          <PremiumAuthBoundary>
+          <ProtectedRoute area="premium" onBack={() => setCurrentScreen(result ? 'build' : 'landing')} onSubscriptionRequired={() => setCurrentScreen(result ? 'checkout' : 'landing')}>
+            <PremiumOnboardingGate vehicle={vehicle}>
+              <PremiumGarage vehicle={vehicle} onBack={() => setCurrentScreen('build')} />
+            </PremiumOnboardingGate>
+          </ProtectedRoute>
+          </PremiumAuthBoundary>
         </section>
+      ) : currentScreen === 'account' ? (
+        <section className="screen-shell"><PremiumAuthBoundary><AccountPanel onBack={() => setCurrentScreen('landing')} /></PremiumAuthBoundary></section>
       ) : currentScreen === 'checkout' ? (
         <section className="screen-shell">
           <StripeCheckoutScreen
@@ -563,6 +583,21 @@ function HomePage() {
             vehicleName={checkoutContext?.vehicleName || getVehicleNameFromData(vehicle, result)}
             onBack={() => setCurrentScreen(result ? 'build' : 'buildLimit')}
           />
+        </section>
+      ) : currentScreen === 'paymentResult' ? (
+        <section className="screen-shell">
+          <PremiumAuthBoundary>
+          <PaymentActivationScreen
+            sessionId={paymentSessionId}
+            purchaseId={paymentPurchaseId}
+            claimToken={paymentClaimToken}
+            checkoutType={checkoutContext?.checkoutType || 'plan_action'}
+            cancelled={paymentCancelled}
+            onActivated={handlePaymentActivated}
+            onRetry={() => setCurrentScreen('checkout')}
+            onBack={() => setCurrentScreen(result ? 'build' : 'landing')}
+          />
+          </PremiumAuthBoundary>
         </section>
       ) : currentScreen === 'buildLimit' ? (
         <section className="screen-shell">
@@ -585,6 +620,7 @@ function HomePage() {
         </section>
       )}
     </main>
+    </Suspense>
   );
 }
 

@@ -2,78 +2,315 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isDashboardUser() {
-      return request.auth != null
-        && request.auth.uid == 'mc50F556jwfCpK8cpajxiTwZ43g2';
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function hasRole(role) {
+      return isSignedIn()
+        && (request.auth.token.role == role
+          || (request.auth.token.roles is list && role in request.auth.token.roles));
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (request.auth.token.admin == true || hasRole('admin'));
+    }
+
+    function isKnowledgeEditor() {
+      return isAdmin() || hasRole('editor');
+    }
+
+    function isReviewer() {
+      return isKnowledgeEditor() || hasRole('reviewer');
+    }
+
+    function ownsUserVehicle(vehicleId) {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/userVehicles/$(vehicleId)).data.ownerId == request.auth.uid;
     }
 
     match /vehicles/{vehicleId} {
-      allow read: if isDashboardUser()
-        || resource.data.status in ['published', 'verified'];
-      allow write: if isDashboardUser();
+      allow read: if isKnowledgeEditor()
+        || resource.data.status in ['published', 'verified']
+        || (isSignedIn() && resource.data.provenance.reviewStatus in ['approved', 'published']);
+      allow write: if isKnowledgeEditor();
     }
 
     match /builds/{buildId} {
       allow read: if true;
-      allow write: if isDashboardUser();
+      allow write: if isKnowledgeEditor();
     }
 
     match /vehicleResearch/{researchId} {
-      allow read, write: if isDashboardUser();
+      allow read, write: if isKnowledgeEditor();
     }
 
     match /brands/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read, write: if isKnowledgeEditor();
     }
 
     match /models/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read, write: if isKnowledgeEditor();
     }
 
     match /generations/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read, write: if isKnowledgeEditor();
     }
 
     match /engines/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read: if isKnowledgeEditor()
+        || (isSignedIn() && resource.data.provenance.reviewStatus in ['approved', 'published']);
+      allow write: if isKnowledgeEditor();
+    }
+
+    match /transmissions/{documentId} {
+      allow read: if isKnowledgeEditor()
+        || (isSignedIn() && resource.data.provenance.reviewStatus in ['approved', 'published']);
+      allow write: if isKnowledgeEditor();
     }
 
     match /images/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read, write: if isKnowledgeEditor();
     }
 
     match /maintenance/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read: if isKnowledgeEditor()
+        || (isSignedIn() && resource.data.provenance.reviewStatus in ['approved', 'published']);
+      allow write: if isKnowledgeEditor();
     }
 
     match /knownIssues/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read: if isKnowledgeEditor()
+        || (isSignedIn() && resource.data.provenance.reviewStatus in ['approved', 'published']);
+      allow write: if isKnowledgeEditor();
     }
 
     match /modifications/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read: if isKnowledgeEditor()
+        || (isSignedIn() && resource.data.provenance.reviewStatus in ['approved', 'published']);
+      allow write: if isKnowledgeEditor();
     }
 
     match /rules/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read, write: if isKnowledgeEditor();
     }
 
     match /compatibilities/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read, write: if isKnowledgeEditor();
     }
 
     match /sources/{documentId} {
-      allow read, write: if isDashboardUser();
+      allow read, write: if isKnowledgeEditor();
     }
 
     match /auditLog/{documentId} {
-      allow read, create: if isDashboardUser();
+      allow read, create: if isAdmin();
       allow update, delete: if false;
     }
 
+    match /aiRuns/{documentId} {
+      allow read: if isReviewer();
+      allow write: if false;
+    }
+
+    match /vehicleResearchResults/{documentId} {
+      allow read: if isReviewer();
+      allow write: if false;
+    }
+
+    match /technicalClaims/{documentId} {
+      allow read: if isReviewer();
+      allow write: if false;
+    }
+
+    match /researchContradictions/{documentId} {
+      allow read: if isReviewer();
+      allow write: if false;
+    }
+
+    match /reviewTasks/{documentId} {
+      allow read: if isReviewer();
+      allow write: if false;
+    }
+
+    match /publishedRevisions/{documentId} {
+      allow read: if resource.data.status == 'published';
+      allow write: if false;
+    }
+
+    match /publishedVehicleResearch/{documentId} {
+      allow read: if resource.data.status == 'published';
+      allow write: if false;
+    }
+
     match /searches/{searchId} {
-      allow create: if true;
+      allow create: if request.resource.data.keys().hasOnly([
+          'brand', 'model', 'generation', 'engine', 'year', 'powertrain', 'transmission',
+          'drivetrain', 'usage', 'goal', 'priority', 'budget', 'vehicleKey', 'exactMatchKey',
+          'goalMatchKey', 'matchedBuildId', 'matchedFromDatabase', 'createdAt'
+        ])
+        && request.resource.data.brand is string && request.resource.data.brand.size() <= 80
+        && request.resource.data.model is string && request.resource.data.model.size() <= 100
+        && request.resource.data.vehicleKey is string && request.resource.data.vehicleKey.size() <= 500
+        && request.resource.data.matchedFromDatabase is bool
+        && request.resource.data.createdAt == request.time;
       allow read, update, delete: if false;
+    }
+
+    match /users/{uid} {
+      allow read: if isSignedIn() && request.auth.uid == uid;
+      allow create: if isSignedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly([
+          'displayName', 'emailNormalized', 'locale', 'timezone', 'status', 'onboardingCompleted',
+          'schemaVersion', 'createdAt', 'updatedAt', 'lastSeenAt'
+        ])
+        && request.resource.data.status == 'active';
+      allow update: if isSignedIn() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'displayName', 'locale', 'timezone', 'onboardingCompleted', 'updatedAt', 'lastSeenAt'
+        ]);
+      allow delete: if false;
+
+      match /notificationPreferences/{preferenceId} {
+        allow read: if isSignedIn() && request.auth.uid == uid;
+        allow write: if false;
+      }
+
+      match /notifications/{notificationId} {
+        allow read: if isSignedIn() && request.auth.uid == uid;
+        allow write: if false;
+      }
+    }
+
+    match /notificationJobs/{jobId} {
+      allow read, write: if false;
+    }
+
+    match /notificationDeliveries/{deliveryId} {
+      allow read, write: if false;
+    }
+
+    match /entitlements/{entitlementId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if false;
+    }
+
+    match /purchases/{purchaseId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if false;
+    }
+
+    match /billingEvents/{eventId} {
+      allow read, write: if false;
+    }
+
+    match /stripeCustomers/{uid} {
+      allow read, write: if false;
+    }
+
+    match /premiumProjects/{projectId} {
+      allow read: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow write: if false;
+
+      match /planVersions/{documentId} {
+        allow read: if isSignedIn()
+          && get(/databases/$(database)/documents/premiumProjects/$(projectId)).data.ownerId == request.auth.uid;
+        allow write: if false;
+      }
+
+      match /conversations/{conversationId} {
+        allow read: if isSignedIn()
+          && get(/databases/$(database)/documents/premiumProjects/$(projectId)).data.ownerId == request.auth.uid;
+        allow write: if false;
+
+        match /messages/{messageId} {
+          allow read: if isSignedIn()
+            && get(/databases/$(database)/documents/premiumProjects/$(projectId)).data.ownerId == request.auth.uid;
+          allow write: if false;
+        }
+      }
+    }
+
+    match /userVehicles/{vehicleId} {
+      allow read: if isSignedIn() && resource.data.ownerId == request.auth.uid;
+      allow create: if false;
+      allow update: if isSignedIn() && resource.data.ownerId == request.auth.uid
+        && request.resource.data.ownerId == resource.data.ownerId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'nickname', 'mileageKm', 'color', 'primaryUse', 'condition', 'power',
+          'currentGoalId', 'profileCompleteness', 'archivedAt', 'updatedAt'
+        ])
+        && request.resource.data.mileageKm is number
+        && request.resource.data.mileageKm >= 0
+        && request.resource.data.mileageKm <= 2000000;
+      allow delete: if false;
+
+      match /maintenanceHistory/{documentId} {
+        allow read: if ownsUserVehicle(vehicleId);
+        allow create: if ownsUserVehicle(vehicleId)
+          && request.resource.data.ownerId == request.auth.uid
+          && request.resource.data.userVehicleId == vehicleId;
+        allow update: if ownsUserVehicle(vehicleId)
+          && resource.data.ownerId == request.auth.uid
+          && request.resource.data.ownerId == resource.data.ownerId
+          && request.resource.data.userVehicleId == vehicleId;
+        allow delete: if ownsUserVehicle(vehicleId) && resource.data.ownerId == request.auth.uid;
+      }
+
+      match /maintenanceTasks/{documentId} {
+        allow read: if ownsUserVehicle(vehicleId);
+        allow create, update: if ownsUserVehicle(vehicleId)
+          && request.resource.data.ownerId == request.auth.uid
+          && request.resource.data.userVehicleId == vehicleId;
+        allow delete: if ownsUserVehicle(vehicleId) && resource.data.ownerId == request.auth.uid;
+      }
+
+      match /installedModifications/{documentId} {
+        allow read: if ownsUserVehicle(vehicleId);
+        allow create, update: if ownsUserVehicle(vehicleId)
+          && request.resource.data.ownerId == request.auth.uid
+          && request.resource.data.userVehicleId == vehicleId
+          && request.resource.data.reviewStatus != 'approved'
+          && request.resource.data.reviewStatus != 'published';
+        allow delete: if ownsUserVehicle(vehicleId) && resource.data.ownerId == request.auth.uid;
+      }
+
+      match /goals/{documentId} {
+        allow read: if ownsUserVehicle(vehicleId);
+        allow create, update: if ownsUserVehicle(vehicleId)
+          && request.resource.data.ownerId == request.auth.uid
+          && request.resource.data.userVehicleId == vehicleId;
+        allow delete: if ownsUserVehicle(vehicleId) && resource.data.ownerId == request.auth.uid;
+      }
+
+      match /diagnosticCases/{documentId} {
+        allow read: if ownsUserVehicle(vehicleId);
+        allow create: if ownsUserVehicle(vehicleId)
+          && request.resource.data.ownerId == request.auth.uid
+          && request.resource.data.userVehicleId == vehicleId
+          && request.resource.data.professionalAssessmentVerified == false;
+        allow update: if ownsUserVehicle(vehicleId)
+          && resource.data.ownerId == request.auth.uid
+          && request.resource.data.ownerId == resource.data.ownerId
+          && request.resource.data.userVehicleId == vehicleId
+          && (request.resource.data.professionalAssessmentVerified == false
+            || resource.data.professionalAssessmentVerified == true);
+        allow delete: if ownsUserVehicle(vehicleId) && resource.data.ownerId == request.auth.uid;
+      }
+
+      match /diagnosticCases/{sessionId}/evidence/{evidenceId} {
+        allow read: if ownsUserVehicle(vehicleId) && resource.data.ownerId == request.auth.uid;
+        allow create: if ownsUserVehicle(vehicleId)
+          && request.resource.data.ownerId == request.auth.uid
+          && request.resource.data.userVehicleId == vehicleId
+          && request.resource.data.diagnosticSessionId == sessionId;
+        allow update: if ownsUserVehicle(vehicleId)
+          && resource.data.ownerId == request.auth.uid
+          && request.resource.data.ownerId == resource.data.ownerId
+          && request.resource.data.userVehicleId == vehicleId
+          && request.resource.data.diagnosticSessionId == sessionId;
+        allow delete: if ownsUserVehicle(vehicleId) && resource.data.ownerId == request.auth.uid;
+      }
     }
   }
 }

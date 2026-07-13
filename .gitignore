@@ -5,3 +5,5 @@ dist
 .DS_Store
 firebase-service-account.json
 *.service-account.json
+playwright-report/
+test-results/

@@ -18,12 +18,18 @@ function resolveApiBaseUrl() {
 
 const API_BASE_URL = resolveApiBaseUrl();
 
+async function getAuthHeaders(includeContentType = false) {
+  const user = auth.currentUser;
+  return {
+    ...(includeContentType ? { 'Content-Type': 'application/json' } : {}),
+    ...(user ? { Authorization: `Bearer ${await user.getIdToken()}` } : {}),
+  };
+}
+
 export async function createCheckoutSession({ vehicleName, buildId, checkoutType = 'plan_action' }) {
   const response = await fetch(`${API_BASE_URL}/api/create-checkout-session`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: await getAuthHeaders(true),
     body: JSON.stringify({
       origin: window.location.origin,
       vehicleName,
@@ -57,9 +63,7 @@ export async function createCheckoutSession({ vehicleName, buildId, checkoutType
 export async function createEmbeddedCheckoutSession({ vehicleName, buildId, checkoutType = 'plan_action' }) {
   const response = await fetch(`${API_BASE_URL}/api/create-embedded-checkout-session`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: await getAuthHeaders(true),
     body: JSON.stringify({
       origin: window.location.origin,
       vehicleName,
@@ -90,9 +94,10 @@ export async function createEmbeddedCheckoutSession({ vehicleName, buildId, chec
   return payload;
 }
 
-export async function getCheckoutSessionStatus(sessionId) {
+export async function getCheckoutSessionStatus(sessionId, claimToken = '') {
   const response = await fetch(
-    `${API_BASE_URL}/api/checkout-session-status?session_id=${encodeURIComponent(sessionId)}`,
+    `${API_BASE_URL}/api/checkout-session-status?session_id=${encodeURIComponent(sessionId)}&claim_token=${encodeURIComponent(claimToken)}`,
+    { headers: await getAuthHeaders() },
   );
 
   const responseText = await response.text();
@@ -112,3 +117,15 @@ export async function getCheckoutSessionStatus(sessionId) {
 
   return payload;
 }
+
+export async function claimPremiumPurchase({ purchaseId, claimToken }) {
+  const user = auth.currentUser;
+  if (!user) throw new Error('Crea una cuenta o inicia sesión para activar Premium.');
+  const response = await fetch(`${API_BASE_URL}/api/premium/claim-purchase`, {
+    method: 'POST', headers: await getAuthHeaders(true), body: JSON.stringify({ purchaseId, claimToken }),
+  });
+  const payload = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(payload?.error || 'No se pudo vincular la compra a tu cuenta.');
+  return payload;
+}
+import { auth } from '../firebase/config';

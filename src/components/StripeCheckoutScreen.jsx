@@ -6,6 +6,14 @@ import {
 
 function waitForStripe() {
   return new Promise((resolve, reject) => {
+    if (!document.querySelector('script[data-tuning-hub-stripe]')) {
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      script.async = true;
+      script.dataset.tuningHubStripe = 'true';
+      script.onerror = () => reject(new Error('No se pudo cargar Stripe. Revisa la conexion e intentalo de nuevo.'));
+      document.head.append(script);
+    }
     const startedAt = Date.now();
 
     function checkStripe() {
@@ -32,7 +40,7 @@ const CHECKOUT_COPY = {
     title: 'Completa el pago',
     price: '4,99 EUR',
     copy:
-      'Pago unico de 4,99 EUR. Al finalizar, tendras el plan de ejecucion completo para comprar mejor, instalar en orden y evitar errores caros.',
+      'Pago unico de 4,99 EUR. Cuando Stripe confirme el pago, crearas la cuenta donde se guardaran tu garaje y el plan Premium.',
   },
   extra_build: {
     label: 'Build extra',
